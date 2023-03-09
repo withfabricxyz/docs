@@ -1,15 +1,10 @@
 {
-  "index": "Introduction",
-  "another": "Another Page",
-  "advanced": "Advanced (A Folder)",
+  "index": "Overview",
+  "crowdfunding": "Crowdfunding Protocol",
   "about": {
-    "title": "About",
-    "type": "page"
-  },
-  "contact": {
-    "title": "Contact ↗",
+    "title": "About ↗",
     "type": "page",
-    "href": "https://twitter.com/shuding_",
+    "href": "https://blog.withfabric.xyz/about",
     "newWindow": true
   }
 }
