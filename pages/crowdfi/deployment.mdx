@@ -1,0 +1,522 @@
+# Deploying a CrowdFi Contract
+
+import { Tab, Tabs } from 'nextra-theme-docs'
+import { Callout } from 'nextra-theme-docs'
+
+CrowdFi contracts are easily deployed by invoking the `deployCampaign` function on
+a factory contract. The function uses OpenZeppelin Clones to create a proxy pointing
+to the underlying logic contract and initializes the contract with provided parameters.
+
+#### Important Parameters
+
+|Name|Type|Description|
+|----|----|-----------|
+|`externalRef`|`uint64`|An optional reference value emitted in the deploy event for association|
+|`recipient`|`address`|the address of the recipient, where funds are sent on success|
+|`minGoal`|`uint256`|the minimum funding amount acceptable for successful financing|
+|`maxGoal`|`uint256`|the maximum funding amount accepted for the financing round|
+|`minContribution`|`uint256`|the minimum deposit an account can make in one deposit|
+|`maxContribution`|`uint256`|the maximum deposit an account can make in one or more deposits|
+|`holdOff`|`uint32`|the number of seconds to wait until the fund starts|
+|`duration`|`uint32`|the runtime of the campaign, in seconds|
+|`erc20TokenAddr`|`address`|the address of the ERC20 token used for payments, or 0 address for native token|
+
+
+#### Native Token vs ERC20
+
+CrowdFi contracts support the chains native token, as well as ERC20 compliant tokens. The contribute and yield functions are different depending
+on whether or not the contract is ERC20 denominated.
+
+<Callout type="error" emoji="️🚫">
+  CrowdFi contracts do not support rebasing tokens! Do not use them as the denominated token.
+</Callout>
+
+<Callout type="warning" emoji="⚠️">
+  CrowdFi contracts support fee taking tokens. The number of CrowdFi tokens minted on contribution will factor in the fee.
+</Callout>
+
+
+#### Factory Addresses
+
+TODO: Fill with correct values
+
+|Chain|Address|
+|-----|-------|
+|`mainnet`|0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0|
+|`seplolia`|0xTODO|
+
+
+#### Example Deployment (Mainnet)
+
+<Tabs items={['ETH', 'USDC']}>
+  <Tab>
+  ```bash
+  cast send 0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0 "deployCampaign()" \
+      1 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266 100000000000 100000000000000000 1 1000000000 0 1800 \
+      0x0000000000000000000000000000000000000000 \
+      --rpc-url http://localhost:8545 \
+      --private-key 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
+  ```
+  </Tab>
+  <Tab>
+  ```bash
+  cast send 0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0 "deployCampaign()" \
+      1 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266 100000000000 100000000000000000 1 1000000000 0 1800 \
+      0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48 \
+      --rpc-url http://localhost:8545 \
+      --private-key 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
+  ```
+  </Tab>
+</Tabs>
+
+
+#### Factory ABI and Source
+
+<Tabs items={['ABI', 'Solidity']}>
+  <Tab>
+    ```json
+    [
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "implementation",
+            "type": "address"
+          }
+        ],
+        "stateMutability": "nonpayable",
+        "type": "constructor"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": false,
+            "internalType": "uint256",
+            "name": "fee",
+            "type": "uint256"
+          }
+        ],
+        "name": "DeployFeeChange",
+        "type": "event"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": true,
+            "internalType": "address",
+            "name": "recipient",
+            "type": "address"
+          },
+          {
+            "indexed": false,
+            "internalType": "uint256",
+            "name": "fee",
+            "type": "uint256"
+          }
+        ],
+        "name": "DeployFeeTransfer",
+        "type": "event"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": false,
+            "internalType": "uint64",
+            "name": "nonce",
+            "type": "uint64"
+          },
+          {
+            "indexed": true,
+            "internalType": "address",
+            "name": "deployment",
+            "type": "address"
+          }
+        ],
+        "name": "Deployment",
+        "type": "event"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": false,
+            "internalType": "address",
+            "name": "feeCollector",
+            "type": "address"
+          },
+          {
+            "indexed": false,
+            "internalType": "uint16",
+            "name": "upfrontBips",
+            "type": "uint16"
+          },
+          {
+            "indexed": false,
+            "internalType": "uint16",
+            "name": "payoutBips",
+            "type": "uint16"
+          }
+        ],
+        "name": "FeeScheduleChange",
+        "type": "event"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": true,
+            "internalType": "address",
+            "name": "previousOwner",
+            "type": "address"
+          },
+          {
+            "indexed": true,
+            "internalType": "address",
+            "name": "newOwner",
+            "type": "address"
+          }
+        ],
+        "name": "OwnershipTransferred",
+        "type": "event"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "uint64",
+            "name": "externalRef",
+            "type": "uint64"
+          },
+          {
+            "internalType": "address",
+            "name": "recipient",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "minGoal",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "maxGoal",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "minContribution",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "maxContribution",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint32",
+            "name": "holdOff",
+            "type": "uint32"
+          },
+          {
+            "internalType": "uint32",
+            "name": "duration",
+            "type": "uint32"
+          },
+          {
+            "internalType": "address",
+            "name": "erc20TokenAddr",
+            "type": "address"
+          }
+        ],
+        "name": "deployCampaign",
+        "outputs": [
+          {
+            "internalType": "address",
+            "name": "",
+            "type": "address"
+          }
+        ],
+        "stateMutability": "payable",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "feeSchedule",
+        "outputs": [
+          {
+            "internalType": "address",
+            "name": "",
+            "type": "address"
+          },
+          {
+            "internalType": "uint16",
+            "name": "",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint16",
+            "name": "",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint256",
+            "name": "",
+            "type": "uint256"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "owner",
+        "outputs": [
+          {
+            "internalType": "address",
+            "name": "",
+            "type": "address"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "renounceOwnership",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "recipient",
+            "type": "address"
+          }
+        ],
+        "name": "transferDeployFees",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "newOwner",
+            "type": "address"
+          }
+        ],
+        "name": "transferOwnership",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "feeCollector",
+            "type": "address"
+          },
+          {
+            "internalType": "uint16",
+            "name": "feeTransferBips",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint16",
+            "name": "feeYieldBips",
+            "type": "uint16"
+          }
+        ],
+        "name": "updateFeeSchedule",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "uint256",
+            "name": "minFeeAmount",
+            "type": "uint256"
+          }
+        ],
+        "name": "updateMinimumDeployFee",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      }
+    ]
+    ```
+  </Tab>
+  <Tab>
+    ```solidity
+    // SPDX-License-Identifier: MIT
+
+    pragma solidity 0.8.17;
+
+    import "@openzeppelin/contracts/proxy/Clones.sol";
+    import "@openzeppelin/contracts/access/Ownable.sol";
+    import "./CrowdFinancingV1.sol";
+
+    /**
+    *
+    * @title Fabric Crowd Financing Factory Contract
+    * @author Fabric Inc.
+    *
+    * @dev A factory which leverages Clones to deploy Fabric Crowd Financing contracts
+    *
+    */
+    contract CrowdFinancingV1Factory is Ownable {
+        modifier feeRequired() {
+            require(msg.value >= _feeDeployMin, "Insufficient ETH to deploy");
+            _;
+        }
+
+        /// @dev Emitted upon a successful Campaign deployment
+        event Deployment(uint64 nonce, address indexed deployment);
+
+        /// @dev Emitted when the fee collector or schedule changes
+        event FeeScheduleChange(address feeCollector, uint16 upfrontBips, uint16 payoutBips);
+
+        /// @dev Emitted when the creation fee minium changes
+        event DeployFeeChange(uint256 fee);
+
+        /// @dev Emitted when the deploy fees are collected by the owner
+        event DeployFeeTransfer(address indexed recipient, uint256 fee);
+
+        /// @dev The campaign contract implementation address
+        address immutable _implementation;
+
+        /// @dev The fee collector address (can be 0, no fees are collected)
+        address private _feeCollector;
+
+        /// @dev The upfront fee (See CrowdFinancingV1)
+        uint16 private _feeTransferBips;
+
+        /// @dev The payout fee (See CrowdFinancingV1)
+        uint16 private _feeYieldBips;
+
+        /// @dev Fee to collect upon deployment
+        uint256 private _feeDeployMin;
+
+        /**
+        * @param implementation the CrowdFinancingV1 implementation address
+        */
+        constructor(address implementation) Ownable() {
+            _implementation = implementation;
+            _feeCollector = address(0);
+            _feeTransferBips = 0;
+            _feeYieldBips = 0;
+            _feeDeployMin = 0;
+        }
+
+        /**
+        * @dev Deploys a new CrowdFinancingV1 contract
+        *
+        * @param externalRef An optional reference value emitted in the deploy event for association
+        * @param recipient the address of the recipient, where funds are sent on success
+        * @param minGoal the minimum funding amount acceptable for successful financing
+        * @param maxGoal the maximum funding amount accepted for the financing round
+        * @param minContribution the minimum deposit an account can make in one deposit
+        * @param maxContribution the maximum deposit an account can make in one or more deposits
+        * @param holdOff the number of seconds to wait until the fund starts
+        * @param duration the runtime of the campaign, in seconds
+        * @param erc20TokenAddr the address of the ERC20 token used for payments, or 0 address for native token
+        *
+        * @return the address of the deployed CrowdFinancingV1 contract
+        */
+        function deployCampaign(
+            uint64 externalRef,
+            address recipient,
+            uint256 minGoal,
+            uint256 maxGoal,
+            uint256 minContribution,
+            uint256 maxContribution,
+            uint32 holdOff,
+            uint32 duration,
+            address erc20TokenAddr
+        ) external payable feeRequired returns (address) {
+            address deployment = Clones.clone(_implementation);
+
+            uint256 startTimestamp = block.timestamp + holdOff;
+            uint256 endTimestamp = startTimestamp + duration;
+
+            CrowdFinancingV1(deployment).initialize(
+                recipient,
+                minGoal,
+                maxGoal,
+                minContribution,
+                maxContribution,
+                startTimestamp,
+                endTimestamp,
+                erc20TokenAddr,
+                _feeCollector,
+                _feeTransferBips,
+                _feeYieldBips
+            );
+
+            emit Deployment(externalRef, deployment);
+
+            return deployment;
+        }
+
+        /**
+        * @dev Owner Only: Transfer accumulated fees
+        */
+        function transferDeployFees(address recipient) external onlyOwner {
+            uint256 amount = address(this).balance;
+            require(amount > 0, "No fees to collect");
+            emit DeployFeeTransfer(recipient, amount);
+            (bool sent,) = payable(recipient).call{value: amount}("");
+            require(sent, "Failed to transfer Ether");
+        }
+
+        /**
+        * @dev Owner Only: Update the fee schedule for future deployments
+        *
+        * @param feeCollector the address of the fee collector, or the 0 address if no fees are collected
+        * @param feeTransferBips the upfront fee in basis points, calculated during processing
+        * @param feeYieldBips the payout fee in basis points. Dilutes the cap table for fee collection
+        */
+        function updateFeeSchedule(address feeCollector, uint16 feeTransferBips, uint16 feeYieldBips) external onlyOwner {
+            _feeCollector = feeCollector;
+            _feeTransferBips = feeTransferBips;
+            _feeYieldBips = feeYieldBips;
+            emit FeeScheduleChange(feeCollector, feeTransferBips, feeYieldBips);
+        }
+
+        /**
+        * @dev Owner Only: Update the deploy fee.
+        *
+        * @param minFeeAmount the amount of wei required to deploy a campaign
+        */
+        function updateMinimumDeployFee(uint256 minFeeAmount) external onlyOwner {
+            _feeDeployMin = minFeeAmount;
+            emit DeployFeeChange(minFeeAmount);
+        }
+
+        /**
+        * @dev Fetch the fee schedule for campaigns and the deploy fee
+        *
+        * @return collector the address of the fee collector, or the 0 address if no fees are collected
+        * @return transferFee the upfront fee in basis points, calculated during transfer
+        * @return yieldFee the payout fee in basis points. Dilutes the cap table for fee collection
+        * @return deployFee the amount of wei required to deploy a campaign
+        */
+        function feeSchedule()
+            external
+            view
+            returns (address collector, uint16 transferFee, uint16 yieldFee, uint256 deployFee)
+        {
+            return (_feeCollector, _feeTransferBips, _feeYieldBips, _feeDeployMin);
+        }
+    }
+    ```
+  </Tab>
+</Tabs>

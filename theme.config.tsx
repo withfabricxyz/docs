@@ -7,7 +7,7 @@ const config: DocsThemeConfig = {
   logo: (
     <div className={styles.logo}>
       <img width="32" height="32" src="/spark.svg" alt="Spark!" />
-      <strong>Fabric Docs</strong>
+      <strong>Fabric Protocol Docs</strong>
     </div>
   ),
   project: {
@@ -22,7 +22,7 @@ const config: DocsThemeConfig = {
   },
   useNextSeoProps() {
     return {
-      titleTemplate: '%s - Fabric Docs'
+      titleTemplate: '%s - Fabric Protocol Docs'
     }
   },
   head: (

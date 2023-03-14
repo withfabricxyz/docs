@@ -1,0 +1,53 @@
+# Withdrawing Funds
+
+Withdrawals are used in two scenarios:
+
+1. Campaign failure
+2. Campaign success and yields occur
+
+#### Campaign Failure
+
+Upon campaign failure, any contributor can invoke the `withdraw()` function. This will effectively burn their
+campaign tokens and transfer the full amount of their contribution to their account.
+
+```ts
+contract.withdraw();
+```
+
+#### Yield
+
+When a campaign succeeds the recipient can transfer any amount of the denominated token back to the contract.
+Campaign token holders then have a balance proportional to their holdings. For example, if Alice contributed
+1 ETH into a campaign which raised 10 ETH, she will have claim on 10% of all yielded funds. If the creator yields
+1 ETH back to the contract, Alice will have 0.1 ETH available to withdraw.
+
+This does not burn any campaign tokens, instead it tracks withdraw amounts for each account to prevent overdraft.
+
+```
+contract.withdraw();
+```
+
+#### Preflight Checks
+
+It's a good idea to determine if an account can withdraw before invoking withdraw functions to prevent burnt gas.
+
+Here is an example function to check the withdrawable amount for a given campaign and account.
+
+```ts
+async function withdrawableAmount(contract: Contract, account: string) : Promise<bigint> {
+  if(!(await contract.isWithdrawAllowed()) {
+    return 0n;
+  }
+
+  const tokenBalance = await contract.balanceOf(account);
+  if(tokenBalance == 0n) {
+    return 0n;
+  }
+
+  if((await contract.state()) === 'FUNDED') {
+    return contract.yieldBalanceOf(account);
+  }
+
+  return tokenBalance;
+}
+```

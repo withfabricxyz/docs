@@ -1,0 +1,29 @@
+# Yield
+
+import { Callout } from 'nextra-theme-docs'
+
+<Callout type="warning" emoji="⚠️">
+  Yields may require regulatory compliance
+</Callout>
+
+The CrowdFi protocol supports payment splitting between token holders. If the purpose
+of the campaign was to finance a project which yields returns, those returns may be
+transferred to the contract and all token holders can withdraw their portion at any time.
+
+#### Yielding Native Tokens
+
+Example yielding 1 Eth to the contract for the contributors to share
+
+```ts
+const txn = await contract.yieldEth({ value: BigInt(Math.pow(10, 18)) })
+```
+
+#### Yielding ERC20 Tokens
+
+Like contributions, ERC20 yields require allowances.
+
+```ts
+const amount = BigInt((Math.pow(10, 6));
+const txn = await tokenContract.approve(contract.address, amount);
+const txn = await contract.yieldERC20(amount);
+```
