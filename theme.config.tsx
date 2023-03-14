@@ -16,7 +16,7 @@ const config: DocsThemeConfig = {
   // chat: {
   //   link: 'https://discord.com',
   // },
-  docsRepositoryBase: 'https://github.com/withfabricxyz/docs/tree/main/pages',
+  docsRepositoryBase: 'https://github.com/withfabricxyz/docs/tree/main',
   footer: {
     text: 'Thanks for all the fish!',
   },
