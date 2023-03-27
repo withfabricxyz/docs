@@ -1,4 +1,4 @@
-# Contributing funds
+# Contributing Funds
 
 import { Callout } from 'nextra-theme-docs'
 import { Tab, Tabs } from 'nextra-theme-docs'
@@ -8,69 +8,65 @@ Contributions are allowed as long as the following conditions are met
 1. The campaign has started
 2. The campaign has not ended
 3. The campaign max goal is not met
+4. The contribution amount doesn't violate the min and max contribution amounts for the account
 
 #### Contributing ETH
 
 Contributions are made to ETH denominated contracts by invoking the `contributeEth()` function with msg.value set the amount of wei.
 
-<Tabs items={['Solidity', 'Cast', 'Viem']}>
-  <Tab>
-  ```solidity
-    ICrowdFinancingV1(address).contributeEth{ value: 1 ether }();
-  ```
-  </Tab>
-  <Tab>
-  ```
-    TODO
-  ```
-  </Tab>
+<Tabs items={['ethers', 'foundry']}>
   <Tab>
   ```ts
-  await walletClient.writeContract({
-    address: CAMPAIGN_ADDR,
-    abi: crowdfiAbi,
-    functionName: 'contributeEth',
-    value: parseEther('1')
-  });
+  import { Contract, Signer } from 'ethers';
+
+  const abi = require('path/to/CrowdFinancingV1.abi.json');
+  const contribute = async (campaignAddress: string, signer: Signer, amount: bigint) : Promise<any> => {
+    const contract = new Contract(campaignAddress, abi, signer);
+    return contract.contributeEth({
+      gasLimit: 200_000,
+      value: amount,
+    });
+  }
+  ```
+  </Tab>
+  <Tab>
+  ```bash
+  cast send ${CAMPAIGN_ADDRESS} "contributeEth()" --value ${AMOUNT} --rpc-url ${RPC_URL} --ledger
   ```
   </Tab>
 </Tabs>
 
-#### Contributing ERC20 Tokens
+#### Contributing ERC-20 Tokens
 
-Contributions are made to ERC20 denominated contracts by invoking the `contributeERC20(amount)` function. This first requires
+Contributions are made to ERC-20 denominated contracts by invoking the `contributeERC20(amount)` function. This first requires
 that the campaign contract has an allowance greater than or equal to the amount specified in the call.
 
-If the contracts allowance for the ERC20 token is less than the amount specified, then the transaction will revert.
+If the contracts allowance for the ERC-20 token is less than the amount specified, then the transaction will revert.
 
-<Tabs items={['Solidity', 'Cast', 'Viem']}>
-  <Tab>
-  ```solidity
-    ICrowdFinancingV1 contract = ICrowdFinancingV1(address);
-    require(IERC20(contract.erc20Address()).approve(campaignAddress, 1e6), 'ERC20: Approval Failed');
-    contract.contributeERC20(1e6);
-  ```
-  </Tab>
-  <Tab>
-  ```
-    TODO
-  ```
-  </Tab>
+<Tabs items={['ethers', 'foundry']}>
   <Tab>
   ```ts
-  await walletClient.writeContract({
-    address: TOKEN_ADDRESS,
-    abi: erc20Abi,
-    functionName: 'approve',
-    args: [CAMPAIGN_ADDR, 10000n]
-  })
+  import { Contract, Signer } from 'ethers';
 
-  await walletClient.writeContract({
-    address: CAMPAIGN_ADDR,
-    abi: crowdfiAbi,
-    functionName: 'contributeEth',
-    args: [10000n]
-  })
+  const abi = require('path/to/CrowdFinancingV1.abi.json');
+  const contribute = async (campaignAddress: string, signer: Signer, amount: bigint) : Promise<any> => {
+    const erc20 = new Contract(erc20ContractAddress, erc20Abi, signer);
+    const txn = await erc20.approve(campaignAddress, amount);
+
+    await pollForReceipt(txn.hash);
+
+    const contract = new Contract(campaignAddress, abi, signer);
+    return contract.contributeERC20(amount, {
+      gasLimit: 200_000,
+    });
+  }
+  ```
+  </Tab>
+  <Tab>
+  ```bash
+  cast send ${TOKEN_ADDRESS} "approve(address,uint256)" ${CAMPAIGN_ADDRESS} ${AMOUNT} --rpc-url ${RPC_URL} --ledger
+  # await for transaction to be mined
+  cast send ${CAMPAIGN_ADDRESS} "contributeERC20(uint256)" ${AMOUNT} --rpc-url ${RPC_URL} --ledger
   ```
   </Tab>
 </Tabs>
@@ -84,20 +80,9 @@ for a given account.
   If an account attempts to contribute a value outside the range, the transaction will revert
 </Callout>
 
-<Tabs items={['Solidity', 'Cast', 'Viem']}>
-  <Tab>
-  ```solidity
-    // TODO
-  ```
-  </Tab>
-  <Tab>
-  ```
-    TODO
-  ```
-  </Tab>
+<Tabs items={['ethers']}>
   <Tab>
   ```ts
-  // TODO
   async function isContributionValid(contract: Contract, account: string, amount: bigint) : Promise<boolean> {
     const allowed = await contract.isContributionAllowed();
     const { 0: low, 1: high } = await contract.contributionRangeFor(account);

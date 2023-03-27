@@ -1,19 +1,47 @@
 # Transferring Funds
 
 import { Callout } from 'nextra-theme-docs'
+import { Tab, Tabs } from 'nextra-theme-docs'
 
 Transfers can occur if the following conditions are met:
 
 1. The min goal is met AND the campaign has ended
-2. OR the max goal is met
+2. The max goal is met
 
 Any account can initiate the transfer, but all funds will be transferred to the recipient address.
 
 #### Invoking Transfer
 
-```ts
-const txn = await contract.transferBalanceToRecipient();
-```
+<Tabs items={['ethers', 'foundry']}>
+  <Tab>
+  ```ts
+  const txn = await campaignContract.transferBalanceToRecipient();
+  ```
+  </Tab>
+  <Tab>
+  ```bash
+  cast send ${CAMPAIGN_ADDRESS} "transferBalanceToRecipient()" --rpc-url ${RPC_URL} --ledger
+  ```
+  </Tab>
+</Tabs>
+
+
+#### Preflight Checks
+
+Before invoking transfer, it's best to check that transfer is allowed
+
+<Tabs items={['ethers', 'foundry']}>
+  <Tab>
+  ```ts
+  const txn = await campaignContract.isTransferAllowed();
+  ```
+  </Tab>
+  <Tab>
+  ```bash
+  cast call ${CAMPAIGN_ADDRESS} "isTransferAllowed()" --rpc-url ${RPC_URL} --ledger
+  ```
+  </Tab>
+</Tabs>
 
 #### Fees
 
@@ -21,17 +49,9 @@ const txn = await contract.transferBalanceToRecipient();
   The protocol currently has all fees set to 0
 </Callout>
 
-There are two types of fees which are captured at time of transfer
+There are two types of optional fees which are collected at time of transfer
 
 1. Transfer fee - A percentage of tokens are taken before transfer and sent to the fee recipient
-2. Yield fee - A percentage of tokens to mint for the fee recipient
+2. Yield fee - A percentage of tokens to mint for the fee recipient (effectively diluting the supply)
 
 These fees are set at time of campaign deployment and will not change after deployment.
-
-#### Preflight Checks
-
-Before invoking transfer, it's best to check that transfer is allowed
-
-```ts
-const allowed : boolean = await contract.isTransferAllowed();
-```

@@ -1,5 +1,6 @@
-# CrowdFinancingV1Factory
-[Git Source](https://github.com/withfabricxyz/contracts/blob/278bdebcf91ed312b0e42a13dea32dd48dd6b6b8/src/finance/CrowdFinancingV1Factory.sol)
+# CrowdFi V1 Factory Reference
+
+[Git Source](https://github.com/withfabricxyz/contracts/blob/b1d8186ade935688a2ee8457124c53f640092408/src/finance/CrowdFinancingV1Factory.sol)
 
 **Inherits:**
 Ownable
@@ -84,7 +85,6 @@ constructor(address implementation) Ownable;
 
 ```solidity
 function deployCampaign(
-    uint64 externalRef,
     address recipient,
     uint256 minGoal,
     uint256 maxGoal,
@@ -99,7 +99,6 @@ function deployCampaign(
 
 |Name|Type|Description|
 |----|----|-----------|
-|`externalRef`|`uint64`|An optional reference value emitted in the deploy event for association|
 |`recipient`|`address`|the address of the recipient, where funds are sent on success|
 |`minGoal`|`uint256`|the minimum funding amount acceptable for successful financing|
 |`maxGoal`|`uint256`|the maximum funding amount accepted for the financing round|
@@ -184,7 +183,7 @@ function feeSchedule()
 
 
 ```solidity
-event Deployment(uint64 nonce, address indexed deployment);
+event Deployment(address indexed deployment);
 ```
 
 ### FeeScheduleChange

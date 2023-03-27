@@ -1,18 +1,31 @@
 # Withdrawing Funds
 
+import { Callout } from 'nextra-theme-docs'
+import { Tab, Tabs } from 'nextra-theme-docs'
+
 Withdrawals are used in two scenarios:
 
-1. Campaign failure
-2. Campaign success and yields occur
+1. The campaign does not reach its goal by the end time
+2. The campaign succeeds and the recipient yields funds back to the contract
 
-#### Campaign Failure
+#### The goal is not met
 
-Upon campaign failure, any contributor can invoke the `withdraw()` function. This will effectively burn their
+If the goal is not met all contributors can invoke the `withdraw()` function. This will effectively burn their
 campaign tokens and transfer the full amount of their contribution to their account.
 
-```ts
-contract.withdraw();
-```
+<Tabs items={['ethers', 'foundry']}>
+  <Tab>
+  ```ts
+  const txn = await campaignContract.withdraw();
+  ```
+  </Tab>
+  <Tab>
+  ```bash
+  cast send ${CAMPAIGN_ADDRESS} "withdraw()" --rpc-url ${RPC_URL} --ledger
+  ```
+  </Tab>
+</Tabs>
+
 
 #### Yield
 
@@ -23,13 +36,22 @@ Campaign token holders then have a balance proportional to their holdings. For e
 
 This does not burn any campaign tokens, instead it tracks withdraw amounts for each account to prevent overdraft.
 
-```
-contract.withdraw();
-```
+<Tabs items={['ethers', 'foundry']}>
+  <Tab>
+  ```ts
+  const txn = await campaignContract.withdraw();
+  ```
+  </Tab>
+  <Tab>
+  ```bash
+  cast send ${CAMPAIGN_ADDRESS} "withdraw()" --rpc-url ${RPC_URL} --ledger
+  ```
+  </Tab>
+</Tabs>
 
 #### Preflight Checks
 
-It's a good idea to determine if an account can withdraw before invoking withdraw functions to prevent burnt gas.
+It's a good idea to determine if an account can withdraw before invoking withdraw functions to save gas.
 
 Here is an example function to check the withdrawable amount for a given campaign and account.
 

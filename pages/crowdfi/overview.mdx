@@ -1,75 +1,112 @@
-# Fabric CrowdFi Protocol
+# CrowdFi Protocol Overview
 
-Fabric is a decentralized protocol for moving capital between creators and contributors.
+![](/campaign_arch.png)
+
+
+The Fabric crowdfinancing protocol moves capital between creators and communities.
 
 Here’s how it works:
 
-1. A creator deploys a crowdfunding contract onchain,
-2. Contributors deposit capital into the contract,
-3. If the funding target is met then the creator can withdraw the pooled capital, else contributors can withdraw their deposits.
+1. A creator deploys a crowdfinancing contract onchain,
+2. Contributors deposit funds into the contract,
+3. If the goal is met, then the recipient can withdraw the pooled funds from the contract, else contributors can withdraw their deposits.
 
 Optionally:
 
-4. Yield generated from deployed capital can be deposited back into the contract by the creator,
+4. Yield generated from deployed capital can be deposited back into the contract by the recipient,
 5. Contributors can then withdraw a percentage of this yield in proportion to their initial contribution (pro rata).
 
-The protocol is a non-upgradable smart contract on ethereum mainnet that can be permissionlessly used to pool capital and verifiably share upside. It lives at the intersection of a crowdfunding project, escrow account, and cap table.
+The protocol is a non-upgradable, EVM-compatible smart contract that can be permissionlessly used to pool capital and verifiably share upside. It lives at the intersection of a crowdfunding project, escrow account, and cap table.
 
 Such is the combinatorial power of crypto-economic software.
 
 
-## Creators
+## Protocol
 
-Anyone can deploy a crowdfunding contract with the Fabric protocol: founders, community builders, artists, DAOs, gaming guilds, freelance collectives, co-ops, nonprofits, neighborhood and home owner’s associations, for profit companies, etc.
+### Contract
+
+Crowdfinancing contracts are the atomic unit of the protocol. They are what creators deploy onchain, contributors deposit funds into, and recipients withdraw from. They are also used to distribute yield.
+
+They have the following parameters:
 
 
-## Contributors
+    **Goal**
+    Goals are discreet min and max funding targets. Goals are *all or nothing*, meaning that recipients can only withdraw if the minimum funding target has been met.
 
-Contributions can be made to the contract by any valid address, be it an individual wallet, multisig, or other smart contract such as a DAO or DeFi protocol.
+
+    **Token**
+    Goals are denominated in ETH or any valid ERC-20 token, such as USDC or DAI.
+
+    **Duration**
+    Discreet start and end times.
+
+    **Recipient**
+    Recipients are the benefactors of the funding goal. They can be any valid address, be it an individual wallet, multisig, or other smart contract such as a DAO or DeFi protocol.
 
 
-## Crowdfunds
+### Creator
 
-Crowdfunds are the atomic unit of the Fabric protocol. They are what creators deploy onchain, contributors deposit funds into, and yield distributions are withdrawn from. They have the following properties:
+Anyone can deploy a crowdfinancing contract: founders, community builders, artists, DAOs, gaming guilds, freelance collectives, schools, co-ops, nonprofits, neighborhood and homeowners associations, for profit companies, etc.
 
-**Goal**
-Discreet min and max funding targets.
 
-**Contribution**
-Discreet min and max contribution amounts.
+### Contributor
 
-**Duration**
-Discreet start and end times.
+Deposits can be made into the contract by any valid address, be it an individual wallet, multisig, or smart contract.
 
 
 ## Fees
 
 The protocol can collect three types of fees:
 
-##### Deployment
-A flat fee in order to deploy a crowdfunding contract onchain.
 
-##### Capital
+1. Deployment
 
-A percentage of the total amount of capital raised.
+A flat fee in order to deploy a crowdfinancing contract onchain.
 
-##### Yield
 
-A percentage of the total returns generated from deployed capital.
+2. Capital
 
-All three are currently set to 0. In the future, if we decide to enable fees they will accrue to the Fabric protocol treasury, not Fabric Inc.
+A percentage of the total funds raised.
 
+
+3. Yield
+
+A percentage of the returns generated from deployed capital.
+
+All are currently set to zero. In the future, if we decide to enable fees, they will accrue to the Fabric protocol treasury, not Fabric Inc.
 
 ## Risks
 
-**Creators**
-Fabric does not (and can not) control who uses the protocol. It is non- upgradable, decentralized, and permissionless which means that in addition to the types of creators mentioned above, scammers, spammers, fraudsters, charlatans, evildoers, and other economic agents of low moral character can use it too.
+Though the protocol has been audited by an independent third-party and thoroughly tested prior to deploying, it is not without risk.
 
-We highly recommend vetting creators prior to contributing funds to their crowdfunding campaign.
 
-**Compliance**
-Prior to offering or participating in any return-producing crowdfund it is up to you to ensure legal and regulatory compliance within your jurisdiction. We recommend hiring a qualified attorney to advise on how best to make use of the Fabric protocol for your unique use case.
+### Creators
 
-**Yield**
-For yield generated offchain there is no onchain mechanism by which to enforce deposits back into the crowdfunding contract. In this case, contributors are entirely dependent on the creator and whatever out of band means might exist to compel them to comply with the claims they made regarding yield distributions.
+Fabric does not (and can not) control who uses the protocol. It is *non-upgradable*, *decentralized*, and *permissionless* which means that in addition to the types of creators mentioned above, scammers, spammers, fraudsters, charlatans, evildoers, and other economic agents of low moral character can also use it. Do your own research and verify the creator address prior to contributing.
 
+
+### Recipients
+
+Just like creators, recipients can also be any valid address. Do your own research and verify the recipient address prior to contributing.
+
+
+### Yield
+
+For yield generated offchain, there is currently no onchain mechanism by which to enforce deposits back into the contract. In this case, contributors are dependent on the recipient—and whatever out-of-band means may exist—to follow through on their promise of returns.
+
+
+### Compliance
+
+Know your rights. Seek counsel from a qualified attorney who can advise on relevant legal and regulatory restrictions in your area. Economic freedom is not yet evenly distributed.
+
+
+### Clients
+
+Anyone can launch a crowdfinancing client. Do your own research and verify that whatever interface you use to interact with the protocol has been developed by a reputable source.
+
+
+## The World Is Yours
+
+People have been pooling capital and sharing upside for centuries. The Fabric crowdfinancing protocol now codifies this basic human impulse into a permissionless, decentralized smart contract that anyone, anywhere in the world can use. No gatekeepers, no middle-men, no masters.
+
+The world is yours.

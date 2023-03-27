@@ -1,4 +1,6 @@
-# CrowdFinancingV1.sol
+# CrowdFi V1 Reference
+
+[Git Source](https://github.com/withfabricxyz/contracts/blob/b1d8186ade935688a2ee8457124c53f640092408/src/finance/CrowdFinancingV1.sol)
 
 **Inherits:**
 Initializable, ReentrancyGuardUpgradeable, IERC20
@@ -388,12 +390,16 @@ function isContributionAllowed() public view returns (bool);
 
 ### isTransferAllowed
 
-Check if the goal was met and funds can be transferred
-
 
 ```solidity
 function isTransferAllowed() public view returns (bool);
 ```
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`<none>`|`bool`|true if the goal was met and funds can be transferred|
+
 
 ### transferBalanceToRecipient
 
@@ -978,3 +984,4 @@ enum State {
     FUNDED
 }
 ```
+

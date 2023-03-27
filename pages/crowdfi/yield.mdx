@@ -1,6 +1,7 @@
 # Yield
 
 import { Callout } from 'nextra-theme-docs'
+import { Tab, Tabs } from 'nextra-theme-docs'
 
 <Callout type="warning" emoji="⚠️">
   Yields may require regulatory compliance
@@ -8,22 +9,44 @@ import { Callout } from 'nextra-theme-docs'
 
 The CrowdFi protocol supports payment splitting between token holders. If the purpose
 of the campaign was to finance a project which yields returns, those returns may be
-transferred to the contract and all token holders can withdraw their portion at any time.
+transferred to the contract and all token holders can withdraw their pro-rata share at any time.
 
 #### Yielding Native Tokens
 
 Example yielding 1 Eth to the contract for the contributors to share
 
-```ts
-const txn = await contract.yieldEth({ value: BigInt(Math.pow(10, 18)) })
-```
+<Tabs items={['ethers', 'foundry']}>
+  <Tab>
+  ```ts
+  const txn = await crowdfiContract.yieldEth({ value: BigInt(Math.pow(10, 18)) })
+  ```
+  </Tab>
+  <Tab>
+  ```bash
+  cast send ${CAMPAIGN_ADDRESS} "yieldEth()" --value ${AMOUNT} --rpc-url ${RPC_URL} --ledger
+  ```
+  </Tab>
+</Tabs>
 
-#### Yielding ERC20 Tokens
 
-Like contributions, ERC20 yields require allowances.
+#### Yielding ERC-20 Tokens
 
-```ts
-const amount = BigInt((Math.pow(10, 6));
-const txn = await tokenContract.approve(contract.address, amount);
-const txn = await contract.yieldERC20(amount);
-```
+Like contributions, ERC-20 yields require allowances.
+
+<Tabs items={['ethers', 'foundry']}>
+  <Tab>
+  ```ts
+  const amount = BigInt((Math.pow(10, 6));
+  const approveTxn = await tokenContract.approve(crowdfiContract.address, amount);
+  // await mining...
+  const yieldTxn = await crowdfiContract.yieldERC20(amount);
+  ```
+  </Tab>
+  <Tab>
+  ```bash
+  cast send ${TOKEN_ADDRESS} "approve(address,uint256)" ${CAMPAIGN_ADDRESS} ${AMOUNT} --rpc-url ${RPC_URL} --ledger
+  cast send ${CAMPAIGN_ADDRESS} "yieldEth()" --value ${AMOUNT} --rpc-url ${RPC_URL} --ledger
+  ```
+  </Tab>
+</Tabs>
+
