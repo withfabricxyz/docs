@@ -3,12 +3,12 @@
 import { Callout } from 'nextra-theme-docs'
 import { Tab, Tabs } from 'nextra-theme-docs'
 
-Transfers can occur if the following conditions are met:
+Transfers can occur if either one of the following conditions is met:
 
 1. The min goal is met AND the campaign has ended
 2. The max goal is met
 
-Any account can initiate the transfer, but all funds will be transferred to the recipient address.
+Any address can initiate the transfer, but all funds will be transferred to the recipient address.
 
 #### Invoking Transfer
 
@@ -28,7 +28,7 @@ Any account can initiate the transfer, but all funds will be transferred to the 
 
 #### Preflight Checks
 
-Before invoking transfer, it's best to check that transfer is allowed
+Before invoking transfer, it's best to check that transfer is allowed.
 
 <Tabs items={['ethers', 'foundry']}>
   <Tab>
@@ -49,9 +49,9 @@ Before invoking transfer, it's best to check that transfer is allowed
   The protocol currently has all fees set to 0
 </Callout>
 
-There are two types of optional fees which are collected at time of transfer
+There are two types of optional fees which are collected at the time of transfer:
 
-1. Transfer fee - A percentage of tokens are taken before transfer and sent to the fee recipient
-2. Yield fee - A percentage of tokens to mint for the fee recipient (effectively diluting the supply)
+1. Transfer fee - A percentage of the funds collected, sent to the fee recipient before transferring the campaign funds to the campaign recipient.
+2. Yield fee - A percentage of campaign tokens minted and sent to the fee recipient.
 
-These fees are set at time of campaign deployment and will not change after deployment.
+These fees are set by the factory contract at the time of the campaign deployment and cannot change after the campaign deployment.
