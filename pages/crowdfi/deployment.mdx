@@ -17,7 +17,7 @@ the contract with campaign parameters.
 |`maxGoal`|`uint256`|the maximum funding amount accepted for the financing round|
 |`minContribution`|`uint256`|the minimum deposit an account can make in one deposit|
 |`maxContribution`|`uint256`|the maximum deposit an account can make in one or more deposits|
-|`holdOff`|`uint32`|the number of seconds to wait until the fund starts|
+|`holdOff`|`uint32`|the number of seconds to wait until the campaign starts|
 |`duration`|`uint32`|the runtime of the campaign, in seconds|
 |`erc20TokenAddr`|`address`|the address of the ERC-20 token used for payments, or 0 address for native token|
 
@@ -25,7 +25,7 @@ the contract with campaign parameters.
 #### Native Token vs ERC-20
 
 CrowdFi contracts support native tokens as well as ERC-20 compliant tokens. The contribute and yield functions are different depending
-on whether or not the contract is ERC-20 denominated.
+on whether the contract is native token or ERC-20 denominated.
 
 <Callout type="error" emoji="️🚫">
   CrowdFi contracts do not support rebasing tokens! Do not use them as the denominated token.
