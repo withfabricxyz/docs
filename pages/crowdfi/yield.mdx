@@ -4,16 +4,16 @@ import { Callout } from 'nextra-theme-docs'
 import { Tab, Tabs } from 'nextra-theme-docs'
 
 <Callout type="warning" emoji="⚠️">
-  Yields may require regulatory compliance.
+  Yields may require regulatory compliance
 </Callout>
 
-The CrowdFi protocol supports splitting yield between token holders. If the purpose
-of the campaign was to finance a project which produces yield, that yield may be
-deposited to the contract and all token holders can then withdraw their pro-rata share at any time.
+The CrowdFi protocol supports payment splitting between token holders. If the purpose
+of the campaign was to finance a project which yields returns, those returns may be
+transferred to the contract and all token holders can withdraw their pro-rata share at any time.
 
 #### Yielding Native Tokens
 
-Here is an example of depositing yield back into the contract.
+Example yielding 1 Eth to the contract for the contributors to share
 
 <Tabs items={['ethers', 'foundry']}>
   <Tab>
@@ -31,7 +31,7 @@ Here is an example of depositing yield back into the contract.
 
 #### Yielding ERC-20 Tokens
 
-Here is a corresponding example for an ERC-20 denominated campaign. Of course, like contributions, ERC-20 yields require allowances.
+Like contributions, ERC-20 yields require allowances.
 
 <Tabs items={['ethers', 'foundry']}>
   <Tab>
