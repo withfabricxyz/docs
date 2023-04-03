@@ -1,112 +1,99 @@
-# CrowdFi Protocol Overview
+# What is the Fabric Crowdfinancing Protocol
 
-![](/campaign_arch.png)
+# Overview
+![](https://paper-attachments.dropboxusercontent.com/s_65601E9EF744934C258CB38CFF884D33FF21F698C741325DD1B2C04C3A7ABC21_1680056817199_crowdfinancing.png)
 
 
-The Fabric crowdfinancing protocol moves capital between creators and communities.
+The Fabric crowdfinancing protocol helps values-aligned communities pool capital in order achieve shared goals.
 
 Here’s how it works:
 
-1. A creator deploys a crowdfinancing contract onchain,
-2. Contributors deposit funds into the contract,
+1. A creator deploys a crowdfinancing contract onchain.
+2. Contributors deposit funds into the contract.
 3. If the goal is met, then the recipient can withdraw the pooled funds from the contract, else contributors can withdraw their deposits.
 
 Optionally:
 
-4. Yield generated from deployed capital can be deposited back into the contract by the recipient,
-5. Contributors can then withdraw a percentage of this yield in proportion to their initial contribution (pro rata).
+4. Yield generated from deployed capital can be deposited back into the contract by the recipient.
+5. Contributors can then withdraw a percentage of this yield, in proportion to their initial contribution.
 
 The protocol is a non-upgradable, EVM-compatible smart contract that can be permissionlessly used to pool capital and verifiably share upside. It lives at the intersection of a crowdfunding project, escrow account, and cap table.
 
 Such is the combinatorial power of crypto-economic software.
 
+# Protocol
+## Contract
 
-## Protocol
+Crowdfinancing contracts are the atomic unit of the protocol. They are what creators deploy onchain, contributors deposit funds into, and recipients withdraw from. They are also used to custody and distribute yield.
 
-### Contract
+Each crowdfinancing contract has the following parameters:
 
-Crowdfinancing contracts are the atomic unit of the protocol. They are what creators deploy onchain, contributors deposit funds into, and recipients withdraw from. They are also used to distribute yield.
+**Goal**
+A goal consists of a minimum and maximum funding target. The contract will not allow contributions above the maximum goal. The recipient can only withdraw pooled funds if the minimum goal is met.
 
-They have the following parameters:
+**Token**
+Goals are denominated in ETH or ERC-20 tokens, such as USDC or DAI.
 
+**Duration**
+The campaign duration is encoded in a start time and an end time; the contract will only accept contributions between those times. At the end time, the contract compares the funds pooled to the minimum goal to determine if the campaign was successful or failed.
 
-    **Goal**
-    Goals are discreet min and max funding targets. Goals are *all or nothing*, meaning that recipients can only withdraw if the minimum funding target has been met.
-
-
-    **Token**
-    Goals are denominated in ETH or any valid ERC-20 token, such as USDC or DAI.
-
-    **Duration**
-    Discreet start and end times.
-
-    **Recipient**
-    Recipients are the benefactors of the funding goal. They can be any valid address, be it an individual wallet, multisig, or other smart contract such as a DAO or DeFi protocol.
+**Recipient**
+If the campaign is successful, the recipient can withdraw the pooled funds. The recipient can be any address, whether an individual wallet, a multisig, or another smart contract such as a DAO or a DeFi protocol. The recipient can deposit any yield generated back into the crowdfinancing contract, for withdrawal by the contributors.
 
 
-### Creator
+## Creator
 
 Anyone can deploy a crowdfinancing contract: founders, community builders, artists, DAOs, gaming guilds, freelance collectives, schools, co-ops, nonprofits, neighborhood and homeowners associations, for profit companies, etc.
 
 
-### Contributor
+## Contributor
 
-Deposits can be made into the contract by any valid address, be it an individual wallet, multisig, or smart contract.
+Deposits can be made into the contract by any address, be it an individual wallet, multisig, DAO, or other protocol. If the campaign fails, contributors can withdraw their deposits. If the campaign is successful, and the recipient later deposits yield into the contract, the contributors can withdraw that yield in proportion to their contributions.
 
 
-## Fees
+# Fees
 
 The protocol can collect three types of fees:
 
 
-1. Deployment
+1. Deployment: a flat fee in order to deploy a crowdfinancing contract onchain.
+2. Capital: a percentage of the total funds raised.
+3. Yield: a percentage of the returns generated from deployed capital.
 
-A flat fee in order to deploy a crowdfinancing contract onchain.
-
-
-2. Capital
-
-A percentage of the total funds raised.
+All fees are currently set to zero. In the future, if we enable fees, they will accrue to the Fabric protocol treasury.
 
 
-3. Yield
+# Risks
 
-A percentage of the returns generated from deployed capital.
-
-All are currently set to zero. In the future, if we decide to enable fees, they will accrue to the Fabric protocol treasury, not Fabric Inc.
-
-## Risks
-
-Though the protocol has been audited by an independent third-party and thoroughly tested prior to deploying, it is not without risk.
+Though the contract has been audited by Quantstamp and thoroughly tested prior to deploying, using the protocol is not without risk.
 
 
-### Creators
+## Creators
 
-Fabric does not (and can not) control who uses the protocol. It is *non-upgradable*, *decentralized*, and *permissionless* which means that in addition to the types of creators mentioned above, scammers, spammers, fraudsters, charlatans, evildoers, and other economic agents of low moral character can also use it. Do your own research and verify the creator address prior to contributing.
-
-
-### Recipients
-
-Just like creators, recipients can also be any valid address. Do your own research and verify the recipient address prior to contributing.
+Fabric does not (and can not) control who uses the protocol. It is *non-upgradable*, *decentralized*, and *permissionless,* which means that in addition to the types of creators mentioned above, scammers, spammers, fraudsters, charlatans, evildoers, and other economic agents of low moral character can also use it. Do your own research and verify both the creator and recipient address prior to contributing.
 
 
-### Yield
+## Recipients
 
-For yield generated offchain, there is currently no onchain mechanism by which to enforce deposits back into the contract. In this case, contributors are dependent on the recipient—and whatever out-of-band means may exist—to follow through on their promise of returns.
+Just like creators, recipients can be any address, and therefore not necessarily a known or trusted actor. Do your own research and verify the recipient address prior to contributing.
 
 
-### Compliance
+## Yield
+
+For yield generated offchain, there is currently no mechanism by which to enforce deposits back into the contract. In this case, contributors are dependent on the recipient—and whatever out-of-band means may exist—to follow through on their promise of returns.
+
+
+## Compliance
 
 Know your rights. Seek counsel from a qualified attorney who can advise on relevant legal and regulatory restrictions in your area. Economic freedom is not yet evenly distributed.
 
 
-### Clients
+## Clients
 
-Anyone can launch a crowdfinancing client. Do your own research and verify that whatever interface you use to interact with the protocol has been developed by a reputable source.
+The first client for using the Fabric protocol is available at https://withfabric.xyz. But anyone can launch a client for interacting with the protocol. Do your own research and verify that whatever interface you use has been developed by a reputable source.
 
+# The World Is Yours
 
-## The World Is Yours
-
-People have been pooling capital and sharing upside for centuries. The Fabric crowdfinancing protocol now codifies this basic human impulse into a permissionless, decentralized smart contract that anyone, anywhere in the world can use. No gatekeepers, no middle-men, no masters.
+People have been pooling capital and sharing upside for centuries. The Fabric crowdfinancing protocol codifies this basic human impulse into a permissionless, decentralized smart contract that anyone, anywhere in the world can use. No gatekeepers, no middle-men, no masters. 
 
 The world is yours.
