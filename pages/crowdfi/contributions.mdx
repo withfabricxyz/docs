@@ -8,7 +8,7 @@ Contributions are allowed as long as the following conditions are met:
 1. The campaign has started
 2. The campaign has not ended
 3. The campaign max goal is not met
-4. The contribution amount doesn't violate the min and max contribution amounts for the contributing address
+4. The contribution amount doesn't violate the min and max contribution amounts for the contributing account
 
 #### Contributing ETH
 
@@ -74,10 +74,10 @@ If the contracts allowance for the ERC-20 token is less than the amount specifie
 #### Preflight Checks
 
 Before contributing funds to the contract, it's best to check if contributions are allowed and to check the min and max contribution amounts
-for a given address.
+for a given account.
 
 <Callout type="warning" emoji="⚠️">
-  If an address attempts to contribute a value outside the range, the transaction will revert
+  If an account attempts to contribute a value outside the range, the transaction will revert
 </Callout>
 
 <Tabs items={['ethers']}>
