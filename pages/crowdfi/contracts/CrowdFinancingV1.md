@@ -8,7 +8,7 @@ Initializable, ReentrancyGuardUpgradeable, IERC20
 **Author:**
 Fabric Inc.
 
-Each instance of a Crowd Financing Contract represents a single campaign with a goal
+Each instance of a CrowdFinancing Contract represents a single campaign with a goal
 of raising funds for a specific purpose. The contract is deployed by the creator through
 the CrowdFinancingV1Factory contract. The creator specifies the recipient address, the
 token to use for payments, the minimum and maximum funding goals, the minimum and maximum
@@ -84,7 +84,7 @@ address private _recipientAddress;
 
 
 ### _token
-*The token used for payments (optional)*
+*The token used for funding (optional)*
 
 
 ```solidity
@@ -129,7 +129,7 @@ uint256 private _maxContribution;
 
 
 ### _startTimestamp
-*The start timestamp for the fund*
+*The start timestamp for the campaign*
 
 
 ```solidity
@@ -138,7 +138,7 @@ uint256 private _startTimestamp;
 
 
 ### _endTimestamp
-*The end timestamp for the fund*
+*The end timestamp for the campaign*
 
 
 ```solidity
@@ -201,7 +201,7 @@ address private _feeRecipient;
 
 
 ### _feeTransferBips
-*The fee in basis points, transferred to the fee recipient upon transfer*
+*The transfer fee in basis points, sent to the fee recipient upon transfer*
 
 
 ```solidity
@@ -210,7 +210,7 @@ uint16 private _feeTransferBips;
 
 
 ### _feeYieldBips
-*The fee in basis points, used to dilute the cap table upon transfer*
+*The yield fee in basis points, used to dilute the cap table upon transfer*
 
 
 ```solidity
@@ -424,7 +424,7 @@ function allocateYieldFee() private returns (uint256);
 
 ### calculateTransferFee
 
-*Calculates a fee to transfer to the fee collector upon processing*
+*Calculates a fee to transfer to the fee collector*
 
 
 ```solidity
@@ -459,7 +459,7 @@ function isGoalMaxMet() public view returns (bool);
 
 ### yieldERC20
 
-Yield ERC20 tokens to all token holders in proportion to their balance
+Yield ERC20 tokens to all campaign token holders in proportion to their token balance
 #### Requirements
 - `amount` must be greater than 0
 - `amount` must be approved for transfer for the contract
@@ -598,7 +598,7 @@ function yieldTotalOf(address account) public view returns (uint256);
 ### withdraw
 
 Withdraw all available funds to the caller if withdraws are allowed and
-the caller has a contribution balance (failed), or a yield balance (funded)
+the caller has a contribution balance (campaign failed), or a yield balance (campaign succeeded)
 #### Events
 - Emits a {Withdraw} event with amount = the amount withdrawn
 
@@ -932,7 +932,7 @@ function feeRecipientAddress() external view returns (address);
 
 ## Events
 ### Contribution
-*Emitted when an account contributions funds to the contract*
+*Emitted when an account contributes funds to the contract*
 
 
 ```solidity
