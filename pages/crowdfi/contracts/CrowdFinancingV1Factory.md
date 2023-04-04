@@ -8,7 +8,7 @@ Ownable
 **Author:**
 Fabric Inc.
 
-*A factory which leverages Clones to deploy Fabric Crowd Financing contracts*
+*A factory which leverages Clones to deploy Fabric CrowdFinancing contracts*
 
 
 ## State Variables
@@ -31,7 +31,7 @@ address private _feeCollector;
 
 
 ### _feeTransferBips
-*The upfront fee (See CrowdFinancingV1)*
+*The transfer fee (See CrowdFi Reference doc)*
 
 
 ```solidity
@@ -40,7 +40,7 @@ uint16 private _feeTransferBips;
 
 
 ### _feeYieldBips
-*The payout fee (See CrowdFinancingV1)*
+*The yield fee (See CrowdFi Reference doc)*
 
 
 ```solidity
@@ -99,14 +99,14 @@ function deployCampaign(
 
 |Name|Type|Description|
 |----|----|-----------|
-|`recipient`|`address`|the address of the recipient, where funds are sent on success|
-|`minGoal`|`uint256`|the minimum funding amount acceptable for successful financing|
+|`recipient`|`address`|the address of the recipient, to which funds can be transfered after success|
+|`minGoal`|`uint256`|the minimum funding amount acceptable for a successful campaign|
 |`maxGoal`|`uint256`|the maximum funding amount accepted for the financing round|
 |`minContribution`|`uint256`|the minimum deposit an account can make in one deposit|
 |`maxContribution`|`uint256`|the maximum deposit an account can make in one or more deposits|
-|`holdOff`|`uint32`|the number of seconds to wait until the fund starts|
+|`holdOff`|`uint32`|the number of seconds to wait until the campaign starts|
 |`duration`|`uint32`|the runtime of the campaign, in seconds|
-|`erc20TokenAddr`|`address`|the address of the ERC20 token used for payments, or 0 address for native token|
+|`erc20TokenAddr`|`address`|the address of the ERC20 token used for payments, or the 0 address for native token|
 
 **Returns**
 
@@ -117,7 +117,7 @@ function deployCampaign(
 
 ### transferDeployFees
 
-*Owner Only: Transfer accumulated fees*
+*Owner Only: Transfer accumulated deployment fees*
 
 
 ```solidity
@@ -137,13 +137,13 @@ function updateFeeSchedule(address feeCollector, uint16 feeTransferBips, uint16 
 |Name|Type|Description|
 |----|----|-----------|
 |`feeCollector`|`address`|the address of the fee collector, or the 0 address if no fees are collected|
-|`feeTransferBips`|`uint16`|the upfront fee in basis points, calculated during processing|
-|`feeYieldBips`|`uint16`|the payout fee in basis points. Dilutes the cap table for fee collection|
+|`feeTransferBips`|`uint16`|the transfer fee, in basis points|
+|`feeYieldBips`|`uint16`|the yield fee, in basis points. Dilutes the cap table used for yield withdrawals.|
 
 
 ### updateMinimumDeployFee
 
-*Owner Only: Update the deploy fee.*
+*Owner Only: Update the deployment fee.*
 
 
 ```solidity
@@ -153,7 +153,7 @@ function updateMinimumDeployFee(uint256 minFeeAmount) external onlyOwner;
 
 |Name|Type|Description|
 |----|----|-----------|
-|`minFeeAmount`|`uint256`|the amount of wei required to deploy a campaign|
+|`minFeeAmount`|`uint256`|the minimum deployment fee|
 
 
 ### feeSchedule
@@ -172,9 +172,9 @@ function feeSchedule()
 |Name|Type|Description|
 |----|----|-----------|
 |`collector`|`address`|the address of the fee collector, or the 0 address if no fees are collected|
-|`transferFee`|`uint16`|the upfront fee in basis points, calculated during transfer|
-|`yieldFee`|`uint16`|the payout fee in basis points. Dilutes the cap table for fee collection|
-|`deployFee`|`uint256`|the amount of wei required to deploy a campaign|
+|`transferFee`|`uint16`|the transfer fee, in basis points|
+|`yieldFee`|`uint16`|the yield fee, in basis points. Dilutes the cap table used for yield withdrawal|
+|`deployFee`|`uint256`|the depolyment fee, in wei|
 
 
 ## Events
