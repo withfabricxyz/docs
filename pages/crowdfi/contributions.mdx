@@ -3,16 +3,16 @@
 import { Callout } from 'nextra-theme-docs'
 import { Tab, Tabs } from 'nextra-theme-docs'
 
-Contributions are allowed as long as the following conditions are met
+Contributions are allowed as long as the following conditions are met:
 
 1. The campaign has started
 2. The campaign has not ended
 3. The campaign max goal is not met
-4. The contribution amount doesn't violate the min and max contribution amounts for the account
+4. The contribution amount doesn't violate the min and max contribution amounts for the contributing account
 
 #### Contributing ETH
 
-Contributions are made to ETH denominated contracts by invoking the `contributeEth()` function with msg.value set the amount of wei.
+Contributions are made to ETH denominated contracts by invoking the `contributeEth()` function with msg.value set to the amount of wei.
 
 <Tabs items={['ethers', 'foundry']}>
   <Tab>
@@ -73,7 +73,7 @@ If the contracts allowance for the ERC-20 token is less than the amount specifie
 
 #### Preflight Checks
 
-Before contributing funds to the contract, it's best to check if contributions are allowed and the min and max contribution amounts
+Before contributing funds to the contract, it's best to check if contributions are allowed and to check the min and max contribution amounts
 for a given account.
 
 <Callout type="warning" emoji="⚠️">
