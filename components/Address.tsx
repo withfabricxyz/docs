@@ -1,12 +1,12 @@
 
 const networks = {
   mainnet: {
-    factory: '0xdeadbeef',
-    logic: '0xdeadbeef',
+    factory: '0x1754F361eEb79c778a92f656D3d72d528e579B1F',
+    logic: '0x58E4036Fb5D169569627ef2F355de9d81e097E0b',
   },
   sepolia: {
-    factory: '0xsepdeadbeef',
-    logic: '0xsepdeadbeef',
+    factory: '0x04Ec36A3D4b162C4F4FB8471e3978fABBf882f40',
+    logic: '0xBE4C766225a27F2643983ba58bAFc7996Bca5e51',
   },
 };
 
