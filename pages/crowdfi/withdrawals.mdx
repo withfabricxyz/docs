@@ -6,12 +6,12 @@ import { Tab, Tabs } from 'nextra-theme-docs'
 Withdrawals are used in two scenarios:
 
 1. The campaign does not reach its goal by the end time
-2. The campaign succeeds and the recipient yields funds back to the contract
+2. The campaign succeeds and the recipient deposits yield funds back into the contract
 
 #### The goal is not met
 
-If the goal is not met all contributors can invoke the `withdraw()` function. This will effectively burn their
-campaign tokens and transfer the full amount of their contribution to their account.
+If the goal is not met, all contributors can invoke the `withdraw()` function. This will effectively burn their
+campaign tokens and transfer the full amount of their contribution to their address.
 
 <Tabs items={['ethers', 'foundry']}>
   <Tab>
