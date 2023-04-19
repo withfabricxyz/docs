@@ -6,5 +6,6 @@
   "yield": "Yield",
   "withdrawals": "Withdrawing Funds",
   "erc20": "ERC-20 Compliance",
+  "unlocking": "Unlocking Failed Funds",
   "contracts": "Contract Reference"
 }

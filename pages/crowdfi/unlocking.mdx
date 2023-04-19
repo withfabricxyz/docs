@@ -1,0 +1,45 @@
+# Unlocking Funds
+
+import { Callout } from 'nextra-theme-docs'
+import { Tab, Tabs } from 'nextra-theme-docs'
+
+If transfer does not occur within 90 days the campaign end date, the unlockFailedFunds function may be invoked,
+which puts the campaign into a failed state and allows contributors to withdraw their funds.
+
+This scenario is unlikely to occur, but is included as a failsafe in case the campaign recipient address is malicious or fails to receive native tokens for any reason.
+
+Any account can unclock funds.
+
+#### Invoking Transfer
+
+<Tabs items={['ethers', 'foundry']}>
+  <Tab>
+  ```ts
+  const txn = await campaignContract.unlockFailedFunds();
+  ```
+  </Tab>
+  <Tab>
+  ```bash
+  cast send ${CAMPAIGN_ADDRESS} "unlockFailedFunds()" --rpc-url ${RPC_URL} --ledger
+  ```
+  </Tab>
+</Tabs>
+
+
+#### Preflight Checks
+
+Before invoking unlockFailedFunds, it's best to check that unlocking is allowed.
+
+<Tabs items={['ethers', 'foundry']}>
+  <Tab>
+  ```ts
+  const txn = await campaignContract.isUnlockAllowed();
+  ```
+  </Tab>
+  <Tab>
+  ```bash
+  cast call ${CAMPAIGN_ADDRESS} "isUnlockAllowed()" --rpc-url ${RPC_URL} --ledger
+  ```
+  </Tab>
+</Tabs>
+

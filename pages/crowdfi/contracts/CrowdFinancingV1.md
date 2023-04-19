@@ -1,6 +1,5 @@
 # CrowdFi V1 Reference
-
-[Git Source](https://github.com/withfabricxyz/contracts/blob/b1d8186ade935688a2ee8457124c53f640092408/src/finance/CrowdFinancingV1.sol)
+[Git Source](https://github.com/withfabricxyz/contracts/blob/641bb82f88de135dcfd971c73420e5d0e994f5d9/src/finance/CrowdFinancingV1.sol)
 
 **Inherits:**
 Initializable, ReentrancyGuardUpgradeable, IERC20
@@ -8,7 +7,7 @@ Initializable, ReentrancyGuardUpgradeable, IERC20
 **Author:**
 Fabric Inc.
 
-Each instance of a Crowd Financing Contract represents a single campaign with a goal
+Each instance of a Crowdfinancing Contract represents a single campaign with a goal
 of raising funds for a specific purpose. The contract is deployed by the creator through
 the CrowdFinancingV1Factory contract. The creator specifies the recipient address, the
 token to use for payments, the minimum and maximum funding goals, the minimum and maximum
@@ -20,12 +19,23 @@ campaign is not successful the funds can be withdrawn by the contributors.
 
 
 ## State Variables
+### TRANSFER_WINDOW
+*If transfer doesn't occur within the TRANSFER_WINDOW, the campaign can be unlocked
+and put into a failed state for withdraws. This is to prevent a campaign from being
+locked forever if the recipient addresses are compromised.*
+
+
+```solidity
+uint256 private constant TRANSFER_WINDOW = 90 days;
+```
+
+
 ### MAX_DURATION_SECONDS
 *Max campaign duration: 90 Days*
 
 
 ```solidity
-uint256 private constant MAX_DURATION_SECONDS = 7776000;
+uint256 private constant MAX_DURATION_SECONDS = 90 days;
 ```
 
 
@@ -34,7 +44,7 @@ uint256 private constant MAX_DURATION_SECONDS = 7776000;
 
 
 ```solidity
-uint256 private constant MIN_DURATION_SECONDS = 1800;
+uint256 private constant MIN_DURATION_SECONDS = 30 minutes;
 ```
 
 
@@ -48,11 +58,11 @@ uint256 private constant PAST_START_TOLERANCE_SECONDS = 60;
 
 
 ### MAX_FEE_BIPS
-*Maximum fee basis points*
+*Maximum fee basis points (12.5%)*
 
 
 ```solidity
-uint16 private constant MAX_FEE_BIPS = 2500;
+uint16 private constant MAX_FEE_BIPS = 1250;
 ```
 
 
@@ -84,7 +94,7 @@ address private _recipientAddress;
 
 
 ### _token
-*The token used for payments (optional)*
+*The token used for funding (optional)*
 
 
 ```solidity
@@ -129,7 +139,7 @@ uint256 private _maxContribution;
 
 
 ### _startTimestamp
-*The start timestamp for the fund*
+*The start timestamp for the campaign*
 
 
 ```solidity
@@ -138,7 +148,7 @@ uint256 private _startTimestamp;
 
 
 ### _endTimestamp
-*The end timestamp for the fund*
+*The end timestamp for the campaign*
 
 
 ```solidity
@@ -201,7 +211,7 @@ address private _feeRecipient;
 
 
 ### _feeTransferBips
-*The fee in basis points, transferred to the fee recipient upon transfer*
+*The transfer fee in basis points, sent to the fee recipient upon transfer*
 
 
 ```solidity
@@ -210,7 +220,7 @@ uint16 private _feeTransferBips;
 
 
 ### _feeYieldBips
-*The fee in basis points, used to dilute the cap table upon transfer*
+*The yield fee in basis points, used to dilute the cap table upon transfer*
 
 
 ```solidity
@@ -310,11 +320,11 @@ function initialize(
 |`recipient`|`address`|the address of the recipient, where funds are transferred when conditions are met|
 |`minGoal`|`uint256`|the minimum funding goal for the financing round|
 |`maxGoal`|`uint256`|the maximum funding goal for the financing round|
-|`minContribution`|`uint256`|the minimum contribution an account can make|
+|`minContribution`|`uint256`|the minimum initial contribution an account can make|
 |`maxContribution`|`uint256`|the maximum contribution an account can make|
 |`startTimestamp`|`uint256`|the UNIX time in seconds denoting when contributions can start|
 |`endTimestamp`|`uint256`|the UNIX time in seconds denoting when contributions are no longer allowed|
-|`erc20TokenAddr`|`address`|the address of the ERC20 token used for payments, or 0 address for native token (ETH)|
+|`erc20TokenAddr`|`address`|the address of the ERC20 token used for funding, or the 0 address for native token (ETH)|
 |`feeRecipientAddr`|`address`|the address of the fee recipient, or the 0 address if no fees are collected|
 |`feeTransferBips`|`uint16`|the transfer fee in basis points, collected during the transfer call|
 |`feeYieldBips`|`uint16`|the yield fee in basis points. Dilutes the cap table for the fee recipient.|
@@ -325,6 +335,7 @@ function initialize(
 Contribute ERC20 tokens into the contract
 #### Events
 - Emits a {Contribution} event
+- Emits a {Transfer} event (ERC20)
 #### Requirements
 - `amount` must be within range of min and max contribution for account
 - `amount` must not cause max goal to be exceeded
@@ -334,7 +345,7 @@ Contribute ERC20 tokens into the contract
 
 
 ```solidity
-function contributeERC20(uint256 amount) external erc20Only contributionGuard(amount) nonReentrant;
+function contributeERC20(uint256 amount) external erc20Only nonReentrant;
 ```
 **Parameters**
 
@@ -348,6 +359,7 @@ function contributeERC20(uint256 amount) external erc20Only contributionGuard(am
 Contribute ETH into the contract
 #### Events
 - Emits a {Contribution} event
+- Emits a {Transfer} event (ERC20)
 #### Requirements
 - `msg.value` must be within range of min and max contribution for account
 - `msg.value` must not cause max goal to be exceeded
@@ -356,7 +368,7 @@ Contribute ETH into the contract
 
 
 ```solidity
-function contributeEth() external payable ethOnly contributionGuard(msg.value);
+function contributeEth() external payable ethOnly;
 ```
 
 ### _addContribution
@@ -365,7 +377,7 @@ function contributeEth() external payable ethOnly contributionGuard(msg.value);
 
 
 ```solidity
-function _addContribution(address account, uint256 amount) private;
+function _addContribution(address account, uint256 amount) private contributionGuard(amount);
 ```
 **Parameters**
 
@@ -412,23 +424,23 @@ Emits a {TransferContributions} event if the target was met and funds transferre
 function transferBalanceToRecipient() external;
 ```
 
-### allocateYieldFee
+### _allocateYieldFee
 
 *Dilutes supply by allocating tokens to the fee collector, allowing for
 withdraws of yield*
 
 
 ```solidity
-function allocateYieldFee() private returns (uint256);
+function _allocateYieldFee() private returns (uint256);
 ```
 
-### calculateTransferFee
+### _calculateTransferFee
 
-*Calculates a fee to transfer to the fee collector upon processing*
+*Calculates a fee to transfer to the fee collector*
 
 
 ```solidity
-function calculateTransferFee() private view returns (uint256);
+function _calculateTransferFee() private view returns (uint256);
 ```
 
 ### isGoalMinMet
@@ -457,9 +469,25 @@ function isGoalMaxMet() public view returns (bool);
 |`<none>`|`bool`|true if the maximum goal was met|
 
 
+### unlockFailedFunds
+
+In the event that a transfer fails due to recipient contract behavior, the campaign
+can be unlocked (marked as failed) to allow contributors to withdraw their funds. This can only
+occur if the state of the campaign is FUNDING and the transfer window
+has expired. Note: Recipient should invoke transferBalanceToRecipient immediately upon success
+to prevent this function from being callable. This is a safety mechanism to prevent
+permanent loss of funds.
+#### Events
+- Emits {Fail} event
+
+
+```solidity
+function unlockFailedFunds() external;
+```
+
 ### yieldERC20
 
-Yield ERC20 tokens to all token holders in proportion to their balance
+Yield ERC20 tokens to all campaign token holders in proportion to their token balance
 #### Requirements
 - `amount` must be greater than 0
 - `amount` must be approved for transfer for the contract
@@ -544,11 +572,11 @@ function isWithdrawAllowed() public view returns (bool);
 |`<none>`|`bool`|true if the contract allows withdraws|
 
 
-### payoutsMadeTo
+### _payoutsMadeTo
 
 
 ```solidity
-function payoutsMadeTo(address account) private view returns (uint256);
+function _payoutsMadeTo(address account) private view returns (uint256);
 ```
 **Returns**
 
@@ -598,31 +626,32 @@ function yieldTotalOf(address account) public view returns (uint256);
 ### withdraw
 
 Withdraw all available funds to the caller if withdraws are allowed and
-the caller has a contribution balance (failed), or a yield balance (funded)
+the caller has a contribution balance (campaign failed), or a yield balance (campaign succeeded)
 #### Events
 - Emits a {Withdraw} event with amount = the amount withdrawn
+- Emits a {Transfer} event representing a token burn if the campaign failed
 
 
 ```solidity
 function withdraw() external;
 ```
 
-### withdrawContribution
+### _withdrawContribution
 
 *Withdraw the initial contribution for the given account*
 
 
 ```solidity
-function withdrawContribution(address account) private;
+function _withdrawContribution(address account) private;
 ```
 
-### withdrawYieldBalance
+### _withdrawYieldBalance
 
 *Withdraw the available yield balance for the given account*
 
 
 ```solidity
-function withdrawYieldBalance(address account) private;
+function _withdrawYieldBalance(address account) private;
 ```
 
 ### _transferSafe
@@ -716,6 +745,24 @@ function _approve(address owner, address spender, uint256 amount) internal virtu
 
 ```solidity
 function transferFrom(address from, address to, uint256 amount) external returns (bool);
+```
+
+### increaseAllowance
+
+See ERC20.increaseAllowance
+
+
+```solidity
+function increaseAllowance(address spender, uint256 addedValue) external virtual returns (bool);
+```
+
+### decreaseAllowance
+
+See ERC20.decreaseAllowance
+
+
+```solidity
+function decreaseAllowance(address spender, uint256 subtractedValue) external virtual returns (bool);
 ```
 
 ### contributionRangeFor
@@ -930,9 +977,22 @@ function feeRecipientAddress() external view returns (address);
 |`<none>`|`address`|The address where the fees are transferred to, or 0x0 if no fees are collected|
 
 
+### isUnlockAllowed
+
+
+```solidity
+function isUnlockAllowed() public view returns (bool);
+```
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`<none>`|`bool`|true if the funds are unlockable, which means the campaign succeeded, but transfer failed to occur within the transfer window|
+
+
 ## Events
 ### Contribution
-*Emitted when an account contributions funds to the contract*
+*Emitted when an account contributes funds to the contract*
 
 
 ```solidity
@@ -957,7 +1017,7 @@ event TransferContributions(address indexed account, uint256 numTokens);
 ```
 
 ### Fail
-*Emitted on processing if time has elapsed and the target was not met*
+*Emitted when the campaign is marked as failed*
 
 
 ```solidity
@@ -965,7 +1025,7 @@ event Fail();
 ```
 
 ### Payout
-*Emitted when makePayment is invoked by the recipient*
+*Emitted when yieldEth or yieldERC20 are called*
 
 
 ```solidity
@@ -984,4 +1044,3 @@ enum State {
     FUNDED
 }
 ```
-

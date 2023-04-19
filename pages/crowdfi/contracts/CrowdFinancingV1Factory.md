@@ -1,6 +1,6 @@
 # CrowdFi V1 Factory Reference
 
-[Git Source](https://github.com/withfabricxyz/contracts/blob/b1d8186ade935688a2ee8457124c53f640092408/src/finance/CrowdFinancingV1Factory.sol)
+[Git Source](https://github.com/withfabricxyz/contracts/blob/641bb82f88de135dcfd971c73420e5d0e994f5d9/src/finance/CrowdFinancingV1Factory.sol)
 
 **Inherits:**
 Ownable
@@ -8,7 +8,7 @@ Ownable
 **Author:**
 Fabric Inc.
 
-*A factory which leverages Clones to deploy Fabric Crowd Financing contracts*
+*A factory which leverages Clones to deploy Fabric CrowdFinancing contracts*
 
 
 ## State Variables
@@ -31,7 +31,7 @@ address private _feeCollector;
 
 
 ### _feeTransferBips
-*The upfront fee (See CrowdFinancingV1)*
+*The transfer fee (See CrowdFinancingV1)*
 
 
 ```solidity
@@ -40,7 +40,7 @@ uint16 private _feeTransferBips;
 
 
 ### _feeYieldBips
-*The payout fee (See CrowdFinancingV1)*
+*The yield fee (See CrowdFinancingV1)*
 
 
 ```solidity
@@ -99,14 +99,14 @@ function deployCampaign(
 
 |Name|Type|Description|
 |----|----|-----------|
-|`recipient`|`address`|the address of the recipient, where funds are sent on success|
-|`minGoal`|`uint256`|the minimum funding amount acceptable for successful financing|
+|`recipient`|`address`|the address of the recipient, to which funds can be transferred after success|
+|`minGoal`|`uint256`|the minimum funding amount acceptable for a successful campaign|
 |`maxGoal`|`uint256`|the maximum funding amount accepted for the financing round|
-|`minContribution`|`uint256`|the minimum deposit an account can make in one deposit|
-|`maxContribution`|`uint256`|the maximum deposit an account can make in one or more deposits|
-|`holdOff`|`uint32`|the number of seconds to wait until the fund starts|
+|`minContribution`|`uint256`|the minimum initial contribution an account can make|
+|`maxContribution`|`uint256`|the maximum contribution an account can make|
+|`holdOff`|`uint32`|the number of seconds to wait until the campaign starts|
 |`duration`|`uint32`|the runtime of the campaign, in seconds|
-|`erc20TokenAddr`|`address`|the address of the ERC20 token used for payments, or 0 address for native token|
+|`erc20TokenAddr`|`address`|the address of the ERC20 token used for payments, or the 0 address for native token|
 
 **Returns**
 
