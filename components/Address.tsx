@@ -1,8 +1,8 @@
 
 const networks = {
   mainnet: {
-    factory: '0x1754F361eEb79c778a92f656D3d72d528e579B1F',
-    logic: '0x58E4036Fb5D169569627ef2F355de9d81e097E0b',
+    factory: '0x8e78d80599197c501353453f73b0b92a402077d6',
+    logic: '0x4abd5d3af06ce5356a455eb5ecdc1f07aa9c083a',
   },
   sepolia: {
     factory: '0x83a322729C3172B0cc6Bf3a3204Fa83E683c584E',
