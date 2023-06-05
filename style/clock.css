@@ -1,0 +1,22 @@
+@keyframes spinny {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.clock {
+  display: block;
+  height: 20rem;
+  width: 20rem;
+  margin: auto;
+  margin-top: 4.25rem;
+  background-image: url('/clock.svg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  animation: spinny 60s infinite steps(60);
+}

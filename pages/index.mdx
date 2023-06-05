@@ -1,7 +1,31 @@
 # Fabric Protocol Docs
+<style>
+    {`
+    @keyframes spinny {
+      from {
+        transform: rotate(0deg);
+      }
 
-Fabric creates EVM compatible protocols and user friendly clients to leverage those protocols. Here you will find documentation on the protocols.
+      to {
+        transform: rotate(360deg);
+      }
+    }
 
-## Quick Start
+    .clock {
+      display: block;
+      height: 24rem;
+      width: 24rem;
+      margin: auto;
+      margin-top: 2rem;
+      background-image: url(/clock.svg);
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+      animation: spinny 60s infinite steps(60);
+    }
+    `}
+</style>
 
-[CrowdFi Protocol Docs](/crowdfi/overview)
+Fabric creates EVM-compatible protocols and user-friendly clients.
+
+<div className="clock" />
