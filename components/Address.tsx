@@ -16,6 +16,14 @@ const networks = {
     factory: '0x24379629781d03a0Fe67D9712FD2d76a92EfEF14',
     logic: '0xf53e3729aC1caDd24D5986b2738D0DEE5f4eD30A',
   },
+  optimism: {
+    factory: '0x19ead00ce8961cffca0551244dc07d87e6ff8f7e',
+    logic: '0x24379629781d03a0fe67d9712fd2d76a92efef14',
+  },
+  zora: {
+    factory: '0xf53e3729aC1caDd24D5986b2738D0DEE5f4eD30A',
+    logic: '0x58E4036Fb5D169569627ef2F355de9d81e097E0b',
+  },
 };
 
 export function explorerBaseUrl(chainName: string) : string {
@@ -25,6 +33,10 @@ export function explorerBaseUrl(chainName: string) : string {
     return 'https://polygonscan.com';
   } else if(chainName === 'arbitrum') {
     return 'https://arbiscan.io';
+  } else if(chainName === 'optimism') {
+    return 'https://optimistic.etherscan.io';
+  } else if(chainName === 'zora') {
+    return 'https://explorer.zora.energy';
   }
 
   return `https://${chainName}.etherscan.io`;
