@@ -24,6 +24,10 @@ const networks = {
     factory: '0xf53e3729aC1caDd24D5986b2738D0DEE5f4eD30A',
     logic: '0x58E4036Fb5D169569627ef2F355de9d81e097E0b',
   },
+  base: {
+    factory: '0xf53e3729aC1caDd24D5986b2738D0DEE5f4eD30A',
+    logic: '0x1754F361eEb79c778a92f656D3d72d528e579B1F',
+  },
 };
 
 export function explorerBaseUrl(chainName: string) : string {
@@ -37,6 +41,8 @@ export function explorerBaseUrl(chainName: string) : string {
     return 'https://optimistic.etherscan.io';
   } else if(chainName === 'zora') {
     return 'https://explorer.zora.energy';
+  } else if(chainName === 'base') {
+    return 'https://basescan.org';
   }
 
   return `https://${chainName}.etherscan.io`;
