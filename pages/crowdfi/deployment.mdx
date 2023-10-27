@@ -2,7 +2,7 @@
 
 import { Tab, Tabs } from 'nextra-theme-docs'
 import { Callout } from 'nextra-theme-docs'
-import { Address } from 'components/Address'
+import { cfpFactories } from 'components/factories'
 
 CrowdFi contracts are deployed by invoking the `deployCampaign` function on
 the factory contract for a given network. The function uses OpenZeppelin Clones to create a proxy and initialize
@@ -38,15 +38,22 @@ on whether the contract is native token or ERC-20 denominated.
 
 #### Factory Addresses
 
-|Network|Address|
-|-----|-------|
-|`Ethereum Mainnet`|<Address chain="mainnet" name="factory" />|
-|`Ethereum Sepolia`|<Address chain="sepolia" name="factory" />|
-|`Polygon`|<Address chain="polygon" name="factory" />|
-|`Arbitrum`|<Address chain="arbitrum" name="factory" />|
-|`Optimism`|<Address chain="optimism" name="factory" />|
-|`Zora`|<Address chain="zora" name="factory" />|
-|`Base`|<Address chain="base" name="factory" />|
+{<table>
+  <thead>
+    <tr>
+      <th>Chain</th>
+      <th>Factory</th>
+    </tr>
+  </thead>
+  <tbody>
+    {cfpFactories().map(item => (
+      <tr key={item.chainId}>
+        <td>{item.name}</td>
+        <td><a className="nx-font-mono" href={item.href} target="_blank">{item.address}</a></td>
+      </tr>
+    ))}
+  </tbody>
+</table>}
 
 #### Example Deployment
 

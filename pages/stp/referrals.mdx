@@ -1,0 +1,94 @@
+import { Tab, Tabs, Callout } from 'nextra-theme-docs'
+
+# Referrals
+
+Referrals are a way for creators to incentivize growth by sharing a portion of revenue with people who refer subscribers.
+
+Creators configure referral codes in the contract by specifying a uint256 key and uint16 basis points values. The key is a unique identifier for the referral code, and the basis points value is the percentage of the purchase price that will be rewarded to the referrer.
+
+Referral codes are not per account and allow for any address to collect referral fees upon minting. This also means they can be used as discounts when the minter owns the referrer account.
+
+Using the referral code requires calling `mintWithReferral` instead of `mint`. The `mintWithReferral` function takes two additional parameters: `referralCode` and `referrer` (address).
+
+## Creating a Referral Code
+
+<Callout type="info" emoji="ℹ️">
+  Only the contract owner can create referrals
+</Callout>
+
+Referral codes are created by calling `createReferralCode`. The function takes two parameters: `referralCode` and `bps`.
+
+<Tabs items={['sdk']}>
+  <Tab>
+  ```ts
+  import {
+    prepareCreateReferralCode,
+  } from '@withfabricxyz/protocol-sdks/stpv1';
+
+  const create = await prepareCreateReferralCode({
+    contractAddress: '0x...',
+    referralCode: 102973019237091232n,
+    bps: 250,
+  });
+
+  const receipt = await create();
+  ```
+  </Tab>
+</Tabs>
+
+## Destroying a Referral Code
+
+<Callout type="info" emoji="ℹ️">
+  Only the contract owner can destroy referrals
+</Callout>
+
+Referral codes can be destroyed. After destruction, it's possible to create a new referral code with the same key to "restore" the referral code. Once destroyed, any
+mints using that referral code will not transfer a reward.
+
+<Tabs items={['sdk']}>
+  <Tab>
+  ```ts
+  import {
+    prepareDeleteReferralCode,
+  } from '@withfabricxyz/protocol-sdks/stpv1';
+
+  const remove = await prepareDeleteReferralCode({
+    contractAddress: '0x...',
+    referralCode: 102973019237091232n,
+  });
+
+  const receipt = await remove();
+  ```
+  </Tab>
+</Tabs>
+
+## Minting with a Referral Code
+
+Minting with a referral code is the same a regular minting, except there are two additional parameters to pass in: `referralCode` and `referrer`.
+
+<Tabs items={['sdk']}>
+  <Tab>
+  ```ts
+  import {
+    prepareMintWithReferral,
+  } from '@withfabricxyz/protocol-sdks/stpv1';
+
+  const mint = await prepareMintWithReferral({
+    contractAddress: '0x...',
+    referralCode: 102973019237091232n,
+    amount: 120000n,
+    referrer: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92264',
+  });
+
+  const receipt = await mint();
+  ```
+  </Tab>
+</Tabs>
+
+## Partner Referrals
+
+Partner referrals are a way for builders to integrate STP and earn a portion of all protocol fees for any subscription deployed with their referral code.
+Partner referrals are managed by Fabric and require setup.
+
+Reach out to Fabric if you are interested in becoming a partner.
+

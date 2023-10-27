@@ -1,0 +1,131 @@
+import { Tab, Tabs, Callout } from 'nextra-theme-docs'
+
+# Withdraws
+
+The funds received from `mint` are held in the contract. Creators can withdraw these funds at any time. The `creatorBalance()` function returns the amount of funds available to withdraw.
+
+Upon calling withdraw, the creator's balance is set to zero and the funds are transferred to the creator's wallet. Additionally, if fees or rewards are configured, the transferred amount is reduced by the fee and reward rates. See [fees](/stp/fees) and [rewards](/stp/rewards) for more information.
+
+## Perform a withdraw
+
+<Callout type="info" emoji="ℹ️">
+  Only the contract owner can withdraw the balance.
+</Callout>
+
+The `withdraw` function transfers the balance to the owners wallet.
+
+<Tabs items={['sdk']}>
+  <Tab>
+  ```ts
+  import {
+    prepareWithdraw,
+  } from '@withfabricxyz/protocol-sdks/stpv1';
+
+  const withdraw = await prepareWithdraw({
+    contractAddress: '0x...',
+  });
+
+  const receipt = await withdraw();
+  ```
+  </Tab>
+</Tabs>
+
+
+## Withdrawing to another account
+
+<Callout type="info" emoji="ℹ️">
+  Only the contract owner can withdraw the balance.
+</Callout>
+
+It's possible for the owner to withdraw funds directly to another account by invoking the `withdrawTo(address account)` function.
+This function is useful for creators who want to withdraw funds to a different account than the one used to create the subscription.
+For example, a creator may want to withdraw funds to a cold wallet or a multisig wallet.
+
+<Tabs items={['sdk']}>
+  <Tab>
+  ```ts
+  import {
+    prepareWithdrawTo,
+  } from '@withfabricxyz/protocol-sdks/stpv1';
+
+  const withdrawTo = await prepareWithdrawTo({
+    contractAddress: '0x...',
+    account: '0x...',
+  });
+
+  const receipt = await withdrawTo();
+  ```
+  </Tab>
+</Tabs>
+
+## Withdrawing and transferring fees
+
+<Callout type="info" emoji="ℹ️">
+  Only the contract owner can withdraw the balance.
+</Callout>
+
+Fee collection is designed around the pull pattern, but the contract has a function which executes transfers to the owner and fee collection in a single transaction.
+
+<Tabs items={['sdk']}>
+  <Tab>
+  ```ts
+  import {
+    prepareWithdrawTo,
+  } from '@withfabricxyz/protocol-sdks/stpv1';
+
+  const withdraw = await prepareWithdrawAndTransferFees({
+    contractAddress: '0x...',
+  });
+
+  const receipt = await withdraw();
+  ```
+  </Tab>
+</Tabs>
+
+## Alternative Transfer Recipient
+
+It's also possible to transfer the balance to a configured recipient via the permissionless call `transferAllBalances()`. In order for this functionality to work, the creator must
+call the `setTransferRecipient(address recipient)` function. This functionality can be disabled by setting the address to 0x0 (default).
+
+This functionality is useful for creators who want to automate the withdrawal process. For example, a creator may want to automatically transfer funds to a cold wallet, a multisig wallet, an exchange, or a sweep contract.
+
+Setting the transfer recipient:
+
+<Callout type="info" emoji="ℹ️">
+  Only the contract owner can set the transfer recipient
+</Callout>
+
+<Tabs items={['sdk']}>
+  <Tab>
+  ```ts
+  import {
+    prepareSetTransferRecipient,
+  } from '@withfabricxyz/protocol-sdks/stpv1';
+
+  const setRecipient = await prepareSetTransferRecipient({
+    contractAddress: '0x...',
+    recipient: '0x...',
+  });
+
+  const receipt = await setRecipient();
+  ```
+  </Tab>
+</Tabs>
+
+Once the transfer recipient is set, any account can transfer the balance to the recipient via the `transferAllBalances()` function. This call also sends the fee balance to the fee collector.
+
+<Tabs items={['sdk']}>
+  <Tab>
+  ```ts
+  import {
+    prepareTransferAllBalances,
+  } from '@withfabricxyz/protocol-sdks/stpv1';
+
+  const transfer = await prepareTransferAllBalances({
+    contractAddress: '0x...',
+  });
+
+  const receipt = await transfer();
+  ```
+  </Tab>
+</Tabs>

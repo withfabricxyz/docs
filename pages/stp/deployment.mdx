@@ -1,0 +1,87 @@
+# Deploying a Subscription Contract
+
+import { Tab, Tabs } from 'nextra-theme-docs'
+import { Callout } from 'nextra-theme-docs'
+import { stpFactories } from 'components/factories'
+
+Subscription contracts are deployed by invoking the `deploySubscription` function on
+the factory contract for a given network. The function uses OpenZeppelin Clones to create a proxy and initialize
+the contract with supplied parameters.
+
+## Deploy Parameters
+
+|Name|Type|Description|
+|----|----|-----------|
+|`name`|`string`|the name of the collection. [See eip-721](https://eips.ethereum.org/EIPS/eip-721)|
+|`symbol`|`string`|the symbol of the collection [See eip-721](https://eips.ethereum.org/EIPS/eip-721)|
+|`contractURI`|`string`|the metadata URI for the collection (contract level metadata)|
+|`tokenURI`|`string`|the metadata URI for the tokens [See eip-721](https://eips.ethereum.org/EIPS/eip-721)|
+|`tokensPerSecond`|`uint256`|the number of base tokens required for a single second of time|
+|`minimumPurchaseSeconds`|`uint256`|the minimum number of seconds an account can purchase|
+|`rewardBps`|`uint16`|the basis points for reward allocations, 0 to disable. [See rewards](/stp/rewards)|
+|`erc20TokenAddr`|`address`|the address of the ERC20 token used for purchases, or the 0x0 for native|
+|`feeConfigId`|`uint256`|the fee configuration id to use for this deployment [See fees](/stp/fees)|
+
+## Native Token vs ERC-20
+
+Subscription contracts support native tokens as well as ERC-20 compliant tokens. When minting occurs, the denominated token will be used to purchase time.
+
+<Callout type="error" emoji="️🚫">
+  Subscription contracts do not support rebasing tokens! Do not use them as the denominated token.
+</Callout>
+
+<Callout type="warning" emoji="⚠️">
+  Subscription contracts support fee taking tokens. The number of tokens transferred on mint will factor in the fee.
+</Callout>
+
+## Factory Addresses
+
+{<table>
+  <thead>
+    <tr>
+      <th>Chain</th>
+      <th>Factory</th>
+    </tr>
+  </thead>
+  <tbody>
+    {stpFactories().map(item => (
+      <tr key={item.chainId}>
+        <td>{item.name}</td>
+        <td><a className="nx-font-mono" href={item.href} target="_blank">{item.address}</a></td>
+      </tr>
+    ))}
+  </tbody>
+</table>}
+
+## Deploying
+
+Deploying occurs via the factory contract. The factory contracts are configured in the SDK for all supported networks.
+
+<Tabs items={['sdk']}>
+  <Tab>
+  ```ts
+  import {
+    CollectionConfig,
+    prepareDeployment,
+  } from '@withfabricxyz/protocol-sdks/stpv1';
+
+  const config: CollectionConfig = {
+    name: 'Test',
+    symbol: 'TEST',
+    contractURI: 'https://example.com/contract',
+    tokenURI: 'https://example.com/token',
+    tokensPerSecond: 1n,
+    minPurchaseSeconds: 60n,
+    erc20TokenAddress: Address.ZERO,
+    rewardBps: 0n,
+    feeId: 0n,
+  };
+
+  // Prepare/simulate the deployment and return an async function that can be used to execute it
+  const deploy = await prepareDeployment(config);
+
+  // Execute the transaction
+  const { receipt, contractAddress } = await deploy();
+  ```
+  </Tab>
+</Tabs>

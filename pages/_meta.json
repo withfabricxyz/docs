@@ -1,10 +1,25 @@
 {
   "index": "Overview",
-  "crowdfi_client": "CrowdFi Client",
-  "crowdfi": "CrowdFi Protocol",
+
+  "-- Protocols": {
+    "type": "separator",
+    "title": "Protocols"
+  },
+  "stp": "Subscription Tokens",
+
+  "crowdfi": "Crowdfinancing",
+
+  "-- Clients": {
+    "type": "separator",
+    "title": "Clients"
+  },
+  "crowdfi_client": "Cocapital",
+  "-- More": {
+    "type": "separator",
+    "title": "More"
+  },
   "about": {
     "title": "About ↗",
-    "type": "page",
     "href": "https://blog.withfabric.xyz/who-is-fabric",
     "newWindow": true
   }

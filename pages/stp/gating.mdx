@@ -1,0 +1,38 @@
+# Token Gating
+
+Given that subscriptions are onchain, the subscription contract is used to limit access. This is done by checking the `balanceOf` of a user's wallet address on the subscription contract.
+If `balanceOf` exceeds 0, the user has a valid subscription and should be granted access to the gated content. Otherwise, they can be directed to mint or renew a subscription, which can be done via Hypersub or by using the SDK.
+
+The power of token gating is that paid access credentials move with users to multiple applications, giving the creator more freedom to build and monetize their community.
+
+### Common Use Cases
+* Chat
+* Long form content
+* Videos
+* Images
+* Audio
+* Livestreams
+* SaaS
+
+### Existing Platforms
+
+* [Discord](https://discord.com/)
+* [Frens](https://www.frens.lol/)
+* [Bonfire](https://www.bonfire.xyz/)
+* [Paragraph](https://paragraph.xyz/)
+* [Highlight](https://highlight.xyz/)
+* [Mintgate](https://www.mintgate.io/)
+* [Console](https://www.console.xyz/)
+* [Huddle01](https://www.huddle01.com/)
+* Custom applications
+* Mobile apps
+* Etc
+
+### Add Token Gating to Your Application
+
+To add token gating to your application, you will need to:
+* Add the ability for a user to connect their wallet and sign a message
+* Add functionality to check the `balanceOf` of a user's wallet address on the subscription contract
+
+With those two pieces in place, any app can become a SaaS provider with STP.
+

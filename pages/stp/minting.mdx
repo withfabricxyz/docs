@@ -1,0 +1,107 @@
+import { Tab, Tabs } from 'nextra-theme-docs'
+
+# Minting Subscriptions
+
+Minting a subscription purchases time with tokens. The amount of time alloted depends on `tokensPerSecond` and the amount of tokens transfered. Additionally, `minimumPurchaseSeconds` is assigned at creation, which sets the floor duration/price for a given purchase.
+
+Upon minting, the calling account is assigned an NFT and several variables representing subscription state. If the account already has an NFT, the subscriptions expiration date is simply extended.
+
+## Simple Mint / Renew
+
+The most basic minting operation is to simply mint or renew a subscription with network native tokens. This will mint a new NFT if the account doesn't already have one, or renew the existing NFT if it does.
+
+<Tabs items={['sdk']}>
+  <Tab>
+  ```ts
+  import {
+    prepareMint,
+  } from '@withfabricxyz/protocol-sdks/stpv1';
+
+  const mint = await prepareMint({
+    contractAddress: '0x...',
+    amount: 100_000n,
+  })
+
+  const receipt = await mint();
+  ```
+  </Tab>
+</Tabs>
+
+## Minting with ERC20 Tokens
+
+Minting will revert on preparation if the balance is too low, or an ERC20 approval isn't sufficient. Driving the user to approve tokens before mint will ensure a smooth experience.
+
+Note: The code below doesn't factor in UX logic and flows. It's a procedural example of the steps required to mint a ERC20 denominated subscription.
+
+<Tabs items={['sdk']}>
+  <Tab>
+  ```ts
+  import {
+    prepareMint,
+    fetchContext,
+  } from '@withfabricxyz/protocol-sdks/stpv1';
+
+  import {
+    prepareTokenApproval,
+  } from '@withfabricxyz/protocol-sdks/erc20';
+
+  const context = fetchContext(
+    contractAddress: '0x...',
+    account: '0x...',
+  );
+
+  // Minimum purchase
+  const amount = context.collection.minimumPurchaseSeconds * context.collection.tokensPerSecond;
+
+  if(context.holdings.balance < amount) {
+    throw new Error('Insufficient balance');
+  }
+
+  // Approve if necessary (holdings approved = balance for native tokens such as ether)
+  if(context.holdings.approved < amount) {
+    const approve = await prepareTokenApproval({
+      address: '0x...',
+      spender: context.collection.address,
+      amount,
+    });
+
+    await approve();
+  }
+
+  // Now we can mint
+  const mint = await prepareMint({
+    contractAddress: '0x...',
+    amount: config.amount,
+    erc20: context.collection.erc20Address != zeroAddress,
+  })
+
+  const receipt = await mint();
+  ```
+  </Tab>
+</Tabs>
+
+
+## Sponsored Minting
+
+The `mintFor` function allows any caller to mint or renew a subscription for another account. This is useful for sponsored calls, automating renewals with credit cards, etc.
+
+**Note**: For ERC20, the caller must have an approved balance for the amount of tokens to be transfered. See the example above.
+
+<Tabs items={['sdk']}>
+  <Tab>
+  ```ts
+  import {
+    prepareMintFor
+  } from '@withfabricxyz/protocol-sdks/stpv1';
+
+  const mint = await prepareMintFor({
+    contractAddress: '0x...',
+    amount: 1_000_000_000n,
+    account: '0x...', // <-- Receives the nft, rewards, time, etc
+  })
+
+  const receipt = await mint();
+  ```
+  </Tab>
+</Tabs>
+

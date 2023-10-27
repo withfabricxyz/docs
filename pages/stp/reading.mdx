@@ -1,0 +1,135 @@
+import { Tab, Tabs } from 'nextra-theme-docs'
+
+# Reading Collection State
+
+There are many view functions for collection and subscribers. The SDK leverages multicall to make several calls in a single request. See the [contract reference](/stp/contracts/STPV1#functions)
+section for details about each view function.
+
+## Collection State
+
+The collection state object contains all relevent contract level state.
+
+<Tabs items={['sdk']}>
+  <Tab>
+  ```ts
+  import {
+    fetchCollectionState,
+    CollectionState,
+  } from '@withfabricxyz/protocol-sdks/stpv1';
+
+  const state: CollectionState = await fetchCollectionState({
+    contractAddress: '0x...',
+  });
+
+  // Typedef for reference
+  type CollectionState = {
+    /** The address of the NFT */
+    address: `0x${string}`;
+    /** Can accounts contribute */
+    isPaused: boolean;
+    /** The name of the NFT */
+    name: string;
+    /** The symbol of the NFT */
+    symbol: string;
+    /** The contract metadata URI */
+    contractURI: string;
+    /** The token metadata URI */
+    tokenUri: string;
+    /** The number of tokens (wei) which buys one second of time */
+    tokensPerSecond: bigint;
+    /** Minimum purchase in seconds */
+    minimumPurchaseSeconds: bigint;
+    /** Owner address */
+    ownerAddress: `0x${string}`;
+    /** The address of the ERC-20 token used for the campaign */
+    erc20Address: `0x${string}`;
+    /** The fee in basis points to charge for transfers */
+    feeBips: number;
+    /** The address of the fee collector */
+    feeCollectorAddress: `0x${string}`;
+    /** The balance of the creator */
+    creatorBalance: bigint;
+    /** The supply cap */
+    supplyCap: bigint;
+    /** The number of tokens minted */
+    totalSupply: bigint;
+    /** The transfer recipient */
+    transferRecipient: `0x${string}`;
+    /** The total reward points */
+    totalRewardPoints: bigint;
+    /** The reward basis points */
+    rewardBps: number;
+    /** The reward multiplier */
+    rewardMultiplier: bigint;
+  };
+  ```
+  </Tab>
+</Tabs>
+
+## Subscriber State
+
+Subscriber state contains all relevent state for a given account.
+
+<Tabs items={['sdk']}>
+  <Tab>
+  ```ts
+  import {
+    fetchSubscriberState,
+    SubscriberState,
+  } from '@withfabricxyz/protocol-sdks/stpv1';
+
+  const state: SubscriberState = await fetchSubscriberState({
+    contractAddress: '0x...',
+    account: '0x...',
+  });
+
+  // Typedef for reference
+  type SubscriberState = {
+    /** The address of the account */
+    address: `0x${string}`;
+    /** The token id (0 means no subscription) */
+    tokenId: bigint;
+    /** The amount of seconds the account can refund */
+    refundableSeconds: bigint;
+    /** The amount of seconds the account has purchased */
+    secondsPurchased: bigint;
+    /** The amount of tokens the account can withdraw from rewards */
+    rewardBalance: bigint;
+    /** The amount of reward points the account has */
+    rewardPoints: bigint;
+    /** Expires at */
+    expiresAt: Date;
+  };
+  ```
+  </Tab>
+</Tabs>
+
+## Combined State (Context)
+
+Context contains all relevent state for a given account, collection, and account holdings relevant to the denominated collection token.
+
+<Tabs items={['sdk']}>
+  <Tab>
+  ```ts
+  import {
+    fetchContext,
+    FullState,
+  } from '@withfabricxyz/protocol-sdks/stpv1';
+
+  const state: SubscriberState = await fetchContext({
+    contractAddress: '0x...',
+    account: '0x...',
+  });
+
+  // Typedef for reference
+  type FullState = {
+    /** The state of the campaign */
+    collection: CollectionState;
+    /** The state of the connected account */
+    subscriber: SubscriberState;
+    /** The holdings of the connected account */
+    holdings: ApprovedTokens;
+  };
+  ```
+  </Tab>
+</Tabs>

@@ -1,0 +1,17 @@
+# Protocol Fees
+
+The Subscription Token Protocol takes fees as a percentage of tokens received. These fees are present to incentivize the development of the protocol. Additionally, they may be shared with
+partners who help grow the protocol with new applications and integrations.
+
+## What are the fees?
+
+It depends. When deploying a subscription, an optional fee id is provided, which sets the fee recipient and basis points for the deployed contract. This can be checked by calling `feeSchedule(uint256 feeId)` on the factory contract for a given network.
+If no feeId is present, the default fee id of 0 is used. This fee schedule may be changed by the factory contract owner, but only future deployments are impacted by the change.
+
+Multiple fee schedules enable partnerships with other organizations supporting the protocol. Fees can be split in many ways, but this happens outside the protocol with other protocols such as 0xsplits. The protocol only supports a single fee collector address.
+
+The default fee rate is 400 basis points (4%).
+
+## How are fees collected?
+
+When a subscription is created, the fee is calculated and stored in the contract. When `transferFees`, `transferAllBalances` or `withdrawAndTransferFees` are called, the fee balance is sent to the fee collector.
