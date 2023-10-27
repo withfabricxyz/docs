@@ -2,48 +2,49 @@
 
 STP makes generating recurring revenue onchain as simple as creating an NFT.
 
-### How it Works
-
+## How it Works
 1. A creator or business specifies a period of time (eg 1 month) and a price per period (eg 10 USDC) then deploys their NFT subscription contract onchain.
-2. Users mint the NFT by purchasing the desired amount of time (eg 6 months for 60 USDC). Doing so grants them access to whatever apps, content, and experiences have been gated on the subscription NFT.
-3. Access will remain until the user's balance of time (eg 6 months) equals zero, at which point, access will be denied unless they mint additional time.
 
-Pre-paid transit cards are a good analogy for NFT subscriptions. So long as the card has a positive balance of time, it's both valuable and useful. However, once the balance of the card reaches zero, though you still own it, it's neither valuable nor useful. Same with an NFT subscription.
+2. Users mint the NFT by purchasing the desired amount of time (eg 6 months for 60 USDC). This grants them access to whatever apps, content, and experiences have been gated on the subscription NFT.
+
+3. Access will remain until the user’s balance of time (eg 6 months) equals zero, at which point, access will be denied unless they mint additional time.
+
+Pre-paid transit cards are a good analogy for NFT subscriptions. So long as the card has a positive balance of time, it’s both valuable and useful. However, once the balance reaches zero, though you still own the card, it’s neither valuable nor useful. Same with an NFT subscription.
 
 ### Onchain Subscriber Rewards
+Owners of the NFT contract have the option to allocate a percentage of their monthly recurring revenue into an onchain pool.
 
-Onchain subscriber rewards are an optional incentive that can be enabled by the owner of the NFT contract, simply by specifying a percentage of the monthly recurring revenue they're willing to share.
+The allocation happens immediately after a subscription has been minted.
 
-The percentage they specify is allocated into an onchain reward pool immediately after a subscription has been minted.
+The more users that subscribe, the bigger the pool.
 
-The more users that subscribe, the bigger the pool. The earlier and longer a user subscribes for, the larger their share of the reward pool.
+The earlier and longer a user subscribes for, the larger their share of the pool.
 
-Users must have an active subscription in order to withdraw their rewards. If their subscription lapses and they do not resubscribe, their rewards can be slashed.
+Users must have an active subscription in order to withdraw their rewards. If their subscription lapses and they do not resubscribe, their rewards can be slashed *.
+
+* Users have a grace period equal to 50% of their total subscription time. eg a 6 month subscription will have a 3 month grace period.
 
 Subscriber rewards can encourage early-adoption, long-term subscriptions, and retention.
 
 [Learn More](/stp/rewards)
 
 ### Onchain Referral Rewards
-
-Owners of the NFT contract can create onchain referral rewards by specifying a percentage of subscription purchases they’re willing to share.
+Owners of the NFT contract can create onchain referral rewards by allocating a percentage of subscription purchases they’re willing to share.
 
 For example:
-
-1. Alice specifies a 10% referral reward for her NFT subscription
+1. Alice allocates a 10% referral reward for her NFT subscription
 2. Bob generates a unique referral URL for Alice’s subscription and shares it with others
 3. Charlie purchases a 100 USDC subscription to Alice using Bob’s link
 4. Alice receives 90 USDC
 5. Bob receives 10 USDC
 
-Referral payments are onchain and made at the time of mint (no withdraw required).
+​​Referral payments are onchain and made at mint time, no withdrawal required.
 
 This can incentivize organic growth and distribution.
 
 [Learn More](/stp/referrals)
 
 ### Fees
-
 The protocol takes a 4% fee on all subscriptions.
 
 [Learn More](/stp/fees)
@@ -51,47 +52,54 @@ The protocol takes a 4% fee on all subscriptions.
 ### Onchain Partner Rewards
 Any entity that facilitates the deployment of NFT subscription contracts is eligible to receive 50% of the protocol fee.
 
-eg. if Alice uses app.xyz to deploy her NFT subscription and it generates 100,000 USDC in annual recurring revenue then the protocol will receive 2,000 USDC and app.xyz will receive 2,000 USDC.
+eg if Alice uses app.xyz to deploy her NFT subscription and it generates 100,000 USDC in annual recurring revenue then the protocol will receive 2,000 USDC and app.xyz will receive 2,000 USDC.
 
 Protocol revenue sharing is all onchain and in perpetuity.
 
 ### Interoperability
+STP contains a `mintFor` function. Put simply, this means any account can purchase a subscription on behalf of any other account. This enables credit card payments.
 
-STP contains a `mintFor` function. Put simply, this means any account can purchase a subscription on behalf of any other account. This enables contract interactions and credit card payments.
+eg Alice subscribes to Bob for 10 USDC per month on app.xyz. She gives her credit card info to app.xyz, who then charges her card 10 USD each month, and in turn, mints 10 USDC worth of time on her behalf.
 
-For example: Alice subscribes for 10 USDC per month on app.xyz. She gives her credit card info to app.xyz, who then charges her card 10 USD each month, and in turn, mints 10 USDC worth of time on her behalf.
-
-With smart contract wallets, MPC wallets, EIP-4337, and other novel forms of abstraction, it's possible for Alice to subscribe without ever knowing she's using crypto.
+With smart contract wallets, MPC wallets, EIP-4337, and other novel forms of abstraction, it’s possible for Alice to subscribe without ever knowing she’s using crypto.
 
 ### Additional Features
-
 #### Grants
 The owner of the NFT contract can issue onchain grants simply by specifying an address and amount of time they wish to grant. [Learn More](/stp/grants)
 
-### Refunds
+#### Refunds
 The owner of the NFT contract can issue onchain refunds simply by specifying an address and amount of time they wish to refund.  [Learn More](/stp/refunds)
 
-### Max Supply
+#### Max Supply
 The owner of the NFT contract can specify an onchain supply cap, thus limiting the number of subscriptions available to mint.  [Learn More](/stp/advanced#adjusting-supply-cap)
 
-### Pause
-The owner of the NFT contract can pause subscriptions any time. [Learn More](/stp/advanced#pausing-and-unpausing)
+#### Pause
+The owner of the NFT contract can pause subscriptions at any time. [Learn More](/stp/advanced#pausing-and-unpausing)
 
-### Ownership Transfer
+#### Ownership Transfer
 The owner of the NFT contract can transfer ownership to any valid address. [Learn More](/stp/advanced#transfering-ownership)
 
-### Revenue Recipient
-The owner of the NFT contract can specify any valid address as the onchain subscription revenue recipient, for example a splits contract, vault, multisig safe, or DAO.
-
+#### Revenue Recipient
+The owner of the NFT contract can specify any valid address as the recipient of their subscription revenue, for example a splits contract, vault, multisig safe, or DAO.
 
 ## Use Cases
+1. Creators: onchain memberships
+2. Businesses: onchain SaaS payments
 
-1. Creators: the easiest way to create recurring revenue onchain
-2. Businesses: onchain B2B SaaS payment infrastructure
+## Why?
+NFTs and ERC-20 tokens provide a one-time, discrete value transfer between buyers and sellers.
 
+However, when these are used as payment for continuous work, incentives become misaligned: a one-time payment for lifetime access is not a sustainable business model.
+
+Token allowances and streaming escrow contracts are one solution to this problem. But they’re complex and hard to use.
+
+We made STP to solve the problem of *easily* creating recurring revenue onchain. 
+
+We’ve achieved this by extending the ERC-721 NFT standard. 
+
+Creating and collecting NFTs has emerged as a robust end-user behavior with a well-understood mental model. Including a temporal dimension, as well as incentives for distribution and retention, are relatively small additions, but have the potential for significant impact.
 
 ## Design Principals
-
 ### Fabric's protocol design principals are:
 
 1. Simple
