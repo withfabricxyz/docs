@@ -14,6 +14,9 @@ const config: DocsThemeConfig = {
     link: 'https://github.com/withfabricxyz',
   },
   docsRepositoryBase: 'https://github.com/withfabricxyz/docs/tree/main',
+  sidebar: {
+    defaultMenuCollapseLevel: 1,
+  },
   footer: {
     text: '©️ 2023 Fabric Inc.',
   },
