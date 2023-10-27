@@ -5,15 +5,16 @@
     "type": "separator",
     "title": "Protocols"
   },
-  "stp": "Subscription Tokens",
+  "stp": "STP",
 
-  "crowdfi": "Crowdfinancing",
+  "crowdfi": "CFP",
 
   "-- Clients": {
     "type": "separator",
     "title": "Clients"
   },
-  "crowdfi_client": "Cocapital",
+  "crowdfi_client": "Crowdfi",
+  "hypersub": "Hypersub",
   "-- More": {
     "type": "separator",
     "title": "More"
