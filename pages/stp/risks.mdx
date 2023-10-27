@@ -1,0 +1,31 @@
+# Risks
+
+While Fabric takes security very seriously, it is important to understand that smart contracts still carry risk. The types of risks include:
+
+1. Smart contract bugs
+2. Compiler bugs
+3. Network level bugs
+4. Human risk
+
+## Smart Contract Bugs
+
+Fabric has all contracts audited by reputable firms to minimize the risk of contract bugs or vulnerabilities. The contracts are non-upgradeable, so once deployed, they cannot be changed.
+This means that if a bug is found, the contract will need to be replaced and subscribers will need to migrate. While we don't expect this to happen, we cannot guarantee that it won't.
+
+Fabric believes non-upgradable contracts reduce human risk, as they remove the ability for the team, and any external force who might compel them, to make changes post-deployment.
+
+Fabric makes source code easily accessible and publishes all audits.
+
+## Compiler Bugs
+
+Fabric doesn't build compilers or languages targetting the EVM and depends on solidity. If solidity were to have a bug, it could impact deployed contracts.
+
+## Network Level Bugs
+
+In the event that all EVM implementations were to exhibit a flaw, it could impact deployed contracts. This is very unlikely but a risk that is inherent to smart contracts.
+
+## Human Risk
+
+Subscription tokens connect creators with fans or customers, and the protocol cannot enforce their behavior or actions.
+This means that creators could choose to not deliver on their promises. If this happens, the dispute is between the creator and the subscriber.
+Fabric cannot enforce the creator to deliver on their promises, issue refunds, etc.
