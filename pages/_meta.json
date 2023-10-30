@@ -13,8 +13,8 @@
     "type": "separator",
     "title": "Clients"
   },
-  "crowdfi_client": "Crowdfi",
   "hypersub_coming_soon": "Hypersub",
+  "crowdfi_client": "Crowdfi",
   "-- More": {
     "type": "separator",
     "title": "More"
