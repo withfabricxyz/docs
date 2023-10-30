@@ -14,7 +14,7 @@
     "title": "Clients"
   },
   "crowdfi_client": "Crowdfi",
-  "hypersub": "Hypersub",
+  "hypersub_coming_soon": "Hypersub",
   "-- More": {
     "type": "separator",
     "title": "More"
