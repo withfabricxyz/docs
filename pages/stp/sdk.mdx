@@ -1,0 +1,36 @@
+# STP SDK
+
+Fabric currently provides a typescipt SDK targetting wagmi/wagmi-core. The source is avilable on [GitHub](https://github.com/withfabricxyz/protocol-sdks/tree/main)
+
+### Installation
+
+```
+npm i @withfabric/protocol-sdks
+```
+
+### Usage
+
+Since the SDK depends on wagmi, all functions will leverage the wagmi config. By default, actions target the connected chain, but chainId can be overriden on any call.
+
+Simple example for a mint transaction:
+
+```typescript
+import {
+  prepareMint,
+} from '@withfabricxyz/protocol-sdks/stpv1';
+
+const mint = await prepareMint({
+  contractAddress: '0x...',
+  amount: 100_000n,
+})
+
+const receipt = await mint();
+```
+
+Examples for other actions can be found throughout the documentation.
+
+### Questions? Feedback?
+
+Reach out on [Telegram](https://t.me/withfabric)
+
+
