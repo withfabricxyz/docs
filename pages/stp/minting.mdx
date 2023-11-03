@@ -15,7 +15,7 @@ The most basic minting operation is to simply mint or renew a subscription with 
   ```ts
   import {
     prepareMint,
-  } from '@withfabricxyz/protocol-sdks/stpv1';
+  } from '@withfabric/protocol-sdks/stpv1';
 
   const mint = await prepareMint({
     contractAddress: '0x...',
@@ -39,7 +39,7 @@ Note: The code below doesn't factor in UX logic and flows. It's a procedural exa
   import {
     prepareMint,
     fetchContext,
-  } from '@withfabricxyz/protocol-sdks/stpv1';
+  } from '@withfabric/protocol-sdks/stpv1';
 
   import {
     prepareTokenApproval,
@@ -92,7 +92,7 @@ The `mintFor` function allows any caller to mint or renew a subscription for ano
   ```ts
   import {
     prepareMintFor
-  } from '@withfabricxyz/protocol-sdks/stpv1';
+  } from '@withfabric/protocol-sdks/stpv1';
 
   const mint = await prepareMintFor({
     contractAddress: '0x...',

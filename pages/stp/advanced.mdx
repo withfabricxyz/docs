@@ -17,7 +17,7 @@ Pausing the contract only prevents mints and renewals. All other functions remai
 <Tabs items={['sdk']}>
   <Tab>
   ```ts
-  import { preparePause, prepareUnpause } from '@withfabricxyz/protocol-sdks/stpv1';
+  import { preparePause, prepareUnpause } from '@withfabric/protocol-sdks/stpv1';
 
   // Pause the contract
   const pause = await preparePause({
@@ -48,7 +48,7 @@ supply cap can be set to 0 to allow unlimited subscribers (default).
 <Tabs items={['sdk']}>
   <Tab>
   ```ts
-  import { prepareSetSupplyCap } from '@withfabricxyz/protocol-sdks/stpv1';
+  import { prepareSetSupplyCap } from '@withfabric/protocol-sdks/stpv1';
 
   const setCap = await prepareSetSupplyCap({
     contractAddress: '0x...',
@@ -72,7 +72,7 @@ Transfers are two step, using [Ownable2Step](https://docs.openzeppelin.com/contr
 <Tabs items={['sdk']}>
   <Tab>
   ```ts
-  import { prepareTransferOwnership } from '@withfabricxyz/protocol-sdks/stpv1';
+  import { prepareTransferOwnership } from '@withfabric/protocol-sdks/stpv1';
 
   const transfer = await prepareTransferOwnership({
     contractAddress: '0x...',
@@ -95,7 +95,7 @@ Once a transfer is started, the pending owner must call `acceptOwnership` to com
 <Tabs items={['sdk']}>
   <Tab>
   ```ts
-  import { prepareAcceptOwnership } from '@withfabricxyz/protocol-sdks/stpv1';
+  import { prepareAcceptOwnership } from '@withfabric/protocol-sdks/stpv1';
 
   const accept = await prepareAcceptOwnership({
     contractAddress: '0x...',
@@ -120,7 +120,7 @@ These funds could be used to pay for a subscription using the `mintFor` function
 <Tabs items={['sdk']}>
   <Tab>
   ```ts
-  import { prepareReconcileERC20Balance } from '@withfabricxyz/protocol-sdks/stpv1';
+  import { prepareReconcileERC20Balance } from '@withfabric/protocol-sdks/stpv1';
 
   const reconcile = await prepareReconcileERC20Balance({
     contractAddress: '0x...',
@@ -146,7 +146,7 @@ If any ERC20 tokens are transferred to the contract unintentionally, they can be
 <Tabs items={['sdk']}>
   <Tab>
   ```ts
-  import { prepareRecoverERC20 } from '@withfabricxyz/protocol-sdks/stpv1';
+  import { prepareRecoverERC20 } from '@withfabric/protocol-sdks/stpv1';
 
   const recover = await prepareRecoverERC20({
     contractAddress: '0x...',
@@ -175,7 +175,7 @@ If native tokens are transferred to the contract unintentionally (via selfdestru
 <Tabs items={['sdk']}>
   <Tab>
   ```ts
-  import { prepareReconcileNativeBalance } from '@withfabricxyz/protocol-sdks/stpv1';
+  import { prepareReconcileNativeBalance } from '@withfabric/protocol-sdks/stpv1';
 
   const recover = await prepareReconcileNativeBalance({
     contractAddress: '0x...',
@@ -201,7 +201,7 @@ If native tokens are transferred to the contract unintentionally (via selfdestru
 <Tabs items={['sdk']}>
   <Tab>
   ```ts
-  import { prepareRecoverNativeTokens } from '@withfabricxyz/protocol-sdks/stpv1';
+  import { prepareRecoverNativeTokens } from '@withfabric/protocol-sdks/stpv1';
 
   const recover = await prepareRecoverNativeTokens({
     contractAddress: '0x...',

@@ -19,7 +19,7 @@ The `withdraw` function transfers the balance to the owners wallet.
   ```ts
   import {
     prepareWithdraw,
-  } from '@withfabricxyz/protocol-sdks/stpv1';
+  } from '@withfabric/protocol-sdks/stpv1';
 
   const withdraw = await prepareWithdraw({
     contractAddress: '0x...',
@@ -46,7 +46,7 @@ For example, a creator may want to withdraw funds to a cold wallet or a multisig
   ```ts
   import {
     prepareWithdrawTo,
-  } from '@withfabricxyz/protocol-sdks/stpv1';
+  } from '@withfabric/protocol-sdks/stpv1';
 
   const withdrawTo = await prepareWithdrawTo({
     contractAddress: '0x...',
@@ -71,7 +71,7 @@ Fee collection is designed around the pull pattern, but the contract has a funct
   ```ts
   import {
     prepareWithdrawTo,
-  } from '@withfabricxyz/protocol-sdks/stpv1';
+  } from '@withfabric/protocol-sdks/stpv1';
 
   const withdraw = await prepareWithdrawAndTransferFees({
     contractAddress: '0x...',
@@ -100,7 +100,7 @@ Setting the transfer recipient:
   ```ts
   import {
     prepareSetTransferRecipient,
-  } from '@withfabricxyz/protocol-sdks/stpv1';
+  } from '@withfabric/protocol-sdks/stpv1';
 
   const setRecipient = await prepareSetTransferRecipient({
     contractAddress: '0x...',
@@ -119,7 +119,7 @@ Once the transfer recipient is set, any account can transfer the balance to the 
   ```ts
   import {
     prepareTransferAllBalances,
-  } from '@withfabricxyz/protocol-sdks/stpv1';
+  } from '@withfabric/protocol-sdks/stpv1';
 
   const transfer = await prepareTransferAllBalances({
     contractAddress: '0x...',

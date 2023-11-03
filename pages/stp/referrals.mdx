@@ -23,7 +23,7 @@ Referral codes are created by calling `createReferralCode`. The function takes t
   ```ts
   import {
     prepareCreateReferralCode,
-  } from '@withfabricxyz/protocol-sdks/stpv1';
+  } from '@withfabric/protocol-sdks/stpv1';
 
   const create = await prepareCreateReferralCode({
     contractAddress: '0x...',
@@ -50,7 +50,7 @@ mints using that referral code will not transfer a reward.
   ```ts
   import {
     prepareDeleteReferralCode,
-  } from '@withfabricxyz/protocol-sdks/stpv1';
+  } from '@withfabric/protocol-sdks/stpv1';
 
   const remove = await prepareDeleteReferralCode({
     contractAddress: '0x...',
@@ -71,7 +71,7 @@ Minting with a referral code is the same a regular minting, except there are two
   ```ts
   import {
     prepareMintWithReferral,
-  } from '@withfabricxyz/protocol-sdks/stpv1';
+  } from '@withfabric/protocol-sdks/stpv1';
 
   const mint = await prepareMintWithReferral({
     contractAddress: '0x...',

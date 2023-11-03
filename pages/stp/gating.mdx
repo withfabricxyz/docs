@@ -1,3 +1,5 @@
+import { ChainList, StpChainList } from 'components/factories'
+
 # Token Gating
 
 Given that subscriptions are onchain, the subscription contract is used to limit access. This is done by checking the `balanceOf` of a user's wallet address on the subscription contract.
@@ -16,18 +18,20 @@ The power of token gating is that paid access credentials move with users to mul
 
 ### Existing Platforms
 
-* [Bonfire](https://www.bonfire.xyz/)
-* [Highlight](https://highlight.xyz/)
-* [Discord](https://discord.com/)
-* [Frens](https://www.frens.lol/)
-* [Paragraph](https://paragraph.xyz/)
-* [Mintgate](https://www.mintgate.io/)
-* [Console](https://www.console.xyz/)
-* [Huddle01](https://www.huddle01.com/)
-* [Perk Shop](https://perk.shop/)
-* Custom applications
-* Mobile apps
-* Etc
+| Platform | Supported Chains |
+| --- | --- |
+| [Bonfire](https://www.bonfire.xyz/) | <ChainList chains={[1, 'Optimism', 'Base', 'Polygon', 'Zora']} />|
+| [Highlight](https://highlight.xyz/) | <ChainList chains={[1, 'Optimism', 'Base', 'Polygon', 'Zora', 'Arbitrum']} />|
+| [Discord](https://discord.com/) | <ChainList chains={[1, 'Optimism', 'Base', 'Polygon', 'Zora', 'Arbitrum']} />|
+| [Frens](https://www.frens.lol/) | <ChainList chains={["Coming Soon"]} />|
+| [Paragraph](https://paragraph.xyz/) | <ChainList chains={['Ethereum', 'Polygon', 'Avalanche', 'Arbitrum', 'Optimism']} />|
+| [Console](https://www.console.xyz/) | <ChainList chains={[1]} />|
+| [Huddle01](https://www.huddle01.com/) | <ChainList chains={[1, 'Polygon', 'Arbitrum', 'Goerli']} />|
+| [Perk Shop](https://perk.shop/) | <ChainList chains={['Ethereum', 'Polygon', 'Base', 'Optimism']} />|
+| Custom applications | <StpChainList />|
+| Mobile apps | <StpChainList />|
+
+*Please let us know if you'd like to leverage STP on a different chain or would like us to add your token gated platform here.*
 
 ### Add Token Gating to Your Application
 
@@ -35,5 +39,5 @@ To add token gating to your application, you will need to:
 * Add the ability for a user to connect their wallet and sign a message
 * Add functionality to check the `balanceOf` of a user's wallet address on the subscription contract
 
-With those two pieces in place, any app can become a SaaS provider with STP.
+With those two pieces in place, any app can become a protected content host or SaaS provider with STP.
 

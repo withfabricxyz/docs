@@ -15,7 +15,7 @@ The collection state object contains all relevent contract level state.
   import {
     fetchCollectionState,
     CollectionState,
-  } from '@withfabricxyz/protocol-sdks/stpv1';
+  } from '@withfabric/protocol-sdks/stpv1';
 
   const state: CollectionState = await fetchCollectionState({
     contractAddress: '0x...',
@@ -76,7 +76,7 @@ Subscriber state contains all relevent state for a given account.
   import {
     fetchSubscriberState,
     SubscriberState,
-  } from '@withfabricxyz/protocol-sdks/stpv1';
+  } from '@withfabric/protocol-sdks/stpv1';
 
   const state: SubscriberState = await fetchSubscriberState({
     contractAddress: '0x...',
@@ -114,7 +114,7 @@ Context contains all relevent state for a given account, collection, and account
   import {
     fetchContext,
     FullState,
-  } from '@withfabricxyz/protocol-sdks/stpv1';
+  } from '@withfabric/protocol-sdks/stpv1';
 
   const state: SubscriberState = await fetchContext({
     contractAddress: '0x...',
