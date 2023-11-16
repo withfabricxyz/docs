@@ -9,21 +9,21 @@ Creators have the option to offer rewards to their subscribers when deploying a 
 3. Reward Redemption
 4. Reward Slashing
 
-Reward points are issued to subscribers when they mint or renew a subscription. The amount of reward points issued depends on the reward multiplier and the number of tokens transferred. If the creator configured a reward pool, the reward points are redeemable for tokens.
+Rewards are issued to subscribers when they mint or renew a subscription. The amount of rewards issued depends on the reward multiplier and the number of tokens transferred. If the creator configured a reward pool, the rewards are redeemable for tokens.
 
 The reward model is designed to incentivize early adoption of a subscription, but is completely optional.
 
 ## Reward Points
 
-Regardless of whether a reward pool is configured, reward points are issued to subscribers when they mint or renew a subscription. The amount of reward points issued depends on the reward multiplier and the number of tokens tokens transferred.
+Regardless of whether a reward pool is configured, rewards are issued to subscribers when they mint or renew a subscription. The amount of rewards issued depends on the reward multiplier and the number of tokens tokens transferred.
 
-Early subscribers are rewarded with more points as the reward multiplier decreases over time. This means that the earlier a subscriber joins and the longer they subscribe for, the more points they will receive.
+Early subscribers are issued more rewards as the reward multiplier decreases over time. This means that the earlier a subscriber joins and the longer they subscribe for, the more rewards they will receive.
 
-These points are not redeemable for tokens unless a reward pool is configured, but can still be used to rate a subscriber's loyalty onchain. If a reward pool is configured, the points are redeemable for tokens. The reward token pool grows with every subscription purchase.
+These rewards are not redeemable for tokens unless a reward pool is configured, but can still be used to rate a subscriber's loyalty onchain. If a reward pool is configured, the rewards are redeemable for tokens. The reward token pool grows with every subscription purchase.
 
 ## Reward Multiplier
 
-The reward multiplier determines how many points are issued at time of mint. It decays over time and is designed to incentivize early adoption and long-term subscriptions.
+The reward multiplier determines how many rewards are issued at time of mint. It decays over time and is designed to incentivize early adoption and long-term subscriptions.
 There is a formula that determines the reward multiplier based on the number of periods that have passed since the subscription was created.
 
 The creation variables are as follows:
@@ -55,7 +55,7 @@ rewardMultiplier = 2 ^ (numRewardHalvings - floor(secondsSinceCreation / minPurc
 |8+    |         0|
 
 
-If a user mints a subscription in period 1 for 10 tokens, they will receive 640 reward points. If they mint a subscription in period 2 for 10 tokens, they will receive 320 reward points. If they mint a subscription in period 12 for 10 tokens, they will receive 0 reward points.
+If a user mints a subscription in period 1 for 10 tokens, they will receive 640 rewards. If they mint a subscription in period 2 for 10 tokens, they will receive 320 rewards. If they mint a subscription in period 12 for 10 tokens, they will receive 0 rewards.
 
 ## Reward Redemption
 
@@ -63,8 +63,8 @@ If a user mints a subscription in period 1 for 10 tokens, they will receive 640 
   Reward redemption requires deployment where `rewardBps` is greater than 0. A value of 100 basis points means 1% of all revenue earned will be allocated to the reward pool. Not all creators will offer this. Additionally, claiming rewards requires an active subscription!
 </Callout>
 
-Reward points are redeemable for tokens. Subscribers can redeem their reward tokens by invoking the `withdrawRewards` on a subscription contract.
-The amount of rewards available depends on the total amount of reward points issued, the number of tokens in the reward pool, and previous withdrawals for the user.
+Rewards are redeemable for tokens. Subscribers can redeem their reward tokens by invoking the `withdrawRewards` on a subscription contract.
+The amount of redeemable tokens depends on the total amount of rewards issued, the number of tokens in the reward pool, and previous withdrawals for the user.
 The denominated reward token is the same as the subscription token. For example, if a user mints a subscription with DAI, the reward token is also DAI. Tokens are allocated to the reward pool on every mint.
 
 <Tabs items={['sdk']}>
@@ -85,10 +85,10 @@ The denominated reward token is the same as the subscription token. For example,
 
 ## Reward Slashing
 
-In the event that a subscriber fails to to renew, other subscribers have the option to slash the past subscriber's reward points after the grace period. The grace period is 50% of the total time minted.
+In the event that a subscriber fails to to renew, other subscribers have the option to slash the past subscriber's rewards after the grace period. The grace period is 50% of the total time minted.
 
-For example, if alice subscribed for 12 months and did not renew, 18 months after her subscription started, any active subscriber could slash her reward points.
+For example, if alice subscribed for 12 months and did not renew, 18 months after her subscription started, any active subscriber could slash her rewards.
 
-When a subscriber's reward points are slashed, 100% of those points are burned, defalating the total points issued, effectively increasing the value of all other reward points.
+When a subscriber's rewards are slashed, 100% of those rewards are burned, defalating the total rewards issued, effectively increasing the value of all other rewards.
 
 This is designed to disincentivize churn and farming and reward current subscribers.
