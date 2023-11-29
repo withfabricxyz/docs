@@ -19,6 +19,11 @@
     "type": "separator",
     "title": "More"
   },
+  "sdk": {
+    "title": "SDK ↗",
+    "href": "https://github.com/withfabricxyz/protocol-sdks",
+    "newWindow": true
+  },
   "about": {
     "title": "About ↗",
     "href": "https://blog.withfabric.xyz/who-is-fabric",

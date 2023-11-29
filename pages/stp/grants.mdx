@@ -7,7 +7,7 @@ import { Tab, Tabs, Callout } from 'nextra-theme-docs'
 </Callout>
 
 Creators can grant access to accounts for a given amount of time. This can be done for a single account, or for a group of accounts with a single transaction.
-Granted time is measured in seconds and is tracked separately from purchased time. The expiration date of a subscription is the sum of remaining purchased time and remaining grant time.
+Granted time is measured in seconds and is tracked separately from purchased time. The expiration date of a subscription is the max of remaining purchased time and remaining grant time.
 
 Granting will mint a new NFT if the beneficiary doesn't currently have a subscription. If they do, the time extends their subscription.
 
