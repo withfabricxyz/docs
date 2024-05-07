@@ -1,0 +1,115 @@
+import { Tab, Tabs, Callout } from 'nextra-theme-docs'
+
+# Tiers
+
+Tiers provide the majority of functionality in STP. Every subscription is minted into a tier, and each tier has its own configuration. A STP contract may have only one tier, or many tiers.
+
+Creators can configure tiers with different prices, durations, and benefits. Tiers can be added, removed, or updated at any time. They can represent commitment discounts, offers, product variants, etc.
+
+## Aspects of a Tier
+
+1. Pricing
+    - Prices are updateable and can be changed at any time
+    - Pricing for joining a tier and renewing can be different
+    - Pricing can be 0, allowing "pay what you want"
+2. Dynamic Durations
+    - Duration of a subscription can be different for each tier
+    - Duration can be changed at any time
+3. Restrictions on subscription durations
+    - Specific start and/or end dates for fixed-duration offerings (seasons, scheduling)
+    - Maximum commitment (eg: subscriber can't have more than 6 months of time minted at any given time)
+4. Restrictions on the number of subscriptions per tier (exclusivity)
+5. Token gated access
+    - Tiers can be gated on any ERC20, ERC721, ERC1155, or STPv2 Tier (HyperTier)
+6. Custom reward curves and rev share
+7. Soulbound tiers (non-transferable as long as the subscription is active)
+8. Tiers can be paused
+9. Inactive subscribers can be booted to free up supply (moved to the inactive tier)
+
+
+## The Default Tier
+
+When deploying a contract, the creator must specify a default tier. This tier is used when a subscriber does not specify a tier when minting a new subscription. If the subscriber does not specify a tier at renew time, time will be added to their subscription in their current tier.
+
+## The Inactive Tier
+
+The inactive tier is a special tier that is used to disable subscriptions. When a subscriber lapses, they can be moved to the inactive tier by calling `deactiveSubscription(address account)`. This will open up a slot for a new subscriber to mint a subscription the tier. If a deactivated subscriber re-joins the tier they must meet tier requirements including paying the join fee.
+
+## Pay What You Want Tiers
+
+Tiers can be configured to allow subscribers to pay what they want. This is useful for donations, charity, or other scenarios where the subscriber should be able to choose their price, including 0 tokens.
+
+If configuring a pay what you want tier, set the `pricePerPeriod` to 0. Note that subscribers will only receive a single period of time each time they mint or renew.
+
+## Tier Permissions
+
+Tiers can be updated by the owner as well as managers. Agents cannot update tiers, but they can grant and revoke time to subscribers in any tier.
+
+## Creating a Tier
+
+Tiers can be created via the SDK or directly onchain.
+
+<Tabs items={['sdk']}>
+  <Tab>
+  ```ts
+  import {
+    prepareCreateTier
+  } from '@withfabric/protocol-sdks/stpv2';
+
+  const tier = {
+    periodDurationSeconds: 36000, // duration of a single period in seconds
+    maxSupply: 100, // Max number of subscriptions in this tier
+    maxCommitmentSeconds: 36000 * 12, // Max commitment of 12 periods
+    startTimestamp: 0, // 0 means no start date (seconds)
+    endTimestamp: 0, // 0 means no end date (seconds)
+    paused: false, // Whether the tier is paused
+    transferrable: false, // Whether the subscription is transferrable while in this tier
+    initialMintPrice: 0n, // The price to join the tier
+    pricePerPeriod: 1000000000n, // The price to renew the tier for one period
+    rewardCurveId: 0, // The reward curve to use for this tier
+    rewardBasisPoints: 500, // The percentage of revenue to share with subscribers
+    gate: {
+      gateType: 0, // 0 = no gate, 1 = ERC20, 2 = ERC721, 3 = ERC1155, 4 = STPv2 Tier
+      contractAddress: zeroAddress, // The address of the gate contract
+      componentId: 0n, // The component ID of the gate (1155 token id, stpv2 tier id)
+      balanceMin: 0n // The minimum balance required to join the tier
+    }
+  };
+
+  const create = await prepareCreateTier({
+    contractAddress: `0x...`,
+    tier,
+  });
+
+  // A new tier is created with an id = current tier count + 1
+  const receipt = await create();
+  ```
+  </Tab>
+</Tabs>
+
+## Updating a Tier
+
+Tiers can be updated. The tier id is required to update a tier. Note that
+
+<Tabs items={['sdk']}>
+  <Tab>
+  ```ts
+  import {
+    prepareUpdateTier
+  } from '@withfabric/protocol-sdks/stpv2';
+
+  // Load tier data
+  const tier = {
+    // ...
+  };
+
+  const update = await prepareUpdateTier({
+    contractAddress: `0x...`,
+    tierId: 1,
+    tier,
+  });
+
+  const receipt = await update();
+  ```
+  </Tab>
+</Tabs>

@@ -1,39 +1,132 @@
-# Roles
+import { Tab, Tabs, Callout } from 'nextra-theme-docs'
 
-STP contracts have three roles: owner, subscriber, and fee collector. Each role has different permissions.
+# Privileged Roles
 
-## Owner
+There are several roles in the STP contract. Each role has different permissions. Owners can grant specific roles to other accounts to delegate responsibilities. This is helpful when the owner is a DAO or multisig.
 
-The owner is responsible for deploying the contract and offering access and perks to subscribers. As a result they maintain the most control over the contract.
+* Owner
+* Manager
+* Agent
+* Issuer
+* Protocol Fee Recipient
+* Client Fee Recipient
 
-#### Permissions
+#### Owner Role
 
-* Managing the transfer recipient
-* Managing the supply cap
-* Pausing and unpausing the contract
-* Granting time to any account
-* Updating contract metadata
-* Refunding remaining purchase time to any account
-* Withdrawing contract funds to any account
-* Creating and deleting referral codes
-* Transferring ownership to another account
-* Recovery and reconcilation of tokens
+The owner is set to the creator (msg.sender) address upon deployment, unless otherwise specified. The owner has complete control over the contract. The exclusive controls of the owner are as follows:
 
-## Subscriber
+* Creating or revoking Managers and Agents `setRoles`
+* Transferring ownership `setPendingOwner`
+* Updating the Transfer Recipient `setTransferRecipient`
+* Withdrawing funds to any address other than the transfer recipient `tranferFunds`
+* Refunding subscribers with contract funds `refund`
+* Token recovery `recoverCurrency`
 
-Subscribers are the users who purchase time from the contract. They are granted access to perks for the duration of their subscription.
+#### Manager Role
 
-#### Permissions
+Managers can control nearly all metadata in the contract. Managers can do the following:
 
-* Mint/Renew
-* Transfer (If the destination doesn't hold a subscription)
-* Withdraw rewards (If enabled by the owner)
+* Grant Time `grantTime`
+* Revoke Time `revokeTime`
+* Update Metadata URL `setMetadataURL`
+* Set Global Supply Cap `setGlobalSupplyCap`
+* Create Tiers `createTier`
+* Update Tiers `updateTier`
+* Manage Referral Codes `setReferralCode`
+* Create Reward Curves `createRewardCurve`
 
-## Fee Collector
+#### Agent Role
 
-The fee collector is responsible for collecting accrued fees from the contract.
+Agents are designed to grant and revoke time to subscribers. Agents can do the following:
 
-#### Permissions
+* Grant Time `grantTime`
+* Revoke Time `revokeTime`
 
-* Collecting accrued fees
-* Managing the fee collector address
+#### Issuer Role
+
+Issuers are intended to allow reward pool share issuance for off-chain or on-chain activities beyond minting subscriptions. Privileges:
+
+* Issue Reward Shares `issueRewardShares`
+
+#### Protocol Fee Recipient
+
+The protocol fee recipient is the address that receives the protocol fee. The protocol fee is a percentage of the subscription price. The protocol fee recipient can do the following:
+
+* Update the protocol fee recipient `updateProtocolFeeRecipient`
+* Remove protocol fees `updateProtocolFeeRecipient(0x0)`
+
+<Callout type="info" emoji="ℹ️">
+  `updateProtocolFeeRecipient` must be invoked via the factory contract `updateProtocolFeeRecipient`, which supports multicall
+</Callout>
+
+#### Client Fee Recipient
+
+The client fee recipient is the address that receives the client fee. The client fee is a percentage of the subscription price. The client fee recipient can do the following:
+
+* Update the client fee recipient `updateClientFeeRecipient`
+* Remove client fees `updateClientFeeRecipient(0x0)`
+
+<Callout type="info" emoji="ℹ️">
+  `updateClientFeeRecipient` must be invoked via the factory contract `updateClientFeeRecipient`, which supports multicall
+</Callout>
+
+---
+
+## Setting Roles
+
+<Callout type="info" emoji="ℹ️">
+  Only the contract owner can grant and revoke roles
+</Callout>
+
+Roles can be set using the `setRoles` function. The roles are represented as a bitmask. The following roles are available:
+
+* ROLE_MANAGER = 1
+* ROLE_AGENT = 2
+* ROLE_ISSUER = 4
+
+<Tabs items={['sdk', 'solidity']}>
+  <Tab>
+  ```ts
+  import {
+    prepareSetRoles,
+    Role,
+  } from '@withfabric/protocol-sdks/stpv2';
+
+  // Add MANAGER and ISSUER roles to the account
+  const grant = await prepareSetRoles({
+    contractAddress: `0x...`,
+    account: `0x...`,
+    roles: [Role.MANAGER, Role.ISSUER],
+  });
+
+  const receipt = await grant();
+
+  // Revoke
+  const revoke = await prepareSetRoles({
+    contractAddress: `0x...`,
+    account: `0x...`,
+    roles: [],
+  });
+
+  const receipt2 = await revoke();
+  ```
+  </Tab>
+  <Tab>
+  ```solidity
+  // Add MANAGER role to the account
+  contract.setRoles(alice, 0x2);
+
+  // Revoke
+  contract.setRoles(alice, 0x0);
+  ```
+  </Tab>
+</Tabs>
+
+### Factory Owner
+
+The factory owner is the owner of the factory contract. The factory owner can do the following:
+
+* Initiate ownership transfer `setPendingOwner`
+* Set the protocol fee recipient `setProtocolFeeRecipient`
+* Set a deploy fee `setDeployFee`
+

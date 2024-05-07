@@ -38,6 +38,15 @@ export function stpFactories() {
   return factoryData(_stpFactories);
 };
 
+export function stpV2Factories() {
+  return [{
+    chainId: 0,
+    name: "TODO",
+    address: "0x0000000000000000000000000000000000000000",
+    href: "#",
+  }];
+};
+
 export function ChainList({ chains } : { chains: chainish[] }) {
   const basic = chains.map(x => getChain(x)?.name || x).join(', ');
 

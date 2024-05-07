@@ -8,16 +8,29 @@ Fabric currently provides a typescipt SDK targetting wagmi/wagmi-core. The sourc
 npm i @withfabric/protocol-sdks
 ```
 
-### Usage
+### Setup
 
-Since the SDK depends on wagmi, all functions will leverage the wagmi config. By default, actions target the connected chain, but chainId can be overriden on any call.
+Since the SDK depends on wagmi, all functions leverage a wagmi config Object, which must set via a configuration call:
 
-Simple example for a mint transaction:
+````typescript
+import { createConfig } from '@wagmi/core';
+import { configureFabricSDK } from '@withfabric/protocol-sdks';
+
+// Create wagmi configuration
+const config = return createConfig({
+  // ...
+});
+
+// Configure the SDK to use your wagmi configuration
+configureFabricSDK({ wagmiConfig: config });
+````
+
+### Mint Example
 
 ```typescript
 import {
   prepareMint,
-} from '@withfabric/protocol-sdks/stpv1';
+} from '@withfabric/protocol-sdks/stpv2';
 
 const mint = await prepareMint({
   contractAddress: '0x...',
@@ -27,10 +40,41 @@ const mint = await prepareMint({
 const receipt = await mint();
 ```
 
+### Usage in a Dapp (React + Wagmi)
+
+
+```tsx
+import { useCallback } from 'react';
+import {
+  prepareMint,
+} from '@withfabric/protocol-sdks/stpv2';
+
+export function MintButton({ contractAddress, chainId, amount } : {
+  contractAddress: `0x${string}`,
+  chainId?: number,
+  amount: bigint,
+}) {
+
+  const mintTxn = useCallback(async () => {
+    // This can throw an error if the mint isn't possible, etc
+    return await prepareMint({
+      contractAddress,
+      amount,
+      chainId,
+    });
+  }, [contractAddress, chainId, amount]);
+
+  // Note: This is a simple example. You may want to add error handling, connection checks, processing states, etc.
+  return <Button
+    onClick={mintTxn}
+    text="Mint"
+  />;
+}
+```
+
 Examples for other actions can be found throughout the documentation.
 
 ### Questions? Feedback?
 
 Reach out on [Telegram](https://t.me/withfabric)
-
 

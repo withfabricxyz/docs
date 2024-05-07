@@ -1,21 +1,24 @@
-# Protocol Fees
+# Fees
 
-The Subscription Token Protocol takes fees as a percentage of tokens received. These fees are present to incentivize the development of the protocol. Additionally, they may be shared with
-partners who help grow the protocol with new applications and integrations.
+There are two types of fees in STP:
 
-## What are the fees?
+1. Protocol Fees
+2. Client Fees
 
-It depends. When deploying a subscription, an optional fee id is provided, which sets the fee recipient and basis points for the deployed contract. This can be checked by calling `feeSchedule(uint256 feeId)` on the factory contract for a given network.
-If no feeId is present, the default fee id of 0 is used. This fee schedule may be changed by the factory contract owner, but only future deployments are impacted by the change.
+### Protocol Fees
 
-Multiple fee schedules enable partnerships with other organizations supporting the protocol. Fees can be split in many ways, but this happens outside the protocol with other protocols such as 0xsplits. The protocol only supports a single fee collector address.
+Protocol fees are collected by the protocol and are used to incentivize the development of the protocol. These fees are collected as a percentage of the tokens received by the contract. The fee rate is 100 basis points (1%).
 
-The default fee rate is 400 basis points (4%).
+### Client Fees
+
+Client fees are set by the client when deploying a subscription. Each client can set their own fee rate, which is collected by the protocol and sent to the recipient. It's up to developers to decide what they want to charge for their services. The protocol enforces a max rake of 12.5%, so the maximum a client could set is 11.5% (11.5% + 1% = 12.5%).
+
+Additionally, the client can allocate a portion of the client fee to referrers when no referral code is presented during mint time. [Learn More](/stp/referrals#client-fee-referral-split)
+
+## When are fees set?
+
+When a subscription is created, the fee is calculated and stored in the contract. Once set, these rates cannot change. However, the recipient for both protocol and client fees can be updated by the respective accounts.
 
 ## How are fees collected?
 
-When a subscription is created, the fee is calculated and stored in the contract. When `transferFees`, `transferAllBalances` or `withdrawAndTransferFees` are called, the fee balance is sent to the fee collector.
-
-## Can we split fees?
-
-It's possible. Please refer to [Partner rewards](/stp/partner_rewards).
+Fees are transferred upon contract inflows, specifically minting.

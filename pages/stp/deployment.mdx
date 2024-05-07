@@ -1,30 +1,40 @@
-# Deploying a Subscription Contract
-
 import { Tab, Tabs } from 'nextra-theme-docs'
 import { Callout } from 'nextra-theme-docs'
-import { stpFactories } from 'components/factories'
+import { stpV2Factories } from 'components/factories'
+
+# Deploying a Subscription Contract
 
 Subscription contracts are deployed by invoking the `deploySubscription` function on
-the factory contract for a given network. The function uses OpenZeppelin Clones to create a proxy and initialize
+the factory contract for a given network. The function uses EIP-1167 to create a proxy then initializes
 the contract with supplied parameters.
 
 ## Deploy Parameters
 
-|Name|Type|Description|
-|----|----|-----------|
-|`name`|`string`|the name of the collection. [See eip-721](https://eips.ethereum.org/EIPS/eip-721)|
-|`symbol`|`string`|the symbol of the collection [See eip-721](https://eips.ethereum.org/EIPS/eip-721)|
-|`contractURI`|`string`|the metadata URI for the collection (contract level metadata)|
-|`tokenURI`|`string`|the metadata URI for the tokens [See eip-721](https://eips.ethereum.org/EIPS/eip-721)|
-|`tokensPerSecond`|`uint256`|the number of base tokens required for a single second of time|
-|`minimumPurchaseSeconds`|`uint256`|the minimum number of seconds an account can purchase|
-|`rewardBps`|`uint16`|the basis points for reward allocations, 0 to disable. [See rewards](/stp/rewards)|
-|`erc20TokenAddr`|`address`|the address of the ERC20 token used for purchases, or the 0x0 for native|
-|`feeConfigId`|`uint256`|the fee configuration id to use for this deployment [See fees](/stp/fees)|
+Deployment involves configuring ERC721 metadata, a default tier (tier 1), reward settings, and curve 0 settings.
+
+```solidity
+struct DeployParams {
+    /// @dev the client fee basis points
+    uint16 clientFeeBps;
+    /// @dev the client fee recipient
+    address clientFeeRecipient;
+    /// @dev An identifer to help track deployments via Deploy event. This should only be used in
+    ///      conjunction with the expected owner account to prevent impersonation via front or back running.
+    bytes deployKey;
+    /// @dev the init parameters for the collection
+    InitParams initParams;
+    /// @dev the init parameters for the default tier (tier 1)
+    Tier tierParams;
+    /// @dev the reward parameters for the collection
+    RewardParams rewardParams;
+    /// @dev Initial reward curve params (curve 0)
+    CurveParams curveParams;
+}
+```
 
 ## Native Token vs ERC-20
 
-Subscription contracts support native tokens as well as ERC-20 compliant tokens. When minting occurs, the denominated token will be used to purchase time.
+Subscription contracts support native tokens as well as ERC20 tokens. When minting occurs, the denominated token will be used to purchase time.
 
 <Callout type="error" emoji="️🚫">
   Subscription contracts do not support rebasing tokens! Do not use them as the denominated token.
@@ -33,6 +43,25 @@ Subscription contracts support native tokens as well as ERC-20 compliant tokens.
 <Callout type="warning" emoji="⚠️">
   Subscription contracts support fee taking tokens. The number of tokens transferred on mint will factor in the fee.
 </Callout>
+
+## Immutable Parameters
+
+Some cannot change after deployment. Ensure these are set correctly before deploying.
+
+#### Determined by Client
+
+- `clientFeeBps`
+- `clientReferralShareBps`
+- `clientFeeRecipient`
+
+#### Determined by Creator
+
+- `initParams.name`
+- `initParams.symbol`
+- `initParams.erc20TokenAddr`
+- `rewardParams.slashGracePeriod`
+- `rewardParams.slashable`
+
 
 ## Factory Addresses
 
@@ -44,7 +73,7 @@ Subscription contracts support native tokens as well as ERC-20 compliant tokens.
     </tr>
   </thead>
   <tbody>
-    {stpFactories().map(item => (
+    {stpV2Factories().map(item => (
       <tr key={item.chainId}>
         <td>{item.name}</td>
         <td><a className="nx-font-mono" href={item.href} target="_blank">{item.address}</a></td>
@@ -61,24 +90,56 @@ Deploying occurs via the factory contract. The factory contracts are configured 
   <Tab>
   ```ts
   import {
-    CollectionConfig,
-    prepareDeployment,
-  } from '@withfabric/protocol-sdks/stpv1';
+    DeployParams, prepareDeployment
+  } from '@withfabric/protocol-sdks/stpv2';
 
-  const config: CollectionConfig = {
-    name: 'Test',
-    symbol: 'TEST',
-    contractURI: 'https://example.com/contract',
-    tokenURI: 'https://example.com/token',
-    tokensPerSecond: 1n,
-    minPurchaseSeconds: 60n,
-    erc20TokenAddress: Address.ZERO,
-    rewardBps: 0n,
-    feeId: 0n,
+  const params: DeployParams = {
+    clientFeeBps: 100, // 1% of ingress tokens go to the clientFeeRecipient
+    clientReferralShareBps: 0, // The number of basis points to share with referrers when no referral code is used
+    clientFeeRecipient: '0x0', // The client fee recipient
+    deployKey: "0xbeef", // A unique identifier for the deployment (emitted as an event for indexers)
+    initParams: {
+      name: 'Test Sub', // The name of the subscription
+      symbol: 'FUN', // The symbol of the subscription
+      contractUri: 'https://example.com/contract', // The URI for the contract metadata (/${tokenId} is appended for tokenURI)
+      owner: zeroAddress, // The owner of the contract (if 0x0 at deploy, it will be set to msg.sender)
+      erc20TokenAddr: zeroAddress, // The address of the ERC20 token to use for minting (0x0 for native token, ETH)
+      globalSupplyCap: 200n, // The maximum number of tokens that can be minted over all tiers
+    },
+    rewardParams: {
+      slashGracePeriod: 3600, // The number of seconds to extend a subscription by for slashing
+      slashable: false, // Whether rewards are slashable
+    },
+    curveParams: {
+      numPeriods: 20, // The number of periods in the curve
+      formulaBase: 2, // The base of the formula (2 ^ N periods)
+      periodSeconds: 3600, // The number of seconds in a period
+      startTimestamp: 0, // The start timestamp for the curve
+      minMultiplier: 1, // The minimum multiplier for the curve (0 means no new distribution after the curve ends)
+    },
+    tierParams: {
+      periodDurationSeconds: 3600, // The number of seconds in a period
+      maxSupply: 10, // The maximum number of tokens that can be minted in this tier
+      maxCommitmentSeconds: 7200, // The maximum number of seconds a commitment can be made for
+      startTimestamp: 0, // The start timestamp for the tier
+      endTimestamp: 0, // The end timestamp for the tier
+      paused: false, // Whether the tier is paused
+      transferrable: true, // Whether tokens are transferrable (soulbound)
+      initialMintPrice: 10000000000000n, // The initial mint price for the tier (cost to join)
+      pricePerPeriod: 1000000000n, // The price per period for the tier
+      rewardCurveId: 0, // The reward curve ID for the tier (for reward distribution)
+      rewardBasisPoints: 500, // The reward basis points for the tier (revshare with pool)
+      gate: {
+        gateType: 0, // The gate type (0 = none, 1 = ERC20, 2 = ERC721, 3 = 1155, 4 = STPv2)
+        contractAddress: zeroAddress, // The address of the gate contract
+        componentId: 0n, // The component ID for the gate (for 1155 or STPv2 [tier id])
+        balanceMin: 0n // The minimum balance required to pass the gate
+      }
+    }
   };
 
   // Prepare/simulate the deployment and return an async function that can be used to execute it
-  const deploy = await prepareDeployment(config);
+  const deploy = await prepareDeployment(params);
 
   // Execute the transaction
   const { receipt, contractAddress } = await deploy();

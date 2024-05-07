@@ -1,0 +1,94 @@
+import { Tab, Tabs, Callout } from 'nextra-theme-docs'
+
+# Subscriber Rewards
+
+Creators have the option to offer rewards to their subscribers when deploying a subscription contract. There are a few key pieces here:
+
+1. Rewards
+2. Reward Multiplier
+3. Reward Redemption
+4. Reward Slashing
+
+Rewards are issued to subscribers when they mint or renew a subscription. The amount of rewards issued depends on the reward multiplier and the number of tokens transferred. If the creator configured a reward pool, the rewards are redeemable for tokens.
+
+The reward model is designed to incentivize early adoption of a subscription, but is completely optional.
+
+## Rewards
+
+Regardless of whether a reward pool is configured, rewards are issued to subscribers when they mint or renew a subscription. The amount of rewards issued depends on the reward multiplier and the number of tokens tokens transferred.
+
+Early subscribers are issued more rewards as the reward multiplier decreases over time. This means that the earlier a subscriber joins and the longer they subscribe for, the more rewards they will receive.
+
+These rewards are not redeemable for tokens unless a reward pool is configured, but can still be used to rate a subscriber's loyalty onchain. If a reward pool is configured, the rewards are redeemable for tokens. The reward token pool grows with every subscription purchase.
+
+## Reward Multiplier
+
+The reward multiplier determines how many rewards are issued at time of mint. It decays over time and is designed to incentivize early adoption and long-term subscriptions.
+There is a formula that determines the reward multiplier based on the number of periods that have passed since the subscription was created.
+
+The creation variables are as follows:
+
+|Variable|Description|
+|--------|-----------|
+|minPurchaseSeconds|The duration of one halving period|
+|numRewardHalvings|The number of halving periods until the reward multipler goes to 1, after which it goes to 0|
+
+numRewardHalvings must be less than or equal to 32 per protocol rules.
+
+#### Simplied Reward Multiplier Formula
+
+```
+rewardMultiplier = 2 ^ (numRewardHalvings - floor(secondsSinceCreation / minPurchaseSeconds))
+```
+
+#### Reward Multiplier Table (6 halvings)
+
+|Period|Multiplier|
+|------|----------|
+|1     |        64|
+|2     |        32|
+|3     |        16|
+|4     |         8|
+|5     |         4|
+|6     |         2|
+|7     |         1|
+|8+    |         0|
+
+
+If a user mints a subscription in period 1 for 10 tokens, they will receive 640 rewards. If they mint a subscription in period 2 for 10 tokens, they will receive 320 rewards. If they mint a subscription in period 12 for 10 tokens, they will receive 0 rewards.
+
+## Reward Redemption
+
+<Callout type="warning" emoji="⚠️">
+  Reward redemption requires deployment where `rewardBps` is greater than 0. A value of 100 basis points means 1% of all revenue earned will be allocated to the reward pool. Not all creators will offer this. Additionally, claiming rewards requires an active subscription!
+</Callout>
+
+Rewards are redeemable for tokens. Subscribers can redeem their reward tokens by invoking the `withdrawRewards` on a subscription contract.
+The amount of redeemable tokens depends on the total amount of rewards issued, the number of tokens in the reward pool, and previous withdrawals for the user.
+The denominated reward token is the same as the subscription token. For example, if a user mints a subscription with DAI, the reward token is also DAI. Tokens are allocated to the reward pool on every mint.
+
+<Tabs items={['sdk']}>
+  <Tab>
+  ```ts
+  import {
+    prepareWithdrawRewards
+  } from '@withfabric/protocol-sdks/stpv1';
+
+  const withdraw = await prepareWithdrawRewards({
+    contractAddress: '0x...',
+  })
+
+  const receipt = await withdraw();
+  ```
+  </Tab>
+</Tabs>
+
+## Reward Slashing
+
+In the event that a subscriber fails to to renew, other subscribers have the option to slash the past subscriber's rewards after the grace period. The grace period is 50% of the total time minted.
+
+For example, if alice subscribed for 12 months and did not renew, 18 months after her subscription started, any active subscriber could slash her rewards.
+
+When a subscriber's rewards are slashed, 100% of those rewards are burned, defalating the total rewards issued, effectively increasing the value of all other rewards.
+
+This is designed to disincentivize churn and farming and reward current subscribers.

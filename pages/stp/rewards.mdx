@@ -1,94 +1,98 @@
 import { Tab, Tabs, Callout } from 'nextra-theme-docs'
+import { RewardCurve } from 'components/RewardCurve';
 
 # Subscriber Rewards
 
-Creators have the option to offer rewards to their subscribers when deploying a subscription contract. There are a few key pieces here:
+Creators have the option to offer rewards to their subscribers when deploying a subscription contract. The reward model is designed to incentivize early adoption of a subscription, but is completely optional. There are a few key pieces here:
 
-1. Rewards
-2. Reward Multiplier
+1. Reward Allocation
+2. Reward Share Issuance
 3. Reward Redemption
-4. Reward Slashing
+4. Reward Share Slashing
 
-Rewards are issued to subscribers when they mint or renew a subscription. The amount of rewards issued depends on the reward multiplier and the number of tokens transferred. If the creator configured a reward pool, the rewards are redeemable for tokens.
+When configured, reward shares are issued to subscribers when they mint or renew a subscription. The amount of shares issued depends on the reward multiplier and the number of tokens transferred to the reward pool. Rewards can be redeemed by share holders in proportion to their share of the pool.
 
-The reward model is designed to incentivize early adoption of a subscription, but is completely optional.
+### Reward Allocation
 
-## Rewards
+Each tier in a subscription contract can have a rev share percentage. This percentage is applied to purchases for the tier. Tokens are allocated to the reward pool for reward share holders to redeem.
 
-Regardless of whether a reward pool is configured, rewards are issued to subscribers when they mint or renew a subscription. The amount of rewards issued depends on the reward multiplier and the number of tokens tokens transferred.
+## Reward Share Issuance
 
-Early subscribers are issued more rewards as the reward multiplier decreases over time. This means that the earlier a subscriber joins and the longer they subscribe for, the more rewards they will receive.
+Reward issuance is determined by a reward curve, the time of mint, and the amount of tokens allocated to the reward pool upon mint. Eg: `tokensAllocatedToRewardPool * curveMultiplier`.
 
-These rewards are not redeemable for tokens unless a reward pool is configured, but can still be used to rate a subscriber's loyalty onchain. If a reward pool is configured, the rewards are redeemable for tokens. The reward token pool grows with every subscription purchase.
+Reward curves are used to calculate a reward multiplier, which is used to determine how many shares are issued to the minter. The curve is a decaying exponential function with an optional floor. Here is a playground to see how multipliers decay from period to period. See [tiers](/stp/tiers) for settings curves.
 
-## Reward Multiplier
-
-The reward multiplier determines how many rewards are issued at time of mint. It decays over time and is designed to incentivize early adoption and long-term subscriptions.
-There is a formula that determines the reward multiplier based on the number of periods that have passed since the subscription was created.
-
-The creation variables are as follows:
-
-|Variable|Description|
-|--------|-----------|
-|minPurchaseSeconds|The duration of one halving period|
-|numRewardHalvings|The number of halving periods until the reward multipler goes to 1, after which it goes to 0|
-
-numRewardHalvings must be less than or equal to 32 per protocol rules.
-
-#### Simplied Reward Multiplier Formula
-
-```
-rewardMultiplier = 2 ^ (numRewardHalvings - floor(secondsSinceCreation / minPurchaseSeconds))
-```
-
-#### Reward Multiplier Table (6 halvings)
-
-|Period|Multiplier|
-|------|----------|
-|1     |        64|
-|2     |        32|
-|3     |        16|
-|4     |         8|
-|5     |         4|
-|6     |         2|
-|7     |         1|
-|8+    |         0|
-
-
-If a user mints a subscription in period 1 for 10 tokens, they will receive 640 rewards. If they mint a subscription in period 2 for 10 tokens, they will receive 320 rewards. If they mint a subscription in period 12 for 10 tokens, they will receive 0 rewards.
+<RewardCurve />
 
 ## Reward Redemption
 
-<Callout type="warning" emoji="⚠️">
-  Reward redemption requires deployment where `rewardBps` is greater than 0. A value of 100 basis points means 1% of all revenue earned will be allocated to the reward pool. Not all creators will offer this. Additionally, claiming rewards requires an active subscription!
-</Callout>
-
-Rewards are redeemable for tokens. Subscribers can redeem their reward tokens by invoking the `withdrawRewards` on a subscription contract.
-The amount of redeemable tokens depends on the total amount of rewards issued, the number of tokens in the reward pool, and previous withdrawals for the user.
-The denominated reward token is the same as the subscription token. For example, if a user mints a subscription with DAI, the reward token is also DAI. Tokens are allocated to the reward pool on every mint.
+Rewards are redeemable for tokens. Subscribers can redeem their reward tokens by invoking the `transferRewards` on a subscription contract.
+The amount of redeemable tokens depends on the total amount of rewards issued, the number of tokens in the reward pool, and previous claims for the user.
+The denominated reward token is the same as the subscription token. For example, if a user mints a subscription with DAI, the reward token is also DAI. Tokens are allocated to the reward pool on every mint (if configured).
 
 <Tabs items={['sdk']}>
   <Tab>
   ```ts
   import {
-    prepareWithdrawRewards
-  } from '@withfabric/protocol-sdks/stpv1';
+    prepareTransferRewards
+  } from '@withfabric/protocol-sdks/stpv2';
 
-  const withdraw = await prepareWithdrawRewards({
+  const transfer = await prepareTransferRewards({
     contractAddress: '0x...',
+    account: '0x...', // reward share holder account
   })
 
-  const receipt = await withdraw();
+  const receipt = await transfer();
   ```
   </Tab>
 </Tabs>
 
 ## Reward Slashing
 
-In the event that a subscriber fails to to renew, other subscribers have the option to slash the past subscriber's rewards after the grace period. The grace period is 50% of the total time minted.
+The creator has the option to enable or disable reward slashing in addition to configuring a slash grace period.
 
-For example, if alice subscribed for 12 months and did not renew, 18 months after her subscription started, any active subscriber could slash her rewards.
+When slashing is enabled, reward share holders which fail to to renew are subject to share slashing. When slash is called, their entire reward share is burned and active reward holders receive a proportional increase in their rewards.
 
-When a subscriber's rewards are slashed, 100% of those rewards are burned, defalating the total rewards issued, effectively increasing the value of all other rewards.
+This is designed to incentivize loyalty and dissensenitivize farming.
 
-This is designed to disincentivize churn and farming and reward current subscribers.
+## Creating a Reward Curve
+
+Each tier can be configured to use a specific reward curve. When creating a tier, the sender must specify `rewardCurveId` and it must exist.
+
+<Callout type="info" emoji="ℹ️">
+  Only the owner and manager can create reward curves. A contract can have no more than 256 reward curves. id 0 - 255.
+</Callout>
+
+<Tabs items={['sdk']}>
+  <Tab>
+  ```ts
+  import {
+    prepareCreateRewardCurve
+  } from '@withfabric/protocol-sdks/stpv2';
+
+  const create = await prepareCreateRewardCurve({
+    contractAddress: '0x...',
+    curve: {
+      numPeriods: 6, // number of periods of decay
+      formulaBase: 2, // base of the formula 2 ^ N periods
+      periodSeconds: 36000, // number of seconds in a period
+      startTimestamp: 0, // start timestamp for the curve (will be set to block.timestamp if 0)
+      minMultiplier: 0, // minimum multiplier for the curve (0 means no new distribution after the curve ends)
+    },
+  })
+
+  const receipt = await create();
+  ```
+  </Tab>
+</Tabs>
+
+
+
+
+## Yielding Rewards
+
+The reward pool balance can be increased by calling `yieldRewards`. This function allows callers to add tokens to the reward pool without minting a subscription.
+
+## Creator Issued Shares
+
+It's possible for the creator to issue reward shares to accounts. This can be done by calling `issueRewardShares`. This is useful for migrating reward shares from a previous contract, or for rewarding users for actions other than minting.

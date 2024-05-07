@@ -2,8 +2,6 @@ import { ChainList, StpChainList } from 'components/factories'
 
 # Token Gating
 
-## WIP
-
 Given that subscriptions are onchain, the subscription contract is used to limit access. This is done by checking the `balanceOf` of a user's wallet address on the subscription contract.
 If `balanceOf` exceeds 0, the user has a valid subscription and should be granted access to the gated content. Otherwise, they can be directed to mint or renew a subscription, which can be done via Hypersub or by using the SDK.
 

@@ -2,24 +2,19 @@
   "overview": "Overview",
   "deployment": "Deployment",
   "reading": "Reading State",
-  "minting": "Minting Subscriptions",
-  "withdraws": "Withdraws",
+  "tiers": "Tiers",
+  "subscribing": "Subscribing",
+  "transfers": "Transfers",
   "rewards": "Subscriber Rewards",
   "referrals": "Referral Rewards",
-  "partner_rewards": "Partner Rewards",
   "refunds": "Refunds",
   "grants": "Grants",
-  "roles": "Roles",
-  "best_practices": "Best Practices",
+  "roles": "Privileged Roles",
   "advanced": "Advanced Usage",
   "fees": "Fees",
   "risks": "Risks",
   "gating": "Gating",
-  "audit_link": {
-    "title": "Audit Report",
-    "href": "https://certificate.quantstamp.com/full/subscription-token-fabric/3d319dfc-3e44-4b0a-9016-52d9af89c920/index.html",
-    "newWindow": true
-  },
   "sdk": "SDK",
-  "contracts": "Contract Reference"
+  "contracts": "Contract Reference",
+  "v1": "V1 Docs"
 }

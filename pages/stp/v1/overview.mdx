@@ -1,7 +1,5 @@
 # Subscription Token Protocol
 
-## WIP
-
 <a href="/stp.png" target="_blank">
   <img width="832" alt="stp" src="/stp.png" />
 </a>
@@ -17,10 +15,6 @@ The Subscription Token Protocol extends the Non Fungible Token standard with the
 3. This access remains in effect until the user’s time expires (eg after 6 months), at which point, access is denied, unless the user mints additional subscription time.
 
 The protocol is a non-upgradable, EVM-compatible smart contract that can be permissionlessly used to gate access to apps, services, content, and experiences. Time-bound subscription NFTs generate recurring revenue for businesses and creators, and are a simple, convenient access method for end-users.
-
-### Tiers
-
-STPv2 Introduced tiers, which allow creators to offer different levels of access to their subscribers. Tiers can be configured with different prices, durations, and benefits. [Learn More](/stp/tiers).
 
 ### Onchain Subscriber Rewards
 The protocol has a mechanism, “Subscriber Rewards”, for the contract deployer to allocate a portion of recurring revenue back to subscribers, to incentivize early adoption, long-term subscriptions, and subscriber retention.
@@ -60,10 +54,6 @@ Protocol partner rewards are all onchain and in perpetuity.
 
 [Learn More](/stp/partner_rewards)
 
-### Roles
-
-STP contracts have three roles: owner, manager, and agent. Each role has different permissions. [Learn More](/stp/roles)
-
 ### Abstractability
 STP contains a function that enables any account to purchase a subscription on behalf of any other account. This facilitates, in particular, credit card payments.
 
@@ -72,7 +62,6 @@ Eg: On app.xyz, Charlie subscribes to Alice’s contract, which costs 10 USDC pe
 With smart contract wallets, MPC wallets, EIP-4337, and other novel forms of abstraction, it’s even possible for Charlie to subscribe without ever knowing he’s using crypto.
 
 ### Additional Features
-
 #### Grants
 The owner of the NFT contract can issue onchain grants simply by specifying an address and amount of time they wish to grant. [Learn More](/stp/grants)
 

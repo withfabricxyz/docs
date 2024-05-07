@@ -1,0 +1,35 @@
+import { Tab, Tabs, Callout } from 'nextra-theme-docs'
+
+# Grants
+
+<Callout type="info" emoji="ℹ️">
+  Only the contract owner can create grants.
+</Callout>
+
+Creators can grant access to accounts for a given amount of time. This can be done for a single account, or for a group of accounts with a single transaction.
+Granted time is measured in seconds and is tracked separately from purchased time. The expiration date of a subscription is the max of remaining purchased time and remaining grant time.
+
+Granting will mint a new NFT if the beneficiary doesn't currently have a subscription. If they do, the time extends their subscription.
+
+<Tabs items={['sdk']}>
+  <Tab>
+  ```ts
+  import {
+    prepareGrantTime,
+  } from '@withfabric/protocol-sdks/stpv1';
+
+  const accounts: `0x${string}`[] = [
+    '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92264',
+    '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92265',
+  ];
+
+  const grant = await prepareGrantTime({
+    contractAddress: '0x...',
+    numSeconds: 86400n,
+    accounts,
+  });
+
+  const receipt = await grant();
+  ```
+  </Tab>
+</Tabs>

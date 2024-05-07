@@ -1,0 +1,66 @@
+import { Tab, Tabs, Callout } from 'nextra-theme-docs'
+
+# Transfers
+
+The owners's cut of funds are held in the contract. The owner of the contract can withdraw these funds at any time. The `contractDetail()` function includes `creatorBalance` indicating the balance available to transfer.
+
+Upon calling `transferFunds`, the creator's balance is adjusted and the funds are transferred to a destination address.
+
+## Perform a Transfer
+
+<Callout type="info" emoji="ℹ️">
+  Only the contract owner can transfer funds to arbitrary accounts.
+</Callout>
+
+The `transferFunds` function transfers some or all of the balance to a destination account.
+
+<Tabs items={['sdk']}>
+  <Tab>
+  ```ts
+  import {
+    prepareTransferFunds,
+  } from '@withfabric/protocol-sdks/stpv2';
+
+  const transfer = await prepareTransferFunds({
+    contractAddress: '0x...',
+    to: '0x...',
+    amount: 1000n,
+  });
+
+  const receipt = await transfer();
+  ```
+  </Tab>
+</Tabs>
+
+
+## Alternative Transfer Recipient
+
+It's also possible to transfer the balance to a configured recipient via `transferFunds()`. In order for this functionality to work, the creator must
+call the `setTransferRecipient(address recipient)` function. This functionality can later be disabled by setting the address to 0x0 (default).
+
+If the transfer recipient is set, the `transferFunds()` function can be called permissionlessly, as long as the `recipient` address matches the configured recipient. This functionality is useful for creators who want to automate the transfers or stream funds via external agent. For example, a creator may want to automatically transfer funds to a cold wallet, a multisig wallet, an exchange, or a sweep contract.
+
+Setting the transfer recipient:
+
+<Callout type="info" emoji="ℹ️">
+  Only the contract owner can set the transfer recipient
+</Callout>
+
+<Tabs items={['sdk']}>
+  <Tab>
+  ```ts
+  import {
+    prepareSetTransferRecipient,
+  } from '@withfabric/protocol-sdks/stpv2';
+
+  const setRecipient = await prepareSetTransferRecipient({
+    contractAddress: '0x...',
+    recipient: '0x...',
+  });
+
+  const receipt = await setRecipient();
+  ```
+  </Tab>
+</Tabs>
+
+Once the transfer recipient is set, any account can call transfer as long as the passed to address equals the configured transfer recipient address.

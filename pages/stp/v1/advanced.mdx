@@ -1,0 +1,227 @@
+import { Tab, Tabs, Callout } from 'nextra-theme-docs'
+
+# Advanced Protocol Usage
+
+Advanced functions are available for managing the contract. These functions are not required for normal operation.
+
+
+## Pausing and Unpausing
+
+<Callout type="info" emoji="ℹ️">
+  Only the contract owner can pause and unpause minting.
+</Callout>
+
+The contract can be paused and unpaused using [Pausable](https://docs.openzeppelin.com/contracts/4.x/api/security#Pausable).
+Pausing the contract only prevents mints and renewals. All other functions remain callable.
+
+<Tabs items={['sdk']}>
+  <Tab>
+  ```ts
+  import { preparePause, prepareUnpause } from '@withfabric/protocol-sdks/stpv1';
+
+  // Pause the contract
+  const pause = await preparePause({
+    contractAddress: '0x...',
+  });
+
+  const pauseReceipt = await pause();
+
+  // Unpause the contract
+  const unpause = await prepareUnpause({
+    contractAddress: '0x...',
+  });
+
+  const unpauseReceipt = await unpause();
+  ```
+  </Tab>
+</Tabs>
+
+## Adjusting Supply Cap
+
+<Callout type="info" emoji="ℹ️">
+  Only the contract owner can adjust the supply cap.
+</Callout>
+
+The maxmimum number of subscribers can be adjusted using the `setSupplyCap` function. The supply cap can be set to any value greater or equal to the current supply. Additionally, the
+supply cap can be set to 0 to allow unlimited subscribers (default).
+
+<Tabs items={['sdk']}>
+  <Tab>
+  ```ts
+  import { prepareSetSupplyCap } from '@withfabric/protocol-sdks/stpv1';
+
+  const setCap = await prepareSetSupplyCap({
+    contractAddress: '0x...',
+    supplyCap: 1000n,
+  });
+
+  const receipt = await setCap();
+  ```
+  </Tab>
+</Tabs>
+
+## Transfering Ownership
+
+<Callout type="info" emoji="ℹ️">
+  Only the contract owner can transfer ownership.
+</Callout>
+
+Transfers are two step, using [Ownable2Step](https://docs.openzeppelin.com/contracts/4.x/api/access#Ownable2Step). Transfers are started via the `transferOwnership` function.
+**This can be used to stage a backup owner**, or to transfer ownership to a new owner.
+
+<Tabs items={['sdk']}>
+  <Tab>
+  ```ts
+  import { prepareTransferOwnership } from '@withfabric/protocol-sdks/stpv1';
+
+  const transfer = await prepareTransferOwnership({
+    contractAddress: '0x...',
+    newOwner: '0x...',
+  });
+
+  const receipt = await transfer();
+  ```
+  </Tab>
+</Tabs>
+
+## Accepting Ownership
+
+<Callout type="info" emoji="ℹ️">
+  Only the PENDING contract owner can accept ownership
+</Callout>
+
+Once a transfer is started, the pending owner must call `acceptOwnership` to complete the transfer.
+
+<Tabs items={['sdk']}>
+  <Tab>
+  ```ts
+  import { prepareAcceptOwnership } from '@withfabric/protocol-sdks/stpv1';
+
+  const accept = await prepareAcceptOwnership({
+    contractAddress: '0x...',
+  });
+
+  const receipt = await accept();
+  ```
+  </Tab>
+</Tabs>
+
+## ERC-20 Reconciliation
+
+<Callout type="info" emoji="ℹ️">
+  Only the contract owner can reconcile the ERC20 balance.
+</Callout>
+
+For ERC20 denominated contracts, it's possible that an account accidentally transfers tokens to the contract by interacting directly with the ERC20 contract.
+If that happens, the `reconcileERC20Balance` function can be called to reconcile the balance of the contract with the ERC20 contract, making the funds available for withdrawal.
+
+These funds could be used to pay for a subscription using the `mintFor` function.
+
+<Tabs items={['sdk']}>
+  <Tab>
+  ```ts
+  import { prepareReconcileERC20Balance } from '@withfabric/protocol-sdks/stpv1';
+
+  const reconcile = await prepareReconcileERC20Balance({
+    contractAddress: '0x...',
+  });
+
+  const receipt = await reconcile();
+  ```
+  </Tab>
+</Tabs>
+
+## ERC-20 Recovery
+
+<Callout type="warning" emoji="⚠️">
+  Not supported for the contract's denominated ERC20 token. Use `reconcileERC20Balance` instead.
+</Callout>
+
+<Callout type="info" emoji="ℹ️">
+  Only the contract owner can recover ERC20 tokens.
+</Callout>
+
+If any ERC20 tokens are transferred to the contract unintentionally, they can be recovered using the `recoverERC20` function.
+
+<Tabs items={['sdk']}>
+  <Tab>
+  ```ts
+  import { prepareRecoverERC20 } from '@withfabric/protocol-sdks/stpv1';
+
+  const recover = await prepareRecoverERC20({
+    contractAddress: '0x...',
+    erc20Address: '0x...',
+    recipient: '0x...',
+    amount: 31337n,
+  });
+
+  const receipt = await recover();
+  ```
+  </Tab>
+</Tabs>
+
+## Native Token Reconciliation
+
+<Callout type="warning" emoji="⚠️">
+  Only supported for contracts denominated with native tokens. For ERC-20 denominated contracts use `recoverNativeTokens` instead.
+</Callout>
+
+<Callout type="info" emoji="ℹ️">
+  Only the contract owner can recover native tokens.
+</Callout>
+
+If native tokens are transferred to the contract unintentionally (via selfdestruct, etc), they can be reconciled using the `reconcileNativeBalance` function.
+
+<Tabs items={['sdk']}>
+  <Tab>
+  ```ts
+  import { prepareReconcileNativeBalance } from '@withfabric/protocol-sdks/stpv1';
+
+  const recover = await prepareReconcileNativeBalance({
+    contractAddress: '0x...',
+  });
+
+  const receipt = await recover();
+  ```
+  </Tab>
+</Tabs>
+
+## Native Token Recovery
+
+<Callout type="warning" emoji="⚠️">
+  Not supported for contract denominated with native tokens. Use `reconcileNativeBalance` instead.
+</Callout>
+
+<Callout type="info" emoji="ℹ️">
+  Only the contract owner can recover native tokens.
+</Callout>
+
+If native tokens are transferred to the contract unintentionally (via selfdestruct, etc), they can be recovered using the `recoverNativeTokens` function.
+
+<Tabs items={['sdk']}>
+  <Tab>
+  ```ts
+  import { prepareRecoverNativeTokens } from '@withfabric/protocol-sdks/stpv1';
+
+  const recover = await prepareRecoverNativeTokens({
+    contractAddress: '0x...',
+    recipient: '0x...',
+  });
+
+  const receipt = await recover();
+  ```
+  </Tab>
+</Tabs>
+
+## Renouncing Ownership
+
+<Callout type="error" emoji="🚫">
+  This is a dangerous call. Once ownership is renounced, it cannot be recovered.
+</Callout>
+
+<Callout type="info" emoji="ℹ️">
+  Only the contract owner can renounce ownership.
+</Callout>
+
+The owner can renounce ownership of the contract using [Ownable](https://docs.openzeppelin.com/contracts/4.x/api/access#Ownable-renounceOwnership).
+This will transfer funds, pause minting, and prevent all ownable functions from being called. This is intended to be used for shutting down a subscription.

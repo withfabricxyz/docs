@@ -1,0 +1,39 @@
+# Roles
+
+STP contracts have three roles: owner, subscriber, and fee collector. Each role has different permissions.
+
+## Owner
+
+The owner is responsible for deploying the contract and offering access and perks to subscribers. As a result they maintain the most control over the contract.
+
+#### Permissions
+
+* Managing the transfer recipient
+* Managing the supply cap
+* Pausing and unpausing the contract
+* Granting time to any account
+* Updating contract metadata
+* Refunding remaining purchase time to any account
+* Withdrawing contract funds to any account
+* Creating and deleting referral codes
+* Transferring ownership to another account
+* Recovery and reconcilation of tokens
+
+## Subscriber
+
+Subscribers are the users who purchase time from the contract. They are granted access to perks for the duration of their subscription.
+
+#### Permissions
+
+* Mint/Renew
+* Transfer (If the destination doesn't hold a subscription)
+* Withdraw rewards (If enabled by the owner)
+
+## Fee Collector
+
+The fee collector is responsible for collecting accrued fees from the contract.
+
+#### Permissions
+
+* Collecting accrued fees
+* Managing the fee collector address

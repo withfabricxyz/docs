@@ -1,0 +1,135 @@
+import { Tab, Tabs } from 'nextra-theme-docs'
+
+# Minting Subscriptions
+
+Minting a subscription purchases time with tokens. The amount of time purchased depends on a tiers `periodDurationSeconds`, `pricePerPeriod`, and the amount of tokens transfered upon minting. The minimum purchase is `pricePerPeriod` + `initialMintPrice` (which can be 0).
+
+Upon minting, the target account is assigned an NFT and several variables representing subscription state. If the account already has an NFT, the subscriptions expiration date is extended by the amount of time purchased.
+
+
+## Mint Advanced
+
+Mint advanced allows minting with a specific [tier](/stp/tiers) and account, along with [referral](/stp/referrals) details.
+
+<Tabs items={['sdk']}>
+  <Tab>
+  ```ts
+  import {
+    prepareMintAdvanced,
+  } from '@withfabric/protocol-sdks/stpv2';
+
+  // Note: Referrer can be set by the client, or by the user
+  // Note: Tier ID is required (but 0 will default to tier 1 if the subscription is new)
+  // Note: The amount can be calculated by the client based on the tier and number of periods desired
+  const mint = await prepareMintAdvanced({
+    contractAddress: '0x...',
+    referralCode: 0n,
+    referrer: '0x0000000000000000000000000000000000000000',
+    tierId: 0,
+    recipient: '0xae2Fc483527B8EF99EB5D9B44875F005ba1FaE13',
+    amount: 1_000_000_000_000n,
+  })
+
+  const receipt = await mint();
+  ```
+  </Tab>
+</Tabs>
+
+## Simple Mint / Renew
+
+The most basic minting operation is to simply mint or renew a subscription by calling mint. This will mint a new NFT if the account doesn't already have one or extend the expiration of the existing NFT. This call will default the subscription to tier 1 for new mints, and renew on the holders existing tier if renewing.
+
+<Tabs items={['sdk']}>
+  <Tab>
+  ```ts
+  import {
+    prepareMint,
+  } from '@withfabric/protocol-sdks/stpv2';
+
+  const mint = await prepareMint({
+    contractAddress: '0x...',
+    amount: 100_000n,
+  })
+
+  const receipt = await mint();
+  ```
+  </Tab>
+</Tabs>
+
+## Minting with ERC20 Tokens
+
+Minting will revert on preparation if the balance is too low, or an ERC20 approval isn't sufficient. Driving the user to approve tokens before mint will ensure a smooth experience.
+
+Note: The code below doesn't factor in UX logic and flows. It's a procedural example of the steps required to mint a ERC20 denominated subscription.
+
+<Tabs items={['sdk']}>
+  <Tab>
+  ```ts
+  import {
+    prepareMint,
+    fetchContext,
+  } from '@withfabric/protocol-sdks/stpv2';
+
+  import {
+    prepareTokenApproval,
+  } from '@withfabricxyz/protocol-sdks/erc20';
+
+  const context = fetchContext(
+    contractAddress: '0x...',
+    account: '0x...',
+  );
+
+  // Minimum purchase
+  const amount = context.collection.minimumPurchaseSeconds * context.collection.tokensPerSecond;
+
+  if(context.holdings.balance < amount) {
+    throw new Error('Insufficient balance');
+  }
+
+  // Approve if necessary (holdings approved = balance for native tokens such as ether)
+  if(context.holdings.approved < amount) {
+    const approve = await prepareTokenApproval({
+      address: '0x...',
+      spender: context.collection.address,
+      amount,
+    });
+
+    await approve();
+  }
+
+  // Now we can mint
+  const mint = await prepareMint({
+    contractAddress: '0x...',
+    amount: config.amount,
+    erc20: context.collection.erc20Address != zeroAddress,
+  })
+
+  const receipt = await mint();
+  ```
+  </Tab>
+</Tabs>
+
+
+## Sponsored Minting
+
+The `mintFor` function allows any caller to mint or renew a subscription for another account.
+
+**Note**: For ERC20, the caller must have an approved balance for the amount of tokens to be transfered. See the example above.
+
+<Tabs items={['sdk']}>
+  <Tab>
+  ```ts
+  import {
+    prepareMintFor
+  } from '@withfabric/protocol-sdks/stpv2';
+
+  const mint = await prepareMintFor({
+    contractAddress: '0x...',
+    amount: 1_000_000_000n,
+    account: '0x...', // <-- Receives the nft, rewards, time, etc
+  })
+
+  const receipt = await mint();
+  ```
+  </Tab>
+</Tabs>
