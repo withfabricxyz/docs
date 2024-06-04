@@ -1,109 +1,76 @@
-# Subscription Token Protocol
+# Subscription Token Protocol - V2
 
-## WIP
-
+<br />
 <a href="/stp.png" target="_blank">
-  <img width="832" alt="stp" src="/stp.png" />
+  <img width="832" alt="stp" src="/stpv2.png" />
 </a>
 
+Since our launch in November, STP—the protocol powering Hypersub—has been used to deploy 600+ subscription contracts and move over 168 ETH (~$600,000) in funds. Hundreds of creators and businesses use Hypersub to run everything from sustainable art practices to onchain SaaS startups and more. Over the last 6 months, we've worked closely with these creators to better understand how STP should evolve, working hard to design the most powerful and flexible onchain payment protocol.
 
-The Subscription Token Protocol extends the Non Fungible Token standard with the addition of a temporal dimension, and economic incentives for distribution, adoption, growth, and retention.
+Today, we're excited to announce the next major iteration of STP. This next evolution of our protocol enables maximum flexibility for Hypersub creators and opens up expansive possibilities for building new businesses and tools that use onchain payments and data.
 
-## How it Works
-1. A creator or business specifies a period of time (eg 1 month) and a price per period (eg 10 USDC) then deploys their subscription NFT contract onchain.
+## Why STP?
 
-2. Users mint the subscription NFT by purchasing a desired amount of time (eg 6 months for 60 USDC). This grants them access to whatever apps, content, and experiences have been gated on the subscription NFT.
+Subscription-based business models are clearly advantageous for a variety of businesses, and have become the norm for creative projects and software businesses alike.
 
-3. This access remains in effect until the user’s time expires (eg after 6 months), at which point, access is denied, unless the user mints additional subscription time.
+Until last year, launching an onchain subscription was difficult, as NFTs and ERC20s had no concept of time embedded within them. Instead, they offered one-time, discrete value transfer between buyers and sellers.
 
-The protocol is a non-upgradable, EVM-compatible smart contract that can be permissionlessly used to gate access to apps, services, content, and experiences. Time-bound subscription NFTs generate recurring revenue for businesses and creators, and are a simple, convenient access method for end-users.
+Token allowances and streaming escrow contracts are one solution to this problem, but they are complex and difficult to use.
+
+We made STP to simplify creating and managing recurring revenue onchain. Hypersub is a client focused on enabling creators and businesses to use the protocol in an easy, accessible way.
+
+We believe STP can enable sustainable revenue generation while unlocking the interoperability and power of building onchain.
+
+## What's new in STPv2?
 
 ### Tiers
 
-STPv2 Introduced tiers, which allow creators to offer different levels of access to their subscribers. Tiers can be configured with different prices, durations, and benefits. [Learn More](/stp/tiers).
+The primary development of STPv2 is Tiers, which can be understood as the ability for creators to provide different offerings at different price-points.
 
-### Onchain Subscriber Rewards
-The protocol has a mechanism, “Subscriber Rewards”, for the contract deployer to allocate a portion of recurring revenue back to subscribers, to incentivize early adoption, long-term subscriptions, and subscriber retention.
+For example, a subscriber to the $5 tier might only get access to Bob's newsletter, while a subscriber at the $10 tier gets access to Bob's newsletter and his private group chat. Creators can create any number of tiers at any number of price points.
 
-If the contract owner enables this mechanism, the specified proportion of each subscription mint payment goes into the subscriber reward pool. As more users subscribe, the pool grows. Each subscriber is allocated tokens signifying a share of the reward pool, and that share is larger the earlier the user subscribes, and the longer they subscribe for.
+Tiers aren't always divided cleanly into low, middle, and high priced offers. Sometimes, creators just want to create a specific offer for a specific group of people, independently of the other tiers. For example, Alice might want to offer a discount to subscribers of Bob's Hypersub or to holders of a particular token. Creators can create custom pricing tied to any token or balance data.
 
-A user must have an active subscription in order to withdraw their rewards. If their subscription lapses and they do not resubscribe, their reward allocation can be slashed. (There’s a grace period before slashing can happen, of half the subscription time. Eg a 6 month subscription has a 3 month grace period.)
+The flexibility of Tiers enables all sorts of other features, including free/pay-what-you-want pricing, token-gated subscriptions, bundles, discounts, non-transferrable tiers, and more.
 
-[Learn More](/stp/rewards)
+With these upgrades, we've made it possible to customize almost every aspect of your contract. Here's a taste of the settings you can now play with:
 
-### Onchain Referral Rewards
-The protocol has a mechanism, “Referral Rewards”, for the contract deployer to allocate a percentage of subscription revenue to those who refer subscribers, in order to incentivize organic growth and distribution.
+**Undateable Pricing.** Pricing of a subscription contract can now be updated for any tier at any time.
 
-For example:
+**Inactive Status.** For supply-capped subscriptions, you can now mark particular subscribers “inactive.” This allows them to maintain possession of their token while opening up a spot for a new subscriber to join.
 
-1. Alice (the contract deployer) specifies a 10% referral reward for her subscription NFT.
-2. Bob (a referrer) generates a unique referral URL for Alice’s subscription and shares it with others.
-3. Charlie (a subscriber) purchases a 100 USDC subscription using Bob’s link.
-4. Alice receives 90 USDC.
-5. Bob receives 10 USDC.
+**Subscription Duration.** Creators can now set minimum and maximum subscription time, helping to avoid situations where someone subscribes for 10 years to a 6 month project or allowing creators to set a minimum level of commitment for subscribers.
 
-Referral payments are made onchain and at the time of each subscription mint, so no withdrawal is required.
+**Max Mintable Time.** Contracts can also cap the amount of time that any individual subscriber can mint, accommodating short-term projects and experiments.
 
-[Learn More](/stp/referrals)
+**Initial Mint Price.** STP contracts can now include an “initiation fee,” which is an up-front fee required to be paid in order to mint any time at all.
 
-### Fees
-The protocol takes a 4% fee on all subscriptions.
+### Subscriber Rewards
 
-[Learn More](/stp/fees)
+One of the most powerful, unique features of STP is Subscriber Rewards, which allow creators to share a percentage of their revenue with subscribers. Our philosophy has always been that your earliest subscribers should get rewarded more than later subscribers, incentivizing support for Hypersub creators from the earliest days.
 
-### Onchain Partner Rewards
-Any entity that facilitates the deployment of subscription NFT contracts is eligible to receive 50% of the protocol fee.
+In STPv2, we've completely reworked Subscriber Rewards to allow for more flexibility and creativity over how you reward your supporters. Everything about Subscriber Rewards is now customizable, including which tiers are contributing to reward pools, which tiers are receiving the rewards, how much more of the rewards early subscribers receive (if at all), and much more.
 
-Eg: If Alice uses app.xyz to deploy her subscription NFT contract and it generates 100,000 USDC in annual recurring revenue, then the protocol will receive 2,000 USDC and app.xyz will receive 2,000 USDC annually.
+Here are a few examples of what's possible:
 
-Protocol partner rewards are all onchain and in perpetuity.
+**Multi-tier contributions.** With STPv2, funds can flow from any tier into a single Subscriber Rewards pool. You can then choose whether to share rewards with members of every tier or just the top tier of subscribers as a special perk.
 
-[Learn More](/stp/partner_rewards)
+**Adjustable reward curves.** Maybe you want day one subscribers to get 90% of the rewards. Maybe you want all of your subscribers to share rewards equally. The rewards curve is now adjustable to suit your community and the culture you want to foster.
 
-### Roles
+**External contributions.** Now, anyone can send funds to the rewards pool. These funds will be automatically split between subscribers according to the settings you've customized. This is a great way to share external revenue sources with your community, so they can share in the upside of even more of your work.
 
-STP contracts have three roles: owner, manager, and agent. Each role has different permissions. [Learn More](/stp/roles)
+### Access
 
-### Abstractability
-STP contains a function that enables any account to purchase a subscription on behalf of any other account. This facilitates, in particular, credit card payments.
+STPv2 also supports access controls for multiple managers. This enables two things:
 
-Eg: On app.xyz, Charlie subscribes to Alice’s contract, which costs 10 USDC per month. He gives his credit card info to app.xyz, which then charges Charlie’s card 10 USD each month, and in turn, mints 10 USDC worth of subscription NFT time on his behalf.
+**Team-managed contracts.** With STPv2, contracts can be managed by multiple people, with the ability to assign different roles to each manager. This means certain members of your team might be able to create a new Drop, but won't necessarily have the ability to remove funds from the contract.
 
-With smart contract wallets, MPC wallets, EIP-4337, and other novel forms of abstraction, it’s even possible for Charlie to subscribe without ever knowing he’s using crypto.
+**App-managed contracts.** Role management also enables smart contracts and apps to take action on a creator's behalf (with permission). For example, some might create a tool to withdraw funds from a contract every time the balance hits a certain level.
 
-### Additional Features
+## What's Next?
 
-#### Grants
-The owner of the NFT contract can issue onchain grants simply by specifying an address and amount of time they wish to grant. [Learn More](/stp/grants)
+We couldn't be more excited to see the creativity and experiences that STPv2 unlocks.
 
-#### Refunds
-The owner of the NFT contract can issue onchain refunds simply by specifying an address and amount of subscription-time payment they wish to refund. [Learn More](/stp/refunds)
+While these features are available in the contract today, the Fabric team will be rolling out client-level support for Hypersub users throughout the summer.
 
-#### Max Supply
-The owner of the NFT contract can specify an onchain supply cap, thus limiting the number of subscriptions available to mint. [Learn More](/stp/advanced#adjusting-supply-cap)
-
-#### Pause
-The owner of the NFT contract can pause subscriptions at any time. [Learn More](/stp/advanced#pausing-and-unpausing)
-
-#### Ownership Transfer
-The owner of the NFT contract can transfer ownership to any valid address. [Learn More](/stp/advanced#transfering-ownership)
-
-#### Revenue Recipient
-The owner of the NFT contract can specify any valid address as the recipient of their subscription revenue, for example a splits contract, vault, multisig safe, or DAO.
-
-## Use Cases
-1. Creators: onchain memberships
-2. Businesses: onchain SaaS payments
-
-## Why?
-NFTs and ERC-20 tokens provide a one-time, discrete value transfer between buyers and sellers.
-However, when these are used as payment for continuous work, incentives become misaligned: a one-time payment for lifetime access is not a sustainable business model.
-
-Token allowances and streaming escrow contracts are one solution to this problem. But they are complex, fragile, and hard to use.
-
-We made STP to easily, efficiently, and robustly create and manage recurring revenue onchain.
-
-Creating and collecting NFTs has emerged as a robust end-user behavior with a well-understood mental model. Adding a temporal dimension to NFTs, as well as incentives for distribution, adoption, growth, and retention, expands the potential use and utility of these crypto-primitives.
-
-<br />
-*The World Is Yours*
+Stay tuned for updates each week as we ship accessible ways for creators to take advantage of this powerful protocol.

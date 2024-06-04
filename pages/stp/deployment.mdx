@@ -46,22 +46,20 @@ Subscription contracts support native tokens as well as ERC20 tokens. When minti
 
 ## Immutable Parameters
 
-Some cannot change after deployment. Ensure these are set correctly before deploying.
+Some parameters cannot change after deployment. Ensure these are set correctly before deploying.
 
 #### Determined by Client
 
 - `clientFeeBps`
 - `clientReferralShareBps`
-- `clientFeeRecipient`
 
 #### Determined by Creator
 
 - `initParams.name`
 - `initParams.symbol`
-- `initParams.erc20TokenAddr`
+- `initParams.currencyAddress`
 - `rewardParams.slashGracePeriod`
 - `rewardParams.slashable`
-
 
 ## Factory Addresses
 
@@ -103,7 +101,7 @@ Deploying occurs via the factory contract. The factory contracts are configured 
       symbol: 'FUN', // The symbol of the subscription
       contractUri: 'https://example.com/contract', // The URI for the contract metadata (/${tokenId} is appended for tokenURI)
       owner: zeroAddress, // The owner of the contract (if 0x0 at deploy, it will be set to msg.sender)
-      erc20TokenAddr: zeroAddress, // The address of the ERC20 token to use for minting (0x0 for native token, ETH)
+      currencyAddress: zeroAddress, // The address of the ERC20 token to use for minting (0x0 for native token, ETH)
       globalSupplyCap: 200n, // The maximum number of tokens that can be minted over all tiers
     },
     rewardParams: {

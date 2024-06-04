@@ -2,10 +2,14 @@ import { ChainList, StpChainList } from 'components/factories'
 
 # Token Gating
 
-## WIP
-
 Given that subscriptions are onchain, the subscription contract is used to limit access. This is done by checking the `balanceOf` of a user's wallet address on the subscription contract.
 If `balanceOf` exceeds 0, the user has a valid subscription and should be granted access to the gated content. Otherwise, they can be directed to mint or renew a subscription, which can be done via Hypersub or by using the SDK.
+
+### Tier Gating
+
+Additionally, token gating can be used to gate content based on the tier a user has subscribed to along with remaining balance. This is done by checking the `tierBalanceOf(tierId, account)` of a user's wallet address on the subscription contract.
+If `tierBalanceOf` exceeds 0, the user has a valid subscription to that tier with time remaining.
+
 
 The power of token gating is that paid access credentials move with users to multiple applications, giving the creator more freedom to build and monetize their community.
 
@@ -41,6 +45,7 @@ The power of token gating is that paid access credentials move with users to mul
 To add token gating to your application, you will need to:
 * Add the ability for a user to connect their wallet and sign a message
 * Add functionality to check the `balanceOf` of a user's wallet address on the subscription contract
+* Add functionality to check the `tierBalanceOf` of a user's wallet address on the subscription contract
 
 With those two pieces in place, any app can become a protected content host or SaaS provider with STP.
 
