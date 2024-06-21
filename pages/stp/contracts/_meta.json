@@ -1,8 +1,6 @@
 {
-  "STPV1": "STP Ref",
-  "STPV1ABI": "STP ABI",
-  "STPV1Source": "STP Source",
-  "STPV1Factory": "Factory Ref",
-  "STPV1FactoryABI": "Factory ABI",
-  "STPV1FactorySource": "Factory Source"
+  "STPV2": "STP Ref",
+  "STPV2ABI": "STP ABI",
+  "STPV2Factory": "Factory Ref",
+  "STPV2FactoryABI": "Factory ABI"
 }
