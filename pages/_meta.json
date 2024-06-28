@@ -1,20 +1,17 @@
 {
   "index": "Overview",
-
   "-- Protocols": {
     "type": "separator",
     "title": "Protocols"
   },
   "stp": "STP",
-
   "crowdfi": "CFP",
-
   "-- Clients": {
     "type": "separator",
     "title": "Clients"
   },
-  "hypersub_coming_soon": "Hypersub",
   "crowdfi_client": "Crowdfi",
+  "hypersub": "Hypersub",
   "-- More": {
     "type": "separator",
     "title": "More"
