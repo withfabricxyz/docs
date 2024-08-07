@@ -6,10 +6,18 @@
 "settings": "Subscription Settings",
 "dashboard": "Dashboard",
 "referrals": "Referrals",
-"grants": "Grants",
-"refunds": "Refunds",
-"rewards": "Subscriber Rewards",
-"dashboard_settings": "Dashboard Settings",
+"grants":  {
+    "display": "hidden"
+},
+"refunds":  {
+    "display": "hidden"
+},
+"rewards":  {
+    "display": "hidden"
+},
+"dashboard_settings": {
+    "display": "hidden"
+},
 "v1_creating_a_hypersub": {
     "display": "hidden"
 },
