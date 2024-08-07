@@ -3,6 +3,7 @@
 "index": "Home Page",
 "subscription": "Subscription Page",
 "create": "Create a Hypersub",
+"drops": "Drops",
 "settings": "Subscription Settings",
 "dashboard": "Dashboard",
 "referrals": "Referrals",
@@ -18,13 +19,7 @@
 "dashboard_settings": {
     "display": "hidden"
 },
-"v1_creating_a_hypersub": {
-    "display": "hidden"
-},
-"v1_dashboard": {
-    "display": "hidden"
-},
-"v1_subscriber_rewards": {
+"v1_docs_subscriber_rewards": {
     "display": "hidden"
 }
 }
