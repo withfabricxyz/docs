@@ -7,19 +7,8 @@
 "settings": "Subscription Settings",
 "dashboard": "Dashboard",
 "referrals": "Referrals",
-"grants":  {
-    "display": "hidden"
-},
-"refunds":  {
-    "display": "hidden"
-},
-"rewards":  {
-    "display": "hidden"
-},
-"dashboard_settings": {
-    "display": "hidden"
-},
-"v1_docs_subscriber_rewards": {
-    "display": "hidden"
-}
+"grants": "Grants",
+"refunds": "Refunds",
+"rewards": "Subscriber Rewards",
+"dashboard_settings": "Dashboard Settings"
 }
