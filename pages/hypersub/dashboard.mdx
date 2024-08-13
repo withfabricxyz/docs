@@ -1,62 +1,35 @@
 # Dashboard
 
-The Hypersub Dashboard is a creator's home for understanding and taking actions for their audience and cashflow.
+The Hypersub Dashboard is central to understanding your subscription. Gain an overview of your income, manage subscribers, and withdraw funds all from one place.
 
-## Subscribers
+To get started, make sure you are connected. From anywhere, click the button next to your avatar to open the menu and select dashboard.
 
-The subscriber page begins with basic information about the contract: number of subscribers, monthly recurring revenue, churn, retention, lapsed subscribers, and renewal data. This data can be filtered on various time ranges.
+### Stats
 
-You can view lists of active, churned, and lapsed subscribers, as well information regarding an individual subscriber's:
+Subscription stats takes a look at the overall health of your subscription. View subscriber count, monthly recurring revenue, churn, retention, lapse, and renewal rates. Click the filter to switch date ranges. Hide stats by clicking the eye icon button.
 
--   Email
--   Farcaster username
--   Wallet address
--   LTV
--   Time remaining on their contract
--   Date subscribed
+### Withdraw
 
-We've also included Import and Export functions:
+Get paid from your subscription by withdrawing available funds. Click the Withdraw button to review. Important: make sure the recipient address is correct as it is where the available funds will be sent. Confirm to open your wallet and sign the transaction. It may take a few seconds to receive your funds.
 
-Import allows you to grant tokens to new or existing subscribers. You can learn more about this on our Grants section.
+If an alternative revenue recipient is set you will see a Transfer button. Transfer works the same as withdraw, except funds are sent to another specified address instead. Learn more about revenue recipients in [dashboard settings.](https://docs.withfabric.xyz/hypersub/dashboard_settings.)
 
-Export allows you to export a CSV file of all subscribers, or a filtered list according to their activity and time subscribed.
+### Import
 
-## Referrals
+Import your audience from other platforms or subscriptions. Click the Import button and enter your addresses. Confirm to open your wallet and sign the transaction. Once complete, your subscription is populated with your audience. Learn more about [grants.](https://docs.withfabric.xyz/hypersub/grants)
 
-The Referrals tab allows you to create new referral links with various referral reward rates.
+### Export
 
-You can also view data on existing referral links, including lists of subscribers and their referral rewards.
+Export a list of your subscribers for external use. Click the Export button, select status and enter time purchased to filter subscribers. Click the Download button to save a CSV to your device.
 
-## Grants
+Export can also be used for subscriber raffles. Export random addresses by switching it on and entering the number of addresses pulled. Winners are displayed in the preview below.
 
-Grants are subscription tokens that a creator gifts to new or existing subscribers.
+### Subscriber Table
 
-To create a grant, simply head to the Grants tab on your dashboard, enter the wallet addresses of the desired grantees, and enter the amount of time you wish to grant with each.
+Take closer look at your Hypersub audience from the subscriber table. View individual subscriber infomation in each row, with important details like address and email. Click the filter button to view subscribers based on status such as active or churned.
 
-Granted time is measured in seconds and is tracked separately from purchased time. The expiration date of a subscription is the max of remaining purchased time and remaining grant time.
+### Kick
 
-Granting will mint a new NFT if the beneficiary doesn't currently have a subscription. If they do, the time extends their subscription.
+Remove subscribers by kicking them from your Hypersub. To kick a subscriber click the more icon to the right of a subcriber's row in the table. Click kick from the menu. Select a refund option if the subscriber has a remaining balance. Confirm to open your wallet and sign the transaction.
 
-## Refunds
-
-Creators can issue refunds to one or more subscribers. Upon refunding a subscriber, the remaining purchased time is revoked, and the token value of that time is returned to the subscriber. Additionally, any granted time is revoked. The token itself it not burned, and can be used to purchase a subscription again.
-
-You can issue a refund by heading to the Refund tab on your dashboard and entering the wallet address of the subscriber you wish to refund.
-
-The source of funds for the refund is the contract's balance. If the contract balance is insufficient, the refund call can be invoked with a value to top up the contract balance. Given that time amounts change in every block, the amount transferred in at time of refund may exceed the amount required. Any excess funds are added to the contract for future withdraws.
-
-## Settings
-
-The Settings tab is a catch-all for other contract details that can be changed. These include:
-
--   Contract Status (i.e. can tokens currently be minted?)
--   Supply Cap (i.e. how many tokens can be minted?)
--   Visibility (i.e. is the Hypersub publicly visible?)
--   Owner (i.e. what address is the owner of the contract?)
--   Revenue Recipient (i.e. what address will receive withdrawn funds?)
-
-### FAQs
-
-### How do I withdraw funds?
-
-The contract owner can withdraw funds by pressing "Transfer" on the Subscribers tab of the dashboard.
+Kick can be useful for removing inactive subscribers to create openings in a supply cap, or for removing individials due to misconduct within community guidelines.
