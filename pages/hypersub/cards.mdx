@@ -1,0 +1,62 @@
+# Card Payments
+
+<br></br>
+<div class="video-container">
+<iframe width="100%" height="100%" src="https://www.youtube.com/embed/ga0wlNrm5aI?rel=0&enablejsapi=1" title="Enable Card Payments" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+</div>
+
+Empower subscibers to transact onchain with card and automate your subscription via recurring payments.
+
+To get started, go to the Settings tab of your Dashboard and click the Connect Stripe button.
+
+### Overview
+
+Paying with a card on Hypersub is different than paying with crypto. The distinctions:
+- Cards use a completely separate payment system from crypto
+- Card prices and crypto prices are unrelated and specified separately. For example, a creator can specify a card price of $9.99 USD and crypto price of $8 USDC.
+- Card payments renew automatically, on a weekly/monthly/yearly recurring basis
+- Subscribers paying with card are not eligible for [subscriber rewards](https://docs.withfabric.xyz/hypersub/rewards)
+
+### Stripe
+
+Card payments on Hypersub use Stripe Connect, which requires identity verification.
+
+Many factors determine how extensive the verification process can be. Hypersub has no control over the verification process and can not impact the outcome, or advocate on your behalf. You may need to revisit your dashboard settings multiple times depending on Stripe's requests.
+
+### Enable
+
+Once Stripe setup is complete you can enable card payments. Go to the Settings tab of your Hypersub Dashboard. Click the Enable button, confirm and sign the transaction.
+
+### Pricing
+
+To set card payment prices click the Update Tier Pricing button. Important: you must set prices before accepting card payments. Compare crypto prices, enter card prices, and confirm. Card prices must be at least $1.00 USD.
+
+Card prices can be changed any time. Go to the Settings tab of your Hypersub Dashboard and click the Update Tier Pricing button. Enter your new prices and confirm.
+
+Subscribers are notified each time you change card pricing and are given the option to cancel their subscription.
+
+### Subscribe
+
+Subscribers will have a slightly different experience with card payments:
+
+1. They must enter card details into the payment form
+2. Their card is charged for the subscription
+3. Hypersub issues your subscription token to the connected address
+4. Time is granted to the token
+5. Steps 2 and 4 repeat on a recurring basis until canceled
+
+Subscribers can cancel any time in [settings](https://www.hypersub.xyz/settings).
+
+### Chargebacks
+
+With Stripe Connect the creator is the merchant, not Hypersub. Creators are responsible for chargebacks. A chargeback occurs when a subscriber questions your payment with their card. Here's what happens:
+- A formal dispute is created on the card network
+- The payment is immediately reversed, covered by Stripe
+- Stripe then charges you for the payment amount and dispute fee
+- If your Stripe balance is zero, you are still responsible for returning funds
+
+Chargebacks have a dispute process. If you can provide evidence of delivery, then you may win the dispute. There is a 6 month window in which chargebacks can be initiated. Learn more about [chargebacks](https://docs.stripe.com/disputes).
+
+### Disable Payments
+
+Card payments can be disabled at any time. Warning: disabling card payments will cancel all active subscriptions purchased with card. To disable go to the Settings tab of your Hypersub Dashboard. Click the Disable button, confirm and sign the transaction.
