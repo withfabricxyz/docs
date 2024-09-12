@@ -68,19 +68,28 @@ Note: The code below doesn't factor in UX logic and flows. It's a procedural exa
   import {
     prepareMint,
     fetchContext,
+    tierDetail,
   } from '@withfabric/protocol-sdks/stpv2';
 
   import {
     prepareTokenApproval,
   } from '@withfabricxyz/protocol-sdks/erc20';
 
-  const context = fetchContext(
-    contractAddress: '0x...',
-    account: '0x...',
-  );
+  const contractAddress = '0x...';
+  const account = '0x...';
 
-  // Minimum purchase
-  const amount = context.collection.minimumPurchaseSeconds * context.collection.tokensPerSecond;
+  const context = await fetchContext({
+    contractAddress,
+    account
+  });
+
+  const tier = await tierDetail({
+    contractAddress,
+    tierId: 1,
+  });
+
+  // Minimum purchase price for this tier
+  const amount = tier.params.pricePerPeriod;
 
   if(context.holdings.balance < amount) {
     throw new Error('Insufficient balance');
@@ -89,8 +98,8 @@ Note: The code below doesn't factor in UX logic and flows. It's a procedural exa
   // Approve if necessary (holdings approved = balance for native tokens such as ether)
   if(context.holdings.approved < amount) {
     const approve = await prepareTokenApproval({
-      address: '0x...',
-      spender: context.collection.address,
+      address: context.currency,
+      spender: contractAddress,
       amount,
     });
 
@@ -99,9 +108,9 @@ Note: The code below doesn't factor in UX logic and flows. It's a procedural exa
 
   // Now we can mint
   const mint = await prepareMint({
-    contractAddress: '0x...',
-    amount: config.amount,
-    erc20: context.collection.erc20Address != zeroAddress,
+    contractAddress,
+    amount,
+    erc20: true,
   })
 
   const receipt = await mint();
