@@ -24,7 +24,7 @@ To get started go to [manifold.xyz](https://www.manifold.xyz/) and log in.
 7. Review, click Publish and confirm the transaction - this may take a few seconds
 8. 🎉
 
-Setting the supply limit to 1 does not effect how many subscribers can receive your airdrop. It limits exposure to someone finding your mint page in the window before you airdrop. Once airdropped your work will be sold out and not mintable to the public.
+Setting the supply limit to 1 does not effect how many subscribers can receive your airdrop. It limits exposure to someone finding your mint page in the window before you airdrop. Once airdropped, your work will be sold out and not mintable by the public.
 
 ### Create a CSV
 
@@ -49,12 +49,77 @@ Deliver your work directly to subscribers.
 
 Notify subscribers about your airdrop, and present your work to the world.
 
-1. Go to your Claim page on Manifold you airdropped from and copy the url
+1. Go to the Claim page on Manifold you airdropped from and copy the url
 2. Go to your subscription page on Hypersub and click the Drops tab
 3. Click Create drop and paste in your Claim page url
 4. Click Create to save and notify your subscribers
 
 Important: the airdrop has already occurred from Manifold, dropping on Hypersub does not airdrop again.
+
+## Archive Subscription
+
+Reasons to archive can include:
+
+- An event has passed
+- A subscription has ended
+- Commitments can no longer be filled
+- Mistakes were made at the contract level
+
+To archive your subscription use a combination of hidden and paused:
+
+1. Go to your subscription page and click the Edit button
+2. Scroll to Hidden and Paused and switch them on
+3. Confirm and sign the transaction
+
+Important: be sure to fulfill any commitments to active subscribers when archiving. Refund them if you can't.
+
+Revive your subscription any time by switching Hidden and Paused off.
+
+## Custom Tokens
+
+<br></br>
+<div class="video-container">
+<iframe width="100%" height="100%" src="https://www.youtube.com/embed/u5pTqO3jJfA?rel=0&enablejsapi=1" title="Add a Custom Token" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+</div>
+
+Denominate pricing in any ERC20 token on Base while creating your Hypersub.
+
+1. Go to [BaseScan](https://basescan.org/) and search for a token (e.g. [DEGEN](https://basescan.org/token/0x4ed4e862860bed51a9570b96d89af5e1b0efefed))
+2. On the token page find the Other Info section.
+3. Click the copy icon to copy the contract address.
+4. Go to the Create page Click the Custom option in the denomination menu
+5. Paste in the address, selecting the token as your denomination
+
+Important: custom tokens are only specified when you create your Hypersub and can not be changed later.
+
+## Description Guidelines
+
+Good descriptions can be key to getting subscribers - people want to know who you are, and what your subscription is about. Little or cryptic details will leave subscribers unsure about your offerings.
+
+- Present value quickly and clearly. Subscribers want to know exactly what they get without effort.
+- Use bullet points for easy scanning. Large blocks of text will probably not be read.
+- Add links. Subscribers want to see you're alive elsewhere and know more about you.
+- Provide social proof. Show how your current subscribers are benefiting.
+
+## Discount Tier
+
+Discounts are currently not available on Hypersub. In place of discounts a combination of a supply capped tier and grants can be used instead.
+
+### Create Tier
+
+1. Go to your dashboard and click the tiers tab
+2. Click the Create tier button and enter the details, including your discounted price
+4. Scroll to Supply cap, switch it on, and enter the number of subscribers you want to discount
+5. Confirm and sign to finish the tier
+
+### Grant Time
+
+1. Go to your dashboard and click the grants tab, then click the Create grant button
+2. Select your new discount tier and paste subscribers equal in number to its set supply cap
+3. Paste 0.001 as the granted time value
+3. Confirm and sign the transaction
+
+Granting 0.001 billing period delivers your subscription token to the chosen subscribers, and fills up the supply cap. It is up to them to purchase more time.
 
 ## Group Chat
 
@@ -86,6 +151,18 @@ To enable a token-gated group chat you'll need to provide your Hypersub contract
 Switch on the Check for NFT setting to remove inactive subscribers from your group an a daily basis.
 
 Learn more about [token-gated group chats](https://warpcast.notion.site/NFT-gated-group-chats-0f76abc16d344414b42fcfea5e55f86d).
+
+## Images
+
+Images are essential to your Hypersub, for better results follow these guidelines when uploading:
+
+- Use .png for most digital artwork
+- Use .jpeg for photos or artwork with a lot of color
+- Files should be a maximum of 10mb in size
+- Files should be a minumum of 800px wide
+- Supported aspect ratios are 1:1 (square), 3:2 (landscape), and 2:3 (portrait)
+
+Hypersub employs some compression when you upload - using a larger file size to compensate will only make your page slower to load.
 
 ## Split Contract
 
@@ -131,32 +208,6 @@ Important: make sure this address is correct as it is where transferred funds wi
 
 Clicking Distribute Only will require all recipients to withdraw individually from the split contract, while Distribute and Withdraw will automatically send funds to each address.
 
-## Verify Balance
-
-<br></br>
-<div class="video-container">
-<iframe width="100%" height="100%" src="https://www.youtube.com/embed/z1k8-ah-RIY?rel=0&enablejsapi=1" title="Verify Hypersub Balance" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-</div>
-
-Verify the amount of time a subscriber has left on your Hypersub.
-
-1. Copy the address you want to verify
-2. Go to your subscription page and click Details
-3. Click NFT subscription contract to open BaseScan
-4. Click the Contract tab, then click the Read Contract as Proxy tab9+8352
-5. Expand the balanceOf section, and paste in the address
-6. Click the Query button, copy the numSeconds value
-7. Open a new tab, paste the value, and append with 'seconds to months' (or weeks, quarters, years)
-
-## Description
-
-Descriptions can be key to getting subscribers - people want to know what your subscription is about. Little or cryptic details will leave subscribers unsure about your offerings.
-
-- Present value quickly and clearly. Subscribers want to know exactly what they get without effort.
-- Use bullet points for easy scanning. Large blocks of text will probably not be read.
-- Add links. Subscribers want to see you're alive elsewhere and know more about you.
-- Provide social proof. Show how your current subscribers are benefiting.
-
 ## Time-capped Subscriptions
 
 <br></br>
@@ -177,53 +228,19 @@ Hypersubs can be used for limited or one time courses, events, and commitment cl
 - Supply cap set to 50: The maximum amount of participants is 50.
 - End date set one year out: Subscription will end after 12 months.
 
-## Archive Subscription
+## Verify Balance
 
-Reasons to archive can include:
+<br></br>
+<div class="video-container">
+<iframe width="100%" height="100%" src="https://www.youtube.com/embed/z1k8-ah-RIY?rel=0&enablejsapi=1" title="Verify Hypersub Balance" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+</div>
 
-- An event has passed
-- A subscription has ended
-- Commitments can no longer be filled
-- Mistakes were made at the contract level
+Verify the amount of time a subscriber has left on your Hypersub.
 
-To archive your subscription use a combination of hidden and paused:
-
-1. Go to your subscription page and click the Edit button
-2. Scroll to Hidden and Paused and switch them on
-3. Confirm and sign the transaction
-
-Important: be sure to fulfill any commitments to active subscribers when archiving. Refund them if you can't.
-
-Revive your subscription any time by switching Hidden and Paused off.
-
-## Discount Tier
-
-Discounts are currently not available on Hypersub. In place of discounts a combination of a supply capped tier and grants can be used instead.
-
-### Create Tier
-
-1. Go to your dashboard and click the tiers tab
-2. Click the Create tier button and enter the details, including your discounted price
-4. Scroll to Supply cap, switch it on, and enter the number of subscribers you want to discount
-5. Confirm and sign to finish the tier
-
-### Grant Time
-
-1. Go to your dashboard and click the grants tab, then click the Create grant button
-2. Select your new discount tier and paste subscribers equal in number to its set supply cap
-3. Paste 0.001 as the granted time value
-3. Confirm and sign the transaction
-
-Granting 0.001 billing period delivers your subscription token to the chosen subscribers, and fills up the supply cap. It is up to them to purchase more time.
-
-## Images
-
-Images are essential to your Hypersub, for better results follow these guidelines when uploading:
-
-- Use .png for most digital artwork
-- Use .jpeg for photos or artwork with a lot of color
-- Files should be a maximum of 10mb in size
-- Files should be a minumum of 800px wide
-- Supported aspect ratios are 1:1 (square), 3:2 (landscape), and 2:3 (portrait)
-
-Hypersub employs some compression when you upload - using a larger file size to compensate will only make your page slower to load.
+1. Copy the address you want to verify
+2. Go to your subscription page and click Details
+3. Click NFT subscription contract to open BaseScan
+4. Click the Contract tab, then click the Read Contract as Proxy tab9+8352
+5. Expand the balanceOf section, and paste in the address
+6. Click the Query button, copy the numSeconds value
+7. Open a new tab, paste the value, and append with 'seconds to months' (or weeks, quarters, years)
