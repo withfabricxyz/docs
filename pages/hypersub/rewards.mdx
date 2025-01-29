@@ -17,6 +17,92 @@ To claim your rewards click the rewards button. From the [rewards page](https://
 
 View your all time rewards totals in the Membership table below. Claim rewards from Legacy memberships individiually by clicking the total button on each membership.
 
+## Ongoing Curves
+
+<br></br>
+<div class="video-container">
+<iframe width="100%" height="100%" src="https://www.youtube.com/embed/Wm5FsYL9psA?rel=0&enablejsapi=1" title="Claim Rewards" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+</div>
+
+Issue rewards to members no matter when they join your membership.
+
+1. Go to your Hypersub membership profile and open Details
+2. Click Subscription contract to open BaseScan, then click the Contract tab
+3. Click the Write Contract as Proxy tab, then click the Connect to Web3 button and sign the transaction
+4. Click 3. createRewardCurve
+
+Enter these input values into the createRewardCurve form:
+
+1. numPeriods: 0
+2. formulaBase: 1
+3. periodSeconds: 2592000
+4. startTimestamp: 0
+5. minMultiplier: 8
+
+**Important:** for periodSeconds, 2592000 is the correct value for monthly memberships. Do not use commas for this value. For other membership periods enter these values:
+
+- Daily: 86400
+- Weekly: 604800
+- Quarterly: 7862400
+- Yearly: 31536000
+
+Once you have your values entered, click the Write button and sign the transaction.
+
+**Important:** if this is your first time creating a new Reward Curve, your rewardCurveId will be 1. This number will be used when assigning a Curve to a Tier.
+
+For each following curve you create, the id will count upwards (1, 2, 3…). Keep track of your Curves in a note if you plan on creating multiple. Your default Curve id is 0.
+
+### Tier Details
+
+To assign your new Reward Curve to a Tier you will need to get your Tier Details.
+
+1. Go to your Hypersub membership profile and open Details
+2. Click Subscription contract to open BaseScan, then click the Contract tab
+3. Click the Read Contract as Proxy tab, then click 19. tierDetail
+4. Enter your tierId, then click the Query button
+5. Save your tier details starting after *tuple:* in a note
+
+**Important:** in your note, delete the first integer (18 in example below) in the string after *tuple:*, it represents the member count and is not necessary for assigning your Curve:
+
+**Example:**
+
+```
+tuple : 18,1,2592000,4294967295,0,0,0,0,1000,false,true,0,1000000000000000,0,0x0000000000000000000000000000000000000000,0,0
+```
+### Assign Curve
+
+To assign your new Reward Curve you will need to update your Tier, including each of its other parameters. **Warning:** entering values that are different from your Tier Details will alter your Tier parameters.
+
+1. Go to your Hypersub membership profile and open Details
+2. Click Subscription contract to open BaseScan, then click the Contract tab
+3. Click the Write Contract as Proxy tab, then click the Connect to Web3 button and sign the transaction
+4. Click 32. updateTier
+
+**Important:** enter your saved Tier Detail values into the updateTier form, mapping details to form inputs left to right, top to bottom, with the exception of your new Reward Curve id.
+
+**Example:** enter your Tier Details into the updateTier form:
+
+1. tierId: 1
+2. periodDurationSeconds: 2592000
+3. maxSupply: 4294967295
+4. maxCommitmentSeconds: 0
+5. startTimestamp: 0
+6. endTimestamp: 0
+7. rewardCurveId: 1
+8. rewardBasisPoints: 1000
+9. paused: false
+10. transferrable: true
+11. initialMintPrice: 0
+12. pricePerPeriod: "1000000000000000"
+13. gate: [0,"0x0000000000000000000000000000000000000000",0,0]
+
+Once you have your values entered, click the Write button and sign the transaction.
+
+**Important:**
+- Set your rewardCurveId to the one you wish to assign
+- The pricePerPeriod value must be entered within "quotations"
+- The last 4 values must be combined within [square brackets]. The long value must also be entered within "quotations"
+
 {/*
 ## Set Rewards
 
