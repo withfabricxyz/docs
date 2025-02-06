@@ -1,13 +1,19 @@
 {
 "overview": "Overview",
 "index": "Home Page",
-"subscribe": "Subscribe",
+"subscribe": "Join a Membership",
 "create": "Create a Hypersub",
 "pricing": "Pricing",
-"tiers": "Tiers",
+"tiers": {
+    "title": "Tiers",
+    "display": "hidden"
+},
 "access": "Access",
 "drops": "Drops",
-"settings": "Membership Settings",
+"settings": {
+    "title": "Membership Settings",
+    "display": "hidden"
+},
 "dashboard": "Dashboard",
 "referrals": "Referrals",
 "grants": "Grants",
