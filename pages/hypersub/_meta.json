@@ -4,16 +4,9 @@
 "subscribe": "Join a Membership",
 "create": "Create a Hypersub",
 "pricing": "Pricing",
-"tiers": {
-    "title": "Tiers",
-    "display": "hidden"
-},
+"tiers": "Tiers",
 "access": "Access",
 "drops": "Drops",
-"settings": {
-    "title": "Membership Settings",
-    "display": "hidden"
-},
 "dashboard": "Dashboard",
 "referrals": "Referrals",
 "grants": "Grants",
