@@ -2,49 +2,62 @@
 
 <br></br>
 <div class="video-container">
-<iframe width="100%" height="100%" src="https://www.youtube.com/embed/ga0wlNrm5aI?rel=0&enablejsapi=1" title="Enable Card Payments" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+<iframe width="100%" height="100%" src="https://www.youtube.com/embed/9EfjanYjcv0?rel=0&enablejsapi=1" title="Enable Card Payments" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 </div>
 
 Empower members to transact onchain with card and automate your membership via recurring payments.
 
 To get started, go to the Settings tab of your Dashboard and click the Connect Stripe button.
 
-### Overview
+## Overview
 
-Paying with card on Hypersub is different than paying with crypto. The distinctions:
+Paying with card on Hypersub is different than paying with crypto:
 - Cards use a completely separate payment system from crypto
-- Card prices and crypto prices are unrelated and specified separately. Example: creators can set a card price of $9.99 USD and crypto price of $8 USDC
-- Card payments renew automatically, on a weekly/monthly/yearly recurring basis
+- Card prices and crypto prices are unrelated and specified separately. **Example:** creators can set a card price of $9.99 USD and crypto price of $8 USDC
+- Card payments renew automatically, on a recurring basis
 - Members paying with card are not eligible for [Rewards](https://docs.withfabric.xyz/hypersub/rewards)
-- Card members can receive [referral rewards](https://docs.withfabric.xyz/hypersub/subscribe#referral-rewards)
+- Members paying with card can receive [referral rewards](https://docs.withfabric.xyz/hypersub/join#referral-rewards)
 - Payouts are in fiat and occur through your Stripe dashboard
 - Refunds on card payments are processed through your Stripe dashboard
 
-### Stripe
+## Stripe Setup
 
 Card payments on Hypersub use Stripe Connect, which requires identity verification.
 
 Many factors determine how extensive the verification process can be. Hypersub has no control over this process and can not impact the outcome, or advocate on your behalf. You may need to revisit your dashboard settings multiple times depending on Stripe's requests.
 
-### Enable
+## Payments
 
-Once Stripe setup is complete you can enable card payments. Go to the Settings tab of your Hypersub Dashboard. Click the Enable button, confirm and sign the transaction.
+Once Stripe setup is complete you can enable card payments.
+
+1. Go to the Settings tab of your Hypersub Dashboard
+2. Click the Enable button, confirm and sign the transaction.
 
 ### Pricing
 
-To set card payment prices click the Update tier pricing button. Important: you must set prices before accepting card payments. Compare crypto prices, enter card prices, and confirm. 
+Set tier pricing after enabling card payments. **Important:** you must set card prices before accepting card payments.
+
+1. After enabling card payments, click the Update tier pricing button
+2. Turn on each tier and compare crypto prices
+3. Enter card prices and confirm
+
+Pricing limitations include:
+
 - Card prices must be at least $1.00 USD
 - Card prices cannot exceed $10,000 USD
 - Creators can only increase the price by 50% per year, once members are active
 - Hypersub takes a 5% fee on all card transactions
 
-Card prices can be changed any time. Go to the Settings tab of your Hypersub Dashboard and click the Update tier pricing button. Enter your new prices and confirm.
+Card prices can be changed any time: 
+
+1. Go to the Settings tab of your Hypersub Dashboard and click the Update tier pricing button
+2. Enter your new prices and confirm
 
 Members are notified each time you change card pricing and are given the option to cancel their membership.
 
 ### Members
 
-Card members will still need a connected wallet. Card payments are simply an additional way to pay. Important: membership benefits enabled by your membership token will not be effected by members paying with card.
+Card members will still need a connected wallet. Card payments are simply an additional way to pay. Benefits determined by your membership token will not be effected by members who pay with card.
 
 Members will have a slightly different experience with card payments:
 
@@ -56,7 +69,7 @@ Members will have a slightly different experience with card payments:
 
 Members can cancel any time in [settings](https://www.hypersub.xyz/settings).
 
-Members who have already paid with crypto, and then join with a card, will be charged immediately. The balance of time on their membership token is additive. Example: if you purchase 6 months with crypto and then decide to pay with a card, your card will be billed for 1 additional month, for a total balance of 7 months.
+Members who have already paid with crypto, and then join with a card, will be charged immediately. The balance of time on their membership token is additive. **Example:** if you purchase 6 months with crypto and then decide to pay with a card, your card will be billed for 1 additional month, for a total balance of 7 months.
 
 ### Chargebacks
 
@@ -78,7 +91,7 @@ Refunds on card payments are in fiat, and processed through Stripe. To get start
 
 ### Disable Payments
 
-Card payments can be disabled at any time. Warning: disabling card payments will cancel all active memberships purchased with card.
+Card payments can be disabled at any time. **Warning:** disabling card payments will cancel all active memberships purchased with card.
 
 1. Go to the Settings tab of your Hypersub Dashboard
 2. Click the Disable button, confirm and sign the transaction
