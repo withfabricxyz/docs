@@ -1,0 +1,24 @@
+export default {
+  overview: 'Overview',
+  deployment: 'Deployment',
+  reading: 'Reading State',
+  tiers: 'Tiers',
+  subscribing: 'Subscribing',
+  transfers: 'Transfers',
+  rewards: 'Subscriber Rewards',
+  referrals: 'Referral Rewards',
+  refunds: 'Refunds',
+  grants: 'Grants',
+  roles: 'Privileged Roles',
+  advanced: 'Advanced Usage',
+  fees: 'Fees',
+  risks: 'Risks',
+  gating: 'Gating',
+  sdk: 'SDK',
+  audit_link: {
+    title: 'Audit Report',
+    href: 'https://certificate.quantstamp.com/full/subscription-token-protocol-v-2/7ef99de3-7f40-434b-9931-cd91a798940b/index.html'
+  },
+  contracts: 'Contract Reference',
+  v1: 'V1 Docs'
+}

@@ -1,0 +1,20 @@
+export default {
+  overview: 'Overview',
+  index: 'Home Page',
+  join: 'Join a Membership',
+  member_dashboard: 'Member Dashboard',
+  create: 'Create a Hypersub',
+  pricing: 'Pricing',
+  tiers: 'Tiers',
+  access: 'Access',
+  drops: 'Drops',
+  earnings: 'Earnings',
+  members: 'Members',
+  referrals: 'Referrals',
+  grants: 'Grants',
+  refunds: 'Refunds',
+  rewards: 'Rewards',
+  dashboard_settings: 'Dashboard Settings',
+  cards: 'Card Payments',
+  tips: 'Tips and Tricks'
+}

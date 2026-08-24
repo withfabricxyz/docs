@@ -1,0 +1,83 @@
+import { Tabs, Callout } from 'nextra/components'
+
+# Refunds
+
+<Callout type="info" emoji="ℹ️">
+  Only the contract owner can issue refunds
+</Callout>
+
+Creators can issue refunds to subscribers as needed. Upon refunding a subscriber, the remaining purchased time is revoked, and a specified amount of tokens are transferred to the account. The token itself it not burned or deactivated and can be used to purchase a subscription again.
+
+The source of funds for the refund is the contract's balance. If the contract balance is insufficient, the `topUp` function can be called to add more funds to creators balance.
+
+<Tabs items={['sdk']}>
+  <Tabs.Tab>
+  ```ts
+  import {
+    prepareRefund,
+  } from '@withfabric/protocol-sdks/stpv2';
+
+  const refund = await prepareRefund({
+    contractAddress: '0x...',
+    account: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92264',
+    amount: 50_000n, // Number of tokens to refund
+  });
+
+  const receipt = await refund();
+  ```
+  </Tabs.Tab>
+</Tabs>
+
+## Eviction
+
+The `refund`, `revokeTime`, and `deactivateSubscription` functions can be called in sequence to refund a subscriber, revoke their granted time, and deactivate their subscription. This can be done with a single transaction to ensure the subscriber is refunded and removed from the contract.
+
+<Tabs items={['sdk']}>
+  <Tabs.Tab>
+  ```ts
+  import {
+    prepareTopUp,
+  } from '@withfabric/protocol-sdks/stpv2';
+
+  const account = '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92264';
+  const evict = await prepareMulticall({
+    contractAddress: collection.contract.contract_address! as `0x${string}`,
+    calls: [{
+      functionName: 'refund',
+      args: [account, 0n],
+    },{
+      functionName: 'revokeTime',
+      args: [account],
+    },{
+      functionName: 'deactivateSubscription',
+      args: [account],
+    }]
+  });
+
+  const receipt = await evict();
+  ```
+  </Tabs.Tab>
+</Tabs>
+
+Note: Evicting a user assumes there are constraints on the tiers that would prevent them from re-joining.
+
+## Top Up Creator Balance
+
+Note: If ERC20, an approval will need to be issued before calling `topUp`.
+
+<Tabs items={['sdk']}>
+  <Tabs.Tab>
+  ```ts
+  import {
+    prepareTopUp,
+  } from '@withfabric/protocol-sdks/stpv2';
+
+  const topup = await prepareTopUp({
+    contractAddress: '0x...',
+    amount: 50_000n, // Number of tokens to add to the creators balance
+  });
+
+  const receipt = await refund();
+  ```
+  </Tabs.Tab>
+</Tabs>

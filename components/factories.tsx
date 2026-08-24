@@ -2,15 +2,11 @@ import { factories as _stpFactories } from '@withfabric/protocol-sdks/stpv1';
 import { factories as _cfpFactories } from '@withfabric/protocol-sdks/cfpv1';
 import { factoryAddresses as _stpV2Factories } from '@withfabric/protocol-sdks/stpv2';
 
-import { extractChain, Chain } from 'viem';
+import { Chain } from 'viem';
 import * as chains from 'viem/chains'
 
 function getChain(chainId: number) : Chain | undefined {
-  return extractChain({
-    // @ts-ignore
-    chains: Object.values(chains),
-    id: chainId,
-  });
+  return Object.values(chains).find(chain => chain.id === chainId) as Chain | undefined;
 }
 
 function factoryData(factories: any) {

@@ -1,0 +1,111 @@
+# Deploying a CrowdFi Contract
+
+import { Tabs } from 'nextra/components'
+import { Callout } from 'nextra/components'
+import { cfpFactories } from '../../components/factories'
+
+CrowdFi contracts are deployed by invoking the `deployCampaign` function on
+the factory contract for a given network. The function uses OpenZeppelin Clones to create a proxy and initialize
+the contract with campaign parameters.
+
+#### Campaign Parameters
+
+|Name|Type|Description|
+|----|----|-----------|
+|`recipient`|`address`|the address of the recipient, where funds are sent on success|
+|`minGoal`|`uint256`|the minimum funding amount acceptable for successful financing|
+|`maxGoal`|`uint256`|the maximum funding amount accepted for the financing round|
+|`minContribution`|`uint256`|the minimum deposit an account can make in one deposit|
+|`maxContribution`|`uint256`|the maximum deposit an account can make in one or more deposits|
+|`holdOff`|`uint32`|the number of seconds to wait until the campaign starts|
+|`duration`|`uint32`|the runtime of the campaign, in seconds|
+|`erc20TokenAddr`|`address`|the address of the ERC-20 token used for payments, or 0 address for native token|
+
+
+#### Native Token vs ERC-20
+
+CrowdFi contracts support native tokens as well as ERC-20 compliant tokens. The contribute and yield functions are different depending
+on whether the contract is native token or ERC-20 denominated.
+
+<Callout type="error" emoji="️🚫">
+  CrowdFi contracts do not support rebasing tokens! Do not use them as the denominated token.
+</Callout>
+
+<Callout type="warning" emoji="⚠️">
+  CrowdFi contracts support fee taking tokens. The number of CrowdFi tokens minted on contribution will factor in the fee.
+</Callout>
+
+
+#### Factory Addresses
+
+{<table>
+  <thead>
+    <tr>
+      <th>Chain</th>
+      <th>Factory</th>
+    </tr>
+  </thead>
+  <tbody>
+    {cfpFactories().map(item => (
+      <tr key={item.chainId}>
+        <td>{item.name}</td>
+        <td><a className="nx-font-mono" href={item.href} target="_blank">{item.address}</a></td>
+      </tr>
+    ))}
+  </tbody>
+</table>}
+
+#### Example Deployment
+
+<Tabs items={['ethers', 'foundry']}>
+  <Tabs.Tab>
+  ```ts
+  import { Contract, Signer } from 'ethers';
+  const abi = require('path/to/CrowdFinancingV1Factory.abi.json');
+  const contract = new Contract(factoryContractAddress, abi, signer);
+
+  // Native token (ETH)
+  const erc20TokenAddress = '0x0000000000000000000000000000000000000000';
+
+  const tx = await contract.deployCampaign(
+    recipientAddress,
+    minGoal,
+    maxGoal,
+    minContribution,
+    maxContribution,
+    holdOffSeconds,
+    durationSeconds,
+    erc20TokenAddress,
+  );
+
+  console.log('deploy tx', tx);
+  ```
+  </Tabs.Tab>
+  <Tabs.Tab>
+  ```bash
+  RPC_URL='<PROVIDE>'
+  FACTORY_ADDRESS='<PROVIDE>'
+
+  RECIPIENT_ADDRESS='0xf39Fd6e51aad88F6F4ce6aB8827279cffFb93311'
+  MIN_GOAL=100000000000
+  MAX_GOAL=100000000000000000
+  MIN_CONTRIBUTION=1
+  MAX_CONTRIBUTION=1000000000
+  HOLDOFF_SECONDS=0
+  DURATION_SECONDS=1800
+  TOKEN_ADDRESS='0x0000000000000000000000000000000000000000'
+
+  cast send ${FACTORY_ADDRESS} "deployCampaign()" \
+      ${RECIPIENT_ADDRESS} \
+      ${MIN_GOAL} \
+      ${MAX_GOAL} \
+      ${MIN_CONTRIBUTION} \
+      ${MAX_CONTRIBUTION} \
+      ${HOLDOFF_SECONDS} \
+      ${DURATION_SECONDS} \
+      ${TOKEN_ADDRESS} \
+      --rpc-url ${RPC_URL} \
+      --ledger
+  ```
+  </Tabs.Tab>
+</Tabs>

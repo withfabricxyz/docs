@@ -1,9 +1,11 @@
-const withNextra = require('nextra')({
-  theme: 'nextra-theme-docs',
-  themeConfig: './theme.config.tsx',
-});
+const withNextra = require('nextra').default({});
 
 module.exports = withNextra({
+  turbopack: {
+    resolveAlias: {
+      components: './components'
+    }
+  },
   async redirects() {
     return [
       {

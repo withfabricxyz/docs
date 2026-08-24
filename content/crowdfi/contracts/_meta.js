@@ -1,0 +1,8 @@
+export default {
+  CrowdFinancingV1: 'CrowdFi Ref',
+  CrowdFinancingV1ABI: 'CrowdFi ABI',
+  CrowdFinancingV1Source: 'CrowdFi Source',
+  CrowdFinancingV1Factory: 'Factory Ref',
+  CrowdFinancingV1FactoryABI: 'Factory ABI',
+  CrowdFinancingV1FactorySource: 'Factory Source'
+}

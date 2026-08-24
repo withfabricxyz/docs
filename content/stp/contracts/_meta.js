@@ -1,0 +1,6 @@
+export default {
+  STPV2: 'STP Ref',
+  STPV2ABI: 'STP ABI',
+  STPV2Factory: 'Factory Ref',
+  STPV2FactoryABI: 'Factory ABI'
+}

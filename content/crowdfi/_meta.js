@@ -1,0 +1,15 @@
+export default {
+  overview: 'Overview',
+  deployment: 'Campaign Deployment',
+  contributions: 'Contributing Funds',
+  transfer: 'Transferring Funds',
+  yield: 'Yield',
+  withdrawals: 'Withdrawing Funds',
+  erc20: 'ERC-20 Compliance',
+  unlocking: 'Unlocking Failed Funds',
+  audit_link: {
+    title: 'Audit Report',
+    href: 'https://certificate.quantstamp.com/full/fabric-crowd-financing-2/b7c2f191-3a07-45b9-8bad-02e9827d19fd/index.html'
+  },
+  contracts: 'Contract Reference'
+}
